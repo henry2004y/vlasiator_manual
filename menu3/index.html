@@ -1,0 +1,66 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <link rel=stylesheet  href="/css/jtd.css"> <link rel=icon  href="/assets/favicon.ico"> <title>Postprocessing</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/" class=title > Vlasiator </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/menu1/" class="menu-list-link ">Installation</a> <li class="menu-list-item "><a href="/menu2/" class="menu-list-link ">Run</a> <li class="menu-list-item active"><a href="/menu3/" class="menu-list-link active">Postprocessing</a> <li class="menu-list-item "><a href="/menu4/" class="menu-list-link ">Misc</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="#" class=menu-list-link >Submenu</a> </ul> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  href="//github.com/fmihpc/vlasiator">Vlasiator on GitHub</a> </div> <div class=franklin-content ><h1 id=analyzing_results ><a href="#analyzing_results">Analyzing Results</a></h1> <div class=franklin-toc ><ol><li><a href="#tests">Tests</a><li><a href="#visualization">Visualization</a></ol></div> <h2 id=tests ><a href="#tests">Tests</a></h2> <p>Inside <code>small_test_definitions.sh</code>, the tests are explicitly listed with orders, which is really not a good idea if the number of tests goes beyond the roof.</p> <p>The vlsvdiff tool is also written in C&#43;&#43;, which compares each variable and output the &quot;distance&quot; between them. It is completely unnecessary to compare files with C&#43;&#43;, but I probably won’t change it, because that’s just reinventing the wheel. What’s needs to be done here is to properly move these test suites into make.</p> <p>An ideal way to do tests is to save the SHA256 results as references, and compare any new results against them. Eventually there should be some automated checks&#33;</p> <p>The first thing that works:</p> <pre><code class="shell hljs">../../../vlsvdiff_DP bulk.0000001.vlsv bulk.0000001.vlsv proton/vg_rho 0</code></pre>
+<p>I made some changes to the run_tests.sh.</p>
+<p>When I ran the <code>run_tests.sh</code> script with creating the reference solutions, I found that I couldn’t completely kill the process with a single <code>ctrl-c</code> command. Typing it twice might work though.</p>
+<p>The standard tests are too long: up to the small magnetosphere test &#40;8th&#41;, it already takes 1 hour using one i5 core running at 3.3GHz&#33;</p>
+<p>Stupid shell scripts does not allow whitespaces between assignment&#33;</p>
+<p>I can now successfully compare results1.</p>
+<h2 id=visualization ><a href="#visualization">Visualization</a></h2>
+<p>As for the visualization package, the documents are literally none, except for comments within the code. I have actualy learned that good codes do not need extra comments, and redundant comments often indicates that the logic can be improved. Seriously, I believe this, because computers does not read comments. You can have thousand lines of comments showing people what is done and still make mistakes in the source code.</p>
+<p>Without even going to details, I can tell that for example <code>plot_colormap</code> is unnecessarily complicated, with over 1200 lines just for plotting a contour with possibly some extra stuffs. As a comparison, my <code>contourf</code> wrapper function in VisAna is 18 lines with comments.</p>
+<p>Now I kind of understand why we should use pcolor or pcolormesh but not contourf, since we are working with cell based data&#33; It is much easier to control in some sense.</p>
+<p>The default colormap in analysator is called <code>hot_desaturated</code>, which is a self-defined one from the Themis IDL toolbox. I don’t like it because it creates discontinuities that don’t exist.</p>
+<p>Let me learn how to write wrappers for Matplotlib again and try to improve on Analysator later.</p>
+<p>VLSV is a self-created file format for Vlasiator.</p>
+<p>Key concepts:</p>
+<ul>
+<li><p>One vlsv file may contain multiple meshes.</p>
+
+<li><p>Each mesh may contain multiple zones.</p>
+
+<li><p>Each mesh is logically Cartesian.</p>
+
+<li><p>Zones are decomposed into irregular domains.</p>
+
+</ul>
+<p>Mesh → zone → domain?  Mesh → domain → zone? According to the figure this should be the case. The manual is really confusing&#33;</p>
+<p>For each domain: Separate zones into locals and ghosts.</p>
+<p>What is the number of zones in x/y/z direction?</p>
+<p>“Each zone has 8 nodes” → cuboid&#33;</p>
+<p>In principle I can now write a vlsv reader in Julia. What makes it more interesting is to check if I can convert it into any of the VTK file formats.</p>
+<p>vlsv is an XML based format, where the meta data is actually saved as file footer in the end. This is perhaps the first file format I&#39;ve seen that does this. Since there is a Python reader, I think it won&#39;t be hard to write a Julia version. This is also the best way to understand the data structure. Let&#39;s do it&#33;</p>
+<p>After two days of work, I now have a working vlsv reader in Julia together with a 2D plotting function. I read through the vlsv reader in Python and identified several issues that may affect speed:</p>
+<ol>
+<li><p>In the current design, every actual reading boils down to a <code>read</code> function, which contains a lot of <code>if</code> statements, check for cell indexes, and XML properties.</p>
+
+</ol>
+<p>Even though this may seem handy at first, this is not a good code design, as the most generic interface should appear in the top level, not the lower level. Lower level functions should be short and efficient, while higher level functions can be huge and handle different scenarios. Without even testing I can tell this is a big performance hit, especially because it&#39;s Python.</p>
+<ol start=2 >
+<li><p>Abuse of dictionaries is a sign of bad code design.</p>
+
+</ol>
+<p>Even dictionary may appear handy initially, it is rarely used in scientific computing largely because better types like arrays can often replace dictionaries especially when handling numerics. One thing that needs special care is the cell indexes, since vlsv format by design allows random sequence. In the current Python version, there are complicated logics even with <code>try ... except</code> syntax to deal with it, and a dictionary is used to store the mapping. With better design these can all be avoided.</p>
+<ol start=3 >
+<li><p>Many functions are called only once.</p>
+
+</ol>
+<p>I know currently Julia cannot beat Python in terms of visualization, but it is still quite surprising to see that my first Julia version is already several times faster. My philosophy here, which is deeply influenced by a Julia expert in the community, is we should not repeat what Matplotlib offers. If some feature or functionality is thoroughly documented in Matplotlib already, we should just use it, instead of repetition. This is by design why those <code>*arg</code> and <code>**arg</code> exist. Simpler is better.</p>
+<p>Vlasiator has two options for postprocessing:</p>
+<ol>
+<li><p>VisIt</p>
+
+<li><p>Analysator</p>
+
+</ol>
+<p>ParaView now provides <a href="https://www.paraview.org/Wiki/VisIt_Database_Bridge">a way to import VisIt plugins</a>, but I haven&#39;t tried. However, it just makes me wonder if it is possible to directly output VTK files from Vlasiator, given that it will be converted to VTK internally somehow. The closest one I found is probably the parallel rectilinear grid &#40;PRectilinearGrid&#41;. Not for now, but if I am really interested and have free time.</p>
+<p>Analysator is based on Mayavi &#40;deprecated&#41; and Python packages like Matplotlib and Numpy. Mayavi requires VTK and PyQt5 as dependencies. It took me some time to figure out how to install mayavi, VTK and PyQt5. The easiest way to get VTK is through pip. Note that as of now, it only supports up to Python3.6. I tried the latest Python3.9 and got no compatible version error. If you install it from source, it requires a rather recent cmake version, and there is a lot of issue for installing the latest cmake version on Ubuntu. PyQt5 cannot be installed from pip, because it does not provide a <code>setup.py</code> file which is needed. However, it can be installed through <code>apt-get</code>.</p>
+<p>Now I can read in the vlsv files. But still, I literally have no idea what are saved in the file, or how to check what I can do.</p>
+<p>The design of the analysator package is similar to my plotting package VisAna. What I like about it is fulfills the needs of the 2D plots for most team members; what I don&#39;t like about it is the redundancy: the unnecessarily complicated function input arguments indicate that we are inventing the wheels for the existing Matplotlib functions. My idea for the recent versions of VisAna is to inherit what&#39;s available in the dependency package and reduce the burden of the wrapper functions, which obviously contradicts what&#39;s happening here for these Python scripts.</p>
+<div class=page-foot >
+  <div class=copyright >
+    &copy; Hongyang Zhou. Last modified: December 08, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div>
+    </div> 
+    </div> 
+    </div> <!-- end of class page-wrap-->

@@ -1,0 +1,73 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <link rel=stylesheet  href="/css/jtd.css"> <link rel=icon  href="/assets/favicon.ico"> <title>Installation</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/" class=title > Vlasiator </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/" class="menu-list-link ">Home</a> <li class="menu-list-item active"><a href="/menu1/" class="menu-list-link active">Installation</a> <li class="menu-list-item "><a href="/menu2/" class="menu-list-link ">Run</a> <li class="menu-list-item "><a href="/menu3/" class="menu-list-link ">Postprocessing</a> <li class="menu-list-item "><a href="/menu4/" class="menu-list-link ">Misc</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="#" class=menu-list-link >Submenu</a> </ul> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  href="//github.com/fmihpc/vlasiator">Vlasiator on GitHub</a> </div> <div class=franklin-content ><h1 id=installation ><a href="#installation">Installation</a></h1> <p>Vlasiator depends on many packages. These can now be handled with my <code>configure.py</code> at ease. However, the documentation on the dependencies still needs to be improved&#33;</p> <div class=franklin-toc ><ol><li><a href="#dccrg">DCCRG</a><li><a href="#zoltan">Zoltan</a><li><a href="#boost">Boost</a><li><a href="#eigen">Eigen</a><li><a href="#phiprof">PHIPROF</a></ol></div> <p>Now with some modifications, the process looks like the following:</p> <ol> <li><p>For a fresh new machine,</p> </ol> <pre><code class="shell hljs">./configure.py -h</code></pre>
+<p>shows the available options.</p>
+<pre><code class="shell hljs">./configure.py -install</code></pre>
+<p>tries to install all the dependencies in the new <code>lib</code> folder.</p>
+<ol start=2 >
+<li><p>To access an existing customized Makefile in <code>MAKE</code> folder with library paths and compiler flags, e.g.</p>
+
+</ol>
+<pre><code class="shell hljs">./configure.py --machine=yann</code></pre>
+<p>then it will incorporate those into generating the main Makefile.</p>
+<ol start=3 >
+<li><p>To save the configured paths into a new customized Makefile &#40;by default Makefile.new&#41;</p>
+
+</ol>
+<pre><code class="shell hljs">./configure.py -install -save</code></pre>
+<p>to specify a name</p>
+<pre><code class="shell hljs">./configure.py -install -save --save_machine=mymachine</code></pre>
+<p>or something like</p>
+<pre><code class="shell hljs">python3.6 configure.py -debug -save -mpi -omp -distfloat \
+    --include=src/projects \
+    --include=/usr/include/boost \
+    --include=lib/zoltan/include \
+    --include=lib/vlsv \
+    --include=lib \
+    --vectorclass_path=lib/vectorclass \
+    --fsgrid_path=lib/fsgrid \
+    --dccrg_path=lib/dccrg \
+    --include=lib/fsgrid \
+    --include=lib/jemalloc/include \
+    --include=lib/phiprof/include \
+    --include=lib/vectorclass \
+    --lib=boost_program_options \
+    --lib=zoltan \
+    --lib=vlsv \
+    --lib=jemalloc \
+    --lib=phiprof \
+    --boost_path=/usr/lib/x86_64-linux-gnu \
+    --zoltan_path=lib/zoltan/lib \
+    --vlsv_path=lib/vlsv \
+    --jemalloc_path=lib/jemalloc/lib \
+    --profile_path=lib/phiprof/lib</code></pre>
+<p>If you really want to set everything manually, just remove the <code>-save</code> above and it will generate the main Makefile.</p>
+<p>I still keep the options of changing order of solvers, floating point precisions, etc.. Even though they rarely change, it is still changeable, but the default is set to the most common options.</p>
+<p>By default options with one <code>-</code> require no arguments, and options with two <code>--</code> require one argument.</p>
+<p>I do not provide support for python2, since the official support has also ended by the end of last year. Therefore is the default python in <code>/usr/bin/env</code> is python2, then the configuration file will raise error at one <code>print</code> statement with <code>end</code> argument.</p>
+<p>The tools should in principle also be able to be compiled, but I am having some issues with those.</p>
+<h2 id=dccrg ><a href="#dccrg">DCCRG</a></h2>
+<p>DCCRG is the underlying grid and MPI library for Vlasiator. I guess this provides similar functionality compared to <strong>AMReX</strong> and <strong>BATL</strong>.</p>
+<h2 id=zoltan ><a href="#zoltan">Zoltan</a></h2>
+<p>Zoltan is used to do loading balancing, or spatial partitioning of the computation.</p>
+<p>It can be downloaded from Sandia&#39;s website: <a href="http://cs.sandia.gov/Zoltan/Zoltan_Distributions/zoltan_distrib_v3.83.tar.gz">Zoltan</a>.</p>
+<h2 id=boost ><a href="#boost">Boost</a></h2>
+<p>I don&#39;t know what Boost is used for. Maybe argument parsing?</p>
+<h2 id=eigen ><a href="#eigen">Eigen</a></h2>
+<p>No idea what Eigen is used for. However, the latest Eigen version has compilation error in assertions:</p>
+<pre><code class="shell hljs">3.3.8
+/home/hyzhou/include/Eigen/src/Core/products/Parallelizer.h:162:40: error: ‘eigen_assert_exception’ is not a member of ‘Eigen’
+  162 |   if (errorCount) EIGEN_THROW_X(Eigen::eigen_assert_exception());
+      |                                        ^~~~~~~~~~~~~~~~~~~~~~
+/home/hyzhou/include/Eigen/src/Core/util/Macros.h:1017:34: note: in definition of macro ‘EIGEN_THROW_X’</code></pre>
+<h2 id=phiprof ><a href="#phiprof">PHIPROF</a></h2>
+<p>PHIPROF is the profiler library used, which is very similar to the timer library in SWMF written in Fortran.</p>
+<p>Currently I need to load the dynamic library like this:</p>
+<pre><code class="julia hljs"><span class=hljs-keyword >export</span> LD_LIBRARY_PATH=/home/<span class=hljs-keyword >local</span>/hongyang/Vlasiator/vlasiator/lib/phiprof/lib</code></pre>
+<div class=page-foot >
+  <div class=copyright >
+    &copy; Hongyang Zhou. Last modified: December 08, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+  </div>
+</div>
+</div>
+    </div> 
+    </div> 
+    </div> <!-- end of class page-wrap-->
