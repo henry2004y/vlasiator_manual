@@ -5,9 +5,11 @@ The website_* must be defined for the RSS to work
 -->
 @def website_title = "Personal Vlasiator Manual"
 @def website_descr = "How to use Vlasiator in detail"
-@def website_url   = "https://tlienart.github.io/FranklinTemplates.jl/"
+@def website_url   = "https://henry2004y.github.io/vlasiator_manual/"
 
 @def author = "Hongyang Zhou"
+
+@def prepath = "project"
 
 @def mintoclevel = 2
 
