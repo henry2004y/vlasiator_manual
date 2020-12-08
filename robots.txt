@@ -1,4 +1,4 @@
-Sitemap: https://tlienart.github.io/FranklinTemplates.jl/sitemap.xml
+Sitemap: https://henry2004y.github.io/vlasiator_manual/sitemap.xml
 
 User-agent: *
 Disallow:
