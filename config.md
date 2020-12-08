@@ -9,7 +9,7 @@ The website_* must be defined for the RSS to work
 
 @def author = "Hongyang Zhou"
 
-@def prepath = "project"
+@def prepath = "vlasiator_manual"
 
 @def mintoclevel = 2
 
