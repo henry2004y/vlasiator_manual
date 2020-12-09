@@ -20,10 +20,9 @@
 <p>I am confused by the <a href="https://github.com/fmihpc/vlsv/blob/master/doc/user&#37;20manual.pdf">vlsv description manual</a>.</p>
 <p>Questions:</p>
 <ol>
-<li><p>What is the correct hierarchy order of concepts? Is it <code>Mesh → zone → domain</code>, or <code>Mesh → domain → zone</code>?</p>
+<li><p>What is the correct hierarchy order of concepts? Is it <code>Mesh → zone → domain</code>, or <code>Mesh → domain → zone</code>? According to the first figure in the manual the latter should be the case. However, in the description of Multi-Domain Meshes section, it says</p>
 
 </ol>
-<p>According to the first figure in the manual the latter should be the case. However, in the description of Multi-Domain Meshes section, it says</p>
 <blockquote>
 <p>zones are decomposed into independent domains.</p>
 </blockquote>
@@ -32,11 +31,8 @@
 <p>Cartesian mesh decomposed into four domains</p>
 </blockquote>
 <ol start=2 >
-<li><p>For each domain, zones are separated into locals and ghosts.</p>
+<li><p>For each domain, zones are separated into locals and ghosts. According to my understanding, mesh is logically Cartesian, but not zones. Then what is the number of zones in x/y/z direction, as shown in the demo code in the Write Mesh Bounding Box section?</p>
 
-</ol>
-<p>According to my understanding, mesh is logically Cartesian, but not zones. Then what is the number of zones in x/y/z direction, as shown in the demo code in the Write Mesh Bounding Box section?</p>
-<ol start=3 >
 <li><p>In the end of Write Bounding Box Node Coordinates section, it is mentioned that </p>
 
 </ol>
@@ -56,21 +52,15 @@
 <p>Analysator is based on Mayavi &#40;deprecated&#41; and Python packages like Matplotlib and Numpy. Mayavi requires VTK and PyQt5 as dependencies. It took me some time to figure out how to install mayavi, VTK and PyQt5. The easiest way to get VTK is through pip. Note that as of now, it only supports up to Python3.6. I tried the latest Python3.9 and got no compatible version error. If you install it from source, it requires a rather recent cmake version, and there is a lot of issue for installing the latest cmake version on Ubuntu. PyQt5 cannot be installed from pip, because it does not provide a <code>setup.py</code> file which is needed. However, it can be installed through <code>apt-get</code>.</p>
 <p>Questions:</p>
 <ol>
-<li><p>In the Python version, I notice a <code>cellids</code> dictionary which is a lookup table for data ordering.</p>
+<li><p>In the Python version, I notice a <code>cellids</code> dictionary which is a lookup table for data ordering. Does this correspond to the concept of blocks as described in vlsv? There is a sorting call somewhere in the plotting function like <code>plot_colormap</code>. It may be better to do the sorting while reading the <code>cellids</code> and save it as an array.</p>
+
+<li><p>It is hard to tell what can I do if someone randomly throws me a vlsv file. For example, I don&#39;t know if it&#39;s 1D, 2D, or 3D, and what kind of plots are available.</p>
 
 </ol>
-<p>Does this correspond to the concept of blocks as described in vlsv? There is a sorting call somewhere in the plotting function like <code>plot_colormap</code>. It may be better to do the sorting while reading the <code>cellids</code> and save it as an array.</p>
-<ol start=2 >
-<li><p>It is hard to tell what can I do if someone randomly throws me a vlsv file.</p>
-
-</ol>
-<p>For example, I don&#39;t know if it&#39;s 1D, 2D, or 3D, and what kind of plots are available. This may be partly solved with more examples.</p>
+<p>This may be partly solved with more examples.</p>
 <ol start=3 >
-<li><p>In Python we may be able to take advantage of the<code>*args</code> and <code>**keyargs</code> of functions to release the burden of rewriting every existing arguments of the plotting functions in Matplotlib.</p>
+<li><p>In Python we may be able to take advantage of the<code>*args</code> and <code>**keyargs</code> of functions to release the burden of rewriting every existing arguments of the plotting functions in Matplotlib. As some new members like me who has used Matplotlib before but haven&#39;t touched the Analysator wrappers so often, it would be very straightforward to return the PyPlot objects from the wrappers, and then I can just rely on the Matplotlib official documentation for the rest.</p>
 
-</ol>
-<p>As some new members like me who has used Matplotlib before but haven&#39;t touched the Analysator wrappers so often, it would be very straightforward to return the PyPlot objects from the wrappers, and then I can just rely on the Matplotlib official documentation for the rest.</p>
-<ol start=4 >
 <li><p>One Python plotting package worth mentioning is yt for astrophysics. I am not familiar with it, but I am impressed by its automatic unit conversion, simple rendering and some other stuff. Maybe worth keeping an eye on that. </p>
 
 </ol>
