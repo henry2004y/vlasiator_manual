@@ -55,16 +55,12 @@ I am confused by the [vlsv description manual](https://github.com/fmihpc/vlsv/bl
 
 Questions:
 
-1. What is the correct hierarchy order of concepts? Is it `Mesh → zone → domain`, or `Mesh → domain → zone`?
-According to the first figure in the manual the latter should be the case.
-However, in the description of Multi-Domain Meshes section, it says
+1. What is the correct hierarchy order of concepts? Is it `Mesh → zone → domain`, or `Mesh → domain → zone`? According to the first figure in the manual the latter should be the case. However, in the description of Multi-Domain Meshes section, it says
 > zones are decomposed into independent domains.
 In the caption of the first figure
 > Cartesian mesh decomposed into four domains
 
-2. For each domain, zones are separated into locals and ghosts.
-According to my understanding, mesh is logically Cartesian, but not zones.
-Then what is the number of zones in x/y/z direction, as shown in the demo code in the Write Mesh Bounding Box section?
+2. For each domain, zones are separated into locals and ghosts. According to my understanding, mesh is logically Cartesian, but not zones. Then what is the number of zones in x/y/z direction, as shown in the demo code in the Write Mesh Bounding Box section?
 
 3. In the end of Write Bounding Box Node Coordinates section, it is mentioned that 
 > Each zone has 8 nodes → cuboid.
@@ -97,15 +93,10 @@ PyQt5 cannot be installed from pip, because it does not provide a `setup.py` fil
 However, it can be installed through `apt-get`.
 
 Questions:
-1. In the Python version, I notice a `cellids` dictionary which is a lookup table for data ordering.
-Does this correspond to the concept of blocks as described in vlsv?
-There is a sorting call somewhere in the plotting function like `plot_colormap`.
-It may be better to do the sorting while reading the `cellids` and save it as an array.
-2. It is hard to tell what can I do if someone randomly throws me a vlsv file.
-For example, I don't know if it's 1D, 2D, or 3D, and what kind of plots are available.
+1. In the Python version, I notice a `cellids` dictionary which is a lookup table for data ordering. Does this correspond to the concept of blocks as described in vlsv? There is a sorting call somewhere in the plotting function like `plot_colormap`. It may be better to do the sorting while reading the `cellids` and save it as an array.
+2. It is hard to tell what can I do if someone randomly throws me a vlsv file. For example, I don't know if it's 1D, 2D, or 3D, and what kind of plots are available.
 This may be partly solved with more examples.
-3. In Python we may be able to take advantage of the`*args` and `**keyargs` of functions to release the burden of rewriting every existing arguments of the plotting functions in Matplotlib.
-As some new members like me who has used Matplotlib before but haven't touched the Analysator wrappers so often, it would be very straightforward to return the PyPlot objects from the wrappers, and then I can just rely on the Matplotlib official documentation for the rest.
+3. In Python we may be able to take advantage of the`*args` and `**keyargs` of functions to release the burden of rewriting every existing arguments of the plotting functions in Matplotlib. As some new members like me who has used Matplotlib before but haven't touched the Analysator wrappers so often, it would be very straightforward to return the PyPlot objects from the wrappers, and then I can just rely on the Matplotlib official documentation for the rest.
 4. One Python plotting package worth mentioning is yt for astrophysics. I am not familiar with it, but I am impressed by its automatic unit conversion, simple rendering and some other stuff. Maybe worth keeping an eye on that. 
 
 ### VisIt
