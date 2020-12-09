@@ -11,15 +11,15 @@
 \toc
 
 
-The so-called cellblock, with size `4x4x4`, is for vectorization.
-I always have doubts on this. Now they are defined as constants in the C++ code.
+The so-called cellblock, with size `4x4x4`, is aimed for vectorization.
+The block sizes are defined as constants.
 
 The current executable is designed to be able to read in command line arguments.
 However, the list is just too long to check and read.
 Also, you cannot use tab to auto-complete input file names!
-I really don’t like the design that you have to explicitly type the cfg file name as an argument into the command line.
-It does not have auto-completion, so it’s a pain
-Why not set some default locations, like looking for cfg files in the current directory?
+It is really annoying to type the cfg file name as an argument into the command line everytime when I try to run the code.
+Besides, it does not have auto-completion for file names.
+Maybe we can set some default locations, like looking for cfg files in the current directory?
 
 
 The speed difference between `-O0` and `-O3` can be 120/9=13 times! This is quite significant. Thanks compiler!
@@ -27,12 +27,11 @@ The speed difference between `-O0` and `-O3` can be 120/9=13 times! This is quit
 ## Input Configuration File
 
 Apparently there is no manual for the configuration parameters.
-Let's do it ourselves.
 
 * Can I switch the orders of commands?
 * Are the commands case-sensitive, e.g. `Outflow`, `outflow`?
 * Can change the normalizations?
-* Urgent need to describe all the available options for each command!
+* Urgent need to describe all the available options for each command.
 * I am curious about this `proton_` syntax for many tags. Is it a common pattern for all the available commands?
 
 
@@ -47,7 +46,7 @@ dynamic_timestep = 1
 ParticlePopulations = proton
 ```
 
-* `project`: type of problems to solve
+* `project`: type of problems to solve (options?)
 * `propagate_field`: field solver on/off
 * `propagate_vlasov_acceleration`: acceleration on/off
 * `propagate_vlasov_translation`: translation on/off
@@ -69,7 +68,7 @@ y_max = 1.3e8      # maximum y location
 z_min = -6.5e6     # minimum z location
 z_max = 6.5e6      # maximum z location
 t_max = 650        # maximum physical time allowed
-dt = 2.0
+dt = 2.0           # ?
 timestep_max = 100 # maximum number of iterations allowed
 ```
 
@@ -100,6 +99,8 @@ vz_length = 15     # number of cells in z
 [proton_sparse]
 minValue = 1.0e-15 # distribution function threshold
 ```
+
+* `mass_units`: do we have other options?
 
 ### Solvers
 
@@ -177,7 +178,6 @@ boundary_y = Maxwellian
 boundary_z = Periodic
 boundary_inner = Ionosphere
 ```
-Doesn't it look nicer?
 Internally we almost don't need to change anything, except a check on the strings.
 
 ### Initial conditions
@@ -252,7 +252,7 @@ system_write_distribution_zline_stride = 0
 ```
 
 * `system_write_file_name`: is it arbitrary?
-* `system_write_distribution_stride`: does it affect all the values or only f? If it's all the output quantities, why this name?
+* `system_write_distribution_stride`: does it affect all the values or only f? If it's all the output quantities, why do we include "distribution" in the name?
 
 
 ```YAML
