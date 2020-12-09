@@ -5,25 +5,18 @@
 
 \tableofcontents <!-- you can use \toc as well -->
 
-Vlasiator, generally speaking, is a numerical model for collisionless ion-kinetic plasma physics.
+Vlasiator is a numerical model for collisionless ion-kinetic plasma physics.
 
 
 ## Features
-
-Can a global magnetosphere model simulate the precipitation fluxes?
-I think the key question is whether a plasma description is applicable also to these energetic species.
-
-I have seen so many frustrations about using multi-fluid MHD.
-It makes wonder if PIC or Vlasov solver can do better in terms of numerical stability.
-
-Other than Vlasiator, Umeda from Japan is the other leader in the Vlasov solver.
 
 Vlasov solvers in higher dimensions are known to be slow. But how slow it is?
 3D Earth: 1 week of running  = 6 million cpu hours?
 
 One restart file for 3D Earth now is typically ~2TB.
 
-* semi-Lagrangian Vlasov solver
+* semi-Lagrangian Vlasov solver for ions
+* massless fluid treatment of electrons
 * 3D mesh refinement in Cartesian boxes
 * Up to isotropic $\nabla P_e$ term in the Ohm's law when solving for the electric field?
 
@@ -35,7 +28,7 @@ $$
 ## Workflow with Git
 
 I originally made some mistakes in the git workflow.
-Vlasiator team chooses to merge into the dev branch instead of the master branch.
+The Vlasiator team chooses to merge into the dev branch instead of the master branch.
 So everytime you fork the repository, commit some changes, and then submit a pull request to the main dev branch.
 However, what happens if while waiting for the commits to be merged, I want to work on a different part of the code and commit new changes?
 If you stay on your own feature branch, the new commits will go into the previous pull request and in the end you will get a huge pull request.

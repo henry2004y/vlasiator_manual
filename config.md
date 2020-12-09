@@ -3,13 +3,12 @@ Add here global page variables to use throughout your
 website.
 The website_* must be defined for the RSS to work
 -->
+@def prepath = "vlasiator_manual"
 @def website_title = "Personal Vlasiator Manual"
 @def website_descr = "How to use Vlasiator in detail"
 @def website_url   = "https://henry2004y.github.io/vlasiator_manual/"
 
 @def author = "Hongyang Zhou"
-
-@def prepath = "vlasiator_manual"
 
 @def mintoclevel = 2
 
