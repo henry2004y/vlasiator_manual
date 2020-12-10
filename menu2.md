@@ -28,11 +28,22 @@ The speed difference between `-O0` and `-O3` can be 120/9=13 times! This is quit
 Apparently there is no manual for the configuration parameters.
 
 * Can I switch the orders of commands?
+** On the command line, all options are either one word (top level) or of the format block.option, they can be in any order. See below for composite option.
+** In a cfg: blocks can be in any order. Top-level options should be at the top, anything after a block title will be counted in that block until the next option. Inside one block, single options can be in any order. See below for composite options.
+** Composed options: There is options that can be repeated any number of times, e.g. `variables.output` to specify more than one output variable. Those can be in any order. However there is a few specific cases where we implemented several composed options to go in groups. In particular, the specification of output file types with the root name of the file type, its frequency, and how many VDFs we want to store. There one has to make sure that the options are in order so that the group of options goes together.
 * Are the commands case-sensitive, e.g. `Outflow`, `outflow`?
+** Yes.
 * Can I change the normalizations? For example, I may want 1D cells of unit length 1, and fixed dt and velocity.
+** Units are SI, but you can use the values that you like.
+** You can set the option to not use dynamic dt.
+** All plasma parameters are set in the project you choose.
 * Urgent need to describe all the available options for each command.
+** `vlasiator --help`, if the help text is incomplete, outdated, wrong, missing that has to be added in the code.
 * I am curious about this `proton_` syntax for many tags. Is it a common pattern for all the available commands?
+** Vlasiator supports more than one ion population. That population's name (e.g. `proton`) gets prepended to a host of options that are specific to that population, like densities, temperatures, boundary behaviour etc.
 * How to restart a run?
+** If the options are set so that restart files come out, you will get files called `restart.INDEX.DATE.vlsv`. INDEX is seven digits in seconds of simulation time, DATE is the date of the file, as this helps  in a lot of practical matters.
+** When you want to restart from a given file, use the option `restart.filename` pointing to that file. In job scripts for multi-stage runs one trick is to use the option on the command line/in the job script as `--restart.filename $( ls -tr | restart.*.vlsv | tail -n 1 )`.
 
 
 ### General
