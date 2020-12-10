@@ -32,7 +32,8 @@ Apparently there is no manual for the configuration parameters.
   * In a cfg: blocks can be in any order. Top-level options should be at the top, anything after a block title will be counted in that block until the next option. Inside one block, single options can be in any order. See below for composite options.
   * Composed options: There is options that can be repeated any number of times, e.g. `variables.output` to specify more than one output variable. Those can be in any order. However there is a few specific cases where we implemented several composed options to go in groups. In particular, the specification of output file types with the root name of the file type, its frequency, and how many VDFs we want to store. There one has to make sure that the options are in order so that the group of options goes together.
 * Are the commands case-sensitive, e.g. `Outflow`, `outflow`?
-  * Yes.
+  * Normal commands: Yes.
+  * Output and diagnostic variable names: No.
 * Can I change the normalizations? For example, I may want 1D cells of unit length 1, and fixed dt and velocity.
   * Units are SI, but you can use the values that you like.
   * You can set the option to not use dynamic dt.
@@ -58,11 +59,12 @@ ParticlePopulations = proton
 ```
 
 * `project`: type of problems to solve (options?)
+  * In the git repository under the projects directory you can find the available projects. Some are old and may be unsupported. Projects may support custom options (e.g defining the dipole field for the Magnetosphere project)
 * `propagate_field`: field solver on/off
 * `propagate_vlasov_acceleration`: acceleration on/off
 * `propagate_vlasov_translation`: translation on/off
 * `dynamic_timestep`: 0 or 1 to have static or dynamic dt
-* `ParticlePopulations`: ion species name, this is arbitrary and is prepended to all the options relevant to that population.
+* `ParticlePopulations`: ion species name, this is arbitrary and is prepended to all the options relevant to that population. Can be repeated to initialize multiple ion species.
 
 ### Grid
 
