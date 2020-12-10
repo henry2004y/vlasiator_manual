@@ -1,48 +1,124 @@
-@def title = "Misc"
+@def title = "Internal"
+@def hascode = true
+@def date = Date(2020, 12, 10)
+@def rss = ""
+
+@def tags = ["syntax", "code"]
+
+# Internal Code Structure
+
+In C++, the included files should be ordered and grouped.
+This part can be done with an automatic script.
+It should be able to:
+* Correct function and file names according to naming standard (`.hpp → .h`, `datareducer → dataReducer`)
+* Switch orders of #include if required
+* Correct comments indentation and argument indentations.
+
+I need to go through the coding standard.
+
+## Main
+
+`vlasiator.cpp`
+
+```cpp
+#include <cstdlib>
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <sstream>
+#include <ctime>
+#ifdef _OPENMP
+   #include <omp.h>
+#endif
+
+#include <fsgrid.hpp>
+
+#include "vlasovmover.h"
+#include "definitions.h"
+#include "mpiconversion.h"
+#include "logger.h"
+#include "parameters.h"
+#include "readparameters.h"
+#include "spatial_cell.hpp"
+#include "datareduction/datareducer.h"
+#include "sysboundary/sysboundary.h"
+
+#include "fieldsolver/fs_common.h"
+#include "projects/project.h"
+#include "grid.h"
+#include "iowrite.h"
+#include "ioread.h"
+
+#include "object_wrapper.h"
+#include "fieldsolver/gridGlue.hpp"
+```
 
 
-# Miscellaneous
+* `object_wrapper.h`: what is this used for?
+* `fieldsolver/gridGlue.hpp`: names are not following the same standard!
 
-**Example**:
+* `phiprof.hpp`
+The usage of this profiler is quite similar to Gabor’s library, both of which should be using `mpi_wtime` on the lower level.
 
-* page with tag [`syntax`](/tag/syntax/)
-* page with tag [`image`](/tag/image/)
-* page with tag [`code`](/tag/code/)
+During compilation, there is a warning about `narrowing conversion of ...`.
+What does it mean and why do we need this?
 
-\toc
+```
+using namespace phiprof
+using namespace std
+```
 
-
-
-## eVlasiator: Dealing with Electrons
-
-The main Vlasiator is solving the Vlasov equations for ions; this eVlasiator is conceptually the same, just replace the ion with electron.
-The differences are mainly scales.
-The normal Vlasiator treats electrons as massless fluid. Possible options to improve that are:
-1. fluid with mass;
-2. electron macro paticles;
-3. electron distribution function
-
-What is the main difference compared with the test particle approach?
-Given that the field resolution is on the order of ion scales, how can you guarantee that electron tracing is accurate?
-
-1. B remains static, but E is updated --- somehow this may mean that it is only electrostatic, but to what extent does it matter?
-
-2. Not particles, but distributions functions (by solving electron Vlasov eq.). With enough number of particles, the final result should be the same.
-
-Ion precipitation: sharp cutoff due to sparse velocity grid, need full VDF information (not saved everywhere in the past). Now implemented as an output option, and use power law extrapolation to get high energy e-, for instance.
-
-* Electron energy range and spectrum
-* Time resolution and length
-* 2D-3D transformation
-* File formats
+Since they are already imported, there is no need to add `std::` in the rest of code.
 
 
+* `recalculateLocalCellsCache()`: why do we need another local block for the 2 lines?
 
-## Resources
 
-CSC, LUMI
-Now the fastest machine in the US and Europe are both using AMD GPUS.
-This is definitely not a headless choice, but a strong sign that the CUDA-equivalent compiler is strong enough to compete and easier enough to use.
-(HIP)
+> needs to be done here already ad the background field will be set right away,
 
-I have applied for an account at CSC. On first sight, they may do a pretty decent job: they have preinstalled Julia 1.3!
+What is “ad”?
+
+* As one can see, there are many FsGrid objects, but they now all share some common values like dx, dy, dz, etc. Why do we need separate values of those?
+
+* The cubic spatial cell requirement is to restrict. Users have to calculate it themselves and even if the cells are not cubic the code will only give a warning message but still run. Maybe we should just add something to the kernel functions.
+
+* The comments for initializing data reduction operators are confusing.
+
+* The main loop with while: Phiprof diagnostic output is fixed to 10 steps. We should have the flexibility to change that.
+
+Stages:
+
+1. `Propagate`
+2. `calculateSpatialTranslation`
+3. `sysBoundaries.applySysBoundaryVlasovConditions`
+4. `calculateInterpolatedVelocityMoments`
+5. `propagateFields`
+
+* The condition `P::propagateField` comments say that it is only for B field? But I can see all the fields in the argument list of propagteFields?
+
+6. `getFieldsFromFsGrid`: since the field solver is working on a regular Cartesian grid, this is supposed to copy field results back to dccrg grid for f?
+
+## Definitions
+
+* What should go into `common.h`, `definitions.h`, and `parameters.h` respectively?
+
+`definitions.h`
+
+* `namespace vmesh`: doesn’t it look the same with/without AMR? 
+I have no clue why this local block ID has to be defined here, since it probably only lives in a local scope.
+
+## Common
+
+`common.h`
+
+
+
+`Namespace sysboundarytype`: is SET_MAXWELLIAN for the fixed inflow?
+
+## Parameters
+
+`parameters.h`
+
+* Why are there a max and a min CFL number?
+
+* What is the difference between `vector<CellID>` and `vector<CellID>&`? Does the second one mean that it is essentially the same vector without copying?

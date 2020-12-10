@@ -18,7 +18,6 @@ The current executable is designed to be able to read in command line arguments.
 However, the list is just too long to check and read.
 Also, you cannot use tab to auto-complete input file names!
 It is really annoying to type the cfg file name as an argument into the command line everytime when I try to run the code.
-Besides, it does not have auto-completion for file names.
 Maybe we can set some default locations, like looking for cfg files in the current directory?
 
 
@@ -30,9 +29,10 @@ Apparently there is no manual for the configuration parameters.
 
 * Can I switch the orders of commands?
 * Are the commands case-sensitive, e.g. `Outflow`, `outflow`?
-* Can change the normalizations?
+* Can I change the normalizations? For example, I may want 1D cells of unit length 1, and fixed dt and velocity.
 * Urgent need to describe all the available options for each command.
 * I am curious about this `proton_` syntax for many tags. Is it a common pattern for all the available commands?
+* How to restart a run?
 
 
 ### General
@@ -192,7 +192,7 @@ densityModel = SheetMaxwellian # ?
 ```
 
 * `emptyBox`: ?
-* `densityModel`: ? 
+* `densityModel`: options? meaning? 
 
 ```YAML
 [proton_Flowthrough]
