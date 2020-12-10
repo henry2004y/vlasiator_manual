@@ -28,8 +28,8 @@ The speed difference between `-O0` and `-O3` can be 120/9=13 times! This is quit
 Apparently there is no manual for the configuration parameters.
 
 * Can I switch the orders of commands?
-** On the command line, all options are either one word (top level) or of the format block.option, they can be in any order. See below for composite option.
-** In a cfg: blocks can be in any order. Top-level options should be at the top, anything after a block title will be counted in that block until the next option. Inside one block, single options can be in any order. See below for composite options.
+ * On the command line, all options are either one word (top level) or of the format block.option, they can be in any order. See below for composite option.
+ * In a cfg: blocks can be in any order. Top-level options should be at the top, anything after a block title will be counted in that block until the next option. Inside one block, single options can be in any order. See below for composite options.
 ** Composed options: There is options that can be repeated any number of times, e.g. `variables.output` to specify more than one output variable. Those can be in any order. However there is a few specific cases where we implemented several composed options to go in groups. In particular, the specification of output file types with the root name of the file type, its frequency, and how many VDFs we want to store. There one has to make sure that the options are in order so that the group of options goes together.
 * Are the commands case-sensitive, e.g. `Outflow`, `outflow`?
 ** Yes.
