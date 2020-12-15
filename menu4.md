@@ -90,7 +90,7 @@ Stages:
 3. `Finalization`
 
 Questions:
-* `object_wrapper.h`: what is this used for?
+* `object_wrapper.h`: it defines a struct named ObjectWrapper which contains the AMR criteria, container for user-defined mesh data, parameters for all particle species, projects, and parameters for velocity meshes.
 * `fieldsolver/gridGlue.hpp`: names are not following the same standard!
 * `phiprof.hpp`
 The usage of this profiler is quite similar to Gabor’s library, both of which should be using `mpi_wtime` on the lower level.
@@ -155,7 +155,42 @@ The base class has a private variable `sysBoundaryCondList` to keep track of all
 This can contain multiple options for the same BC class?
 
 The class is declared in the header file.
+On top of the boundary types class, there is a container class `SysBoundary` that is used to initialize, store, and apply boundary conditions.
+
+
+In `Commons.h`, the general information for the grid is defined:
+```cpp
+struct technical {
+   int sysBoundaryFlag;  /*!< System boundary flags */
+   int sysBoundaryLayer; /*!< System boundary layer index */
+   Real maxFsDt;         /*!< Maximum timestep allowed in ordinary space by fieldsolver for this cell */
+   int fsGridRank;       /*!< Rank in the fsGrids cartesian coordinator */
+   uint SOLVE;           /*!< Bit mask to determine whether a given cell should solve E or B components */
+   int refLevel;         /*!< AMR Refinement Level */
+};
+```
 
 The base `getParameters()` function is used to set periodic BC or not.
-The `initSysBoundaries()`
-This can be modified.
+
+`initSysBoundaries()`: loops through the list of system boundary conditions listed as to be used in the configuration file/command line arguments. For each of these it adds the corresponding instance and updates the member `isThisDynamic` to determine whether any `SysBoundaryCondition` is dynamic in time.
+
+This can be modified to remove the periodicity checking, and the boundary list initialization from `sysBoundaryCondList` is unnecessary. All types of boundary conditions should be prescribed in the class.
+
+`P::xcells_ini`: what does this effect?
+
+`AddSysBoundary()`
+
+`initSysBoundary()`
+
+`checkRefinement()`: for AMR usage presumably?
+
+`belongsToLayer()`: check ghost cell layers?
+
+`classifyCells()`: loops through all cells and and for each assigns the correct `sysBoundaryFlag` depending on the return value of each `SysBoundaryCondition`'s `assignSysBoundary`.
+
+`applyInitialState()`: loops through all `SysBoundaryConditions` and calls the corresponding `applyInitialState()` function for all existing particle species.
+
+`applySysBoundaryVlasovConditions()`: loops through all `SysBoundaryConditions` and calls the corresponding `vlasovBoundaryCondition()` function for all moments for all particle species, one at a time.
+
+
+`vlasovBoundaryCopyFromTheClosestNbr()`: the last argument, `calculate_V_moments` should be renames, as it looks too similar to a function!
