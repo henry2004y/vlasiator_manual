@@ -140,3 +140,22 @@ I have no clue why this local block ID has to be defined here, since it probably
 * Why are there a max and a min CFL number?
 
 * What is the difference between `vector<CellID>` and `vector<CellID>&`? Does the second one mean that it is essentially the same vector without copying?
+
+
+## SysBoundary
+
+The top level file is `sysboundarycondition.cpp`, with the declaration of `namespace SBC`.
+It contains a base class called `SysBoundaryCondition`, and 4 derived classes:
+* `DoNotCompute`
+* `Ionosphere`
+* `Outflow`
+* `SetMaxwellian`
+
+The base class has a private variable `sysBoundaryCondList` to keep track of all the boundary conditions as strings.
+This can contain multiple options for the same BC class?
+
+The class is declared in the header file.
+
+The base `getParameters()` function is used to set periodic BC or not.
+The `initSysBoundaries()`
+This can be modified.

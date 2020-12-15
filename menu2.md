@@ -141,7 +141,7 @@ maxSlAccelerationRotation = 22 # maximum allowed rotation per cycle?
 Current boundary settings
 ```YAML
 [boundaries]
-periodic_x = yes
+periodic_x = no
 periodic_y = yes
 periodic_z = yes
 boundary = Outflow
@@ -149,7 +149,7 @@ boundary = Maxwellian
 boundary = Ionosphere
 ```
 
-* `boundary`: type of boundary class that will be initialised and usable in the run.
+* `boundary`: type of boundary class that will be initialised and usable in the run. The actual boundary type for each face is explicitly controlled by the tag with the same boundary type below.
   * `Outflow`: so far this is a Neumann condition (copy-condition fo the nearest simulation cell)
 ```YAML
 [outflow]
@@ -159,7 +159,7 @@ face = x-
 face = y-
 face = y+
 ```
-  * `Maxwellian`: Takes the values from the provided dat file, `time density temperature Vx Vy Vz Bx By Bz`, partial support for time-variation is already in the code.
+  * `Maxwellian`: Takes the values from the provided dat file, `time density temperature Vx Vy Vz Bx By Bz`, partial support for time-variation is already in the code.proton
 ```YAML
 [maxwellian]
 face = x+
