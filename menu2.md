@@ -107,15 +107,17 @@ vy_min = -600000.0 # minimum vy value resolved
 vy_max = +600000.0 # maximum vy value resolved
 vz_min = -600000.0 # minimum vz value resolved
 vz_max = +600000.0 # maximum vz value resolved
-vx_length = 15     # number of cells in x     
-vy_length = 15     # number of cells in y
-vz_length = 15     # number of cells in z
+vx_length = 15     # number of blocks in x
+vy_length = 15     # number of blocks in y
+vz_length = 15     # number of blocks in z
 
 [proton_sparse]
 minValue = 1.0e-15 # distribution function threshold
 ```
 
 * `mass_units`: PROTON or ELECTRON (at the latest once the electorn branch is merged)
+
+Each velocity block consists of $4\times 4\times 4$ cells.
 
 ### Solvers
 
