@@ -100,9 +100,9 @@
 <span class=hljs-string >vy_max</span> <span class=hljs-string >=</span> <span class=hljs-string >+600000.0</span> <span class=hljs-comment ># maximum vy value resolved</span>
 <span class=hljs-string >vz_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-600000.0</span> <span class=hljs-comment ># minimum vz value resolved</span>
 <span class=hljs-string >vz_max</span> <span class=hljs-string >=</span> <span class=hljs-string >+600000.0</span> <span class=hljs-comment ># maximum vz value resolved</span>
-<span class=hljs-string >vx_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of cells in x     </span>
-<span class=hljs-string >vy_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of cells in y</span>
-<span class=hljs-string >vz_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of cells in z</span>
+<span class=hljs-string >vx_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of blocks in x</span>
+<span class=hljs-string >vy_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of blocks in y</span>
+<span class=hljs-string >vz_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of blocks in z</span>
 
 [<span class=hljs-string >proton_sparse</span>]
 <span class=hljs-string >minValue</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-15</span> <span class=hljs-comment ># distribution function threshold</span></code></pre>
@@ -110,6 +110,7 @@
 <li><p><code>mass_units</code>: PROTON or ELECTRON &#40;at the latest once the electorn branch is merged&#41;</p>
 
 </ul>
+<p>Each velocity block consists of <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>×</mo><mn>4</mn><mo>×</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">4\times 4\times 4</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >4</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >4</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.64444em;vertical-align:0em;"></span><span class=mord >4</span></span></span></span> cells.</p>
 <h3 id=solvers ><a href="#solvers">Solvers</a></h3>
 <pre><code class="YAML hljs">[<span class=hljs-string >fieldsolver</span>]
 <span class=hljs-string >ohmHallTerm</span> <span class=hljs-string >=</span> <span class=hljs-number >2</span>
