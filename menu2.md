@@ -25,25 +25,26 @@ The speed difference between `-O0` and `-O3` can be 120/9=13 times! This is quit
 
 ## Input Configuration File
 
-Apparently there is no manual for the configuration parameters.
+There is no manual for the configuration parameters currently.
+However, there is a script helping to identify potential errors in the configuration file, `tools/check_vlasiator_cfg.sh`.
+To run that,
+```shell
+./check_vlasiator_cfg.sh vlasiator test.cfg
+```
 
-* Can I switch the orders of commands?
+* Orders of commands
   * On the command line, all options are either one word (top level) or of the format block.option, they can be in any order. See below for composite option.
   * In a cfg: blocks can be in any order. Top-level options should be at the top, anything after a block title will be counted in that block until the next option. Inside one block, single options can be in any order. See below for composite options.
   * Composed options: There is options that can be repeated any number of times, e.g. `variables.output` to specify more than one output variable. Those can be in any order. However there is a few specific cases where we implemented several composed options to go in groups. In particular, the specification of output file types with the root name of the file type, its frequency, and how many VDFs we want to store. There one has to make sure that the options are in order so that the group of options goes together.
-* Are the commands case-sensitive, e.g. `Outflow`, `outflow`?
-  * Normal commands: Yes.
-  * Output and diagnostic variable names: No.
-* Can I change the normalizations? For example, I may want 1D cells of unit length 1, and fixed dt and velocity.
-  * Units are SI, but you can use the values that you like.
-  * You can set the option to not use dynamic dt.
+* Commands are case-sensitive, except output and diagnostic variable names.
+* Normalization
+  * All input units are SI.
   * All plasma parameters are set in the project you choose.
-* Urgent need to describe all the available options for each command.
+* We need to describe all the available options for each command.
   * `vlasiator --help`, if the help text is incomplete, outdated, wrong, missing that has to be added in the code.
-* I am curious about this `proton_` syntax for many tags. Is it a common pattern for all the available commands?
-  * Vlasiator supports more than one ion population. That population's name (e.g. `proton`) gets prepended to a host of options that are specific to that population, like densities, temperatures, boundary behaviour etc.
+* There are these `proton_` prefix syntax for many tags. Vlasiator supports more than one ion population. That population's name (e.g. `proton`) gets prepended to a host of options that are specific to that population, like densities, temperatures, boundary behaviour etc.
 * How to restart a run?
-  * If the options are set so that restart files come out, you will get files called `restart.INDEX.DATE.vlsv`. INDEX is seven digits in seconds of simulation time, DATE is the date of the file, as this helps  in a lot of practical matters.
+  * If the options are set so that restart files come out, you will get files called `restart.INDEX.DATE.vlsv`. INDEX is seven digits in seconds of simulation time, DATE is the date of the file, as this helps in a lot of practical matters.
   * When you want to restart from a given file, use the option `restart.filename` pointing to that file. In job scripts for multi-stage runs one trick is to use the option on the command line/in the job script as `--restart.filename $( ls -tr | restart.*.vlsv | tail -n 1 )`.
 
 
@@ -127,7 +128,7 @@ maxCFL = 0.5
 [vlasovsolver]
 minCFL = 0.8
 maxCFL = 0.99
-maxSlAccelerationRotation = 22 # maximum allowed rotation per cycle?
+maxSlAccelerationRotation = 22 # maximum allowed rotation per subcycle
 ```
 
 * `ohmHallTerm`: 0, 1 or 2, that is the spatial order of accuracy of the Hall term in the field solver (0 turns it off altogether)
@@ -135,8 +136,8 @@ maxSlAccelerationRotation = 22 # maximum allowed rotation per cycle?
 
 ### Boundary Conditions
 
-* `precedence`: Don't touch that or it might well be instable. But it says which boundary condition is chosen (higher precedence) over another at corners where two types meet.
-* `+`,`-`: what is the convention? (see --help, + is the positive side/highest coordinate, - is the negative/lower side)
+* `precedence`: Don't touch that or it might well be unstable. It says which boundary condition is chosen (higher precedence) over another at corners where two types meet.
+* `+`,`-`: (see --help, + is the positive side/highest coordinate, - is the negative/lower side)
 
 Current boundary settings
 ```YAML
@@ -245,6 +246,8 @@ This will effect the discrete velocity space in Vlasiator due to finite resoluti
 For example, if the temperature is very low, the distribution is approximately a Dirac distribution.
 Therefore, the distribution will only locate within one velocity cell, and thus taking the velocity value as the cell center value instead of the input value listed above.
 The output velocity would be way off if the velocity space resolution is low.
+
+The other thing worths noticing is that there will be numerical errors. Even if you set a periodic boundary with a set of constant input parameters, the output velocity will still fluctuates on the order of machine precision.
 
 Background field
 ```YAML
