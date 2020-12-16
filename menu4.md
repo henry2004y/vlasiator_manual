@@ -171,6 +171,8 @@ struct technical {
 ```
 
 The base `getParameters()` function is used to set periodic BC or not.
+This may not be the ideal place to do it.
+By definition this function should only *read* parameters without doing anything further.
 
 `initSysBoundaries()`: loops through the list of system boundary conditions listed as to be used in the configuration file/command line arguments. For each of these it adds the corresponding instance and updates the member `isThisDynamic` to determine whether any `SysBoundaryCondition` is dynamic in time.
 

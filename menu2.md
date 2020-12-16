@@ -207,6 +207,8 @@ densityModel = SheetMaxwellian # ?
 * `emptyBox`: deprecated/undocumented, remnant from a separate project by Arto
 * `densityModel`: deprecated/undocumented, remnant from a separate project by Arto
 
+The deprecated command can be safely ignored for now.
+
 ```YAML
 [proton_Flowthrough]
 T = 100000.0         # initial temperature
@@ -220,7 +222,7 @@ nVelocitySamples = 2 # number of samples per cell per veloctiy dimension to take
 
 ```YAML
 [proton_Magnetosphere]
-T = 100000.0         # initial temperature?
+T = 100000.0         # initial temperature
 rho = 1.0e5          # initial number density
 VX0 = -5.0e5         # initial velocity in x
 VY0 = 0.0            # initial velocity in x
@@ -229,17 +231,27 @@ nSpaceSamples = 1    # number of samples per cell per spatial dimension to take 
 nVelocitySamples = 1 # number of samples per cell per veloctiy dimension to take to compute the vdf
 ```
 
-What does this command mean?
-* These are two different projects, only one can be active in any given run (and usually only one si set in a given cfg).
+These are two different projects, only one can be active in any given run (and usually only one si set in a given cfg).
+However, since they appear essentially the same, we may be able to merge them into one tag.
 
-Why do we need two identical commands with different names?
+The temperature determines the initial width of the Maxwellian distribution function.
+As an estimation, the thermal speed is
+\[
+v_{th} = \frac{k_B T}{m}
+\]
+with a constant factor depending on the dimension and exact definition.
+For instance, protons of 1K has a thermal speed of about 90 m/s. 
+This will effect the discrete velocity space in Vlasiator due to finite resolution and width.
+For example, if the temperature is very low, the distribution is approximately a Dirac distribution.
+Therefore, the distribution will only locate within one velocity cell, and thus taking the velocity value as the cell center value instead of the input value listed above.
+The output velocity would be way off if the velocity space resolution is low.
 
 Background field
 ```YAML
 [Magnetosphere]
-constBgBX = -3.5355339e-9 # constant background magnetic field x component
-constBgBY = 3.5355339e-9  # same in y
-noDipoleInSW = 1.0        # ? float but not integer? It gets parsed anyway, no impact...
+constBgBX = -3.0e-9 # constant background magnetic field x component
+constBgBY = 3.0e-9  # same in y
+noDipoleInSW = 1.0  # ? float but not integer? It gets parsed anyway, no impact...
 ```
 
 ### Parallelization
@@ -267,8 +279,8 @@ system_write_distribution_zline_stride = 0
 ```
 
 * `system_write_file_name`: it is arbitrary, although we have used `bulk` for the frequent simulation output files for almost 10 years now.
-* `system_write_distribution_stride`: Write out the velocity distribution function every N cells, this is a modulo on the cell's ID essentially.
-* `system_write_distribution_xline_stride`: Write out the VDf every N cells in x (same for y and z).
+* `system_write_distribution_stride`: write out the velocity distribution function every N cells, this is a modulo on the cell's ID essentially.
+* `system_write_distribution_xline_stride`: write out the VDf every N cells in x (same for y and z).
 
 
 ```YAML
