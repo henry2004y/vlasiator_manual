@@ -75,21 +75,25 @@ All the values are assumed to be in SI units.
 x_length = 20      # number of cells in x
 y_length = 20      # number of cells in x
 z_length = 1       # number of cells in x
-x_min = -1.3e8     # minimum x location
-x_max = 1.3e8      # maximum x location
-y_min = -1.3e8     # minimum y location
-y_max = 1.3e8      # maximum y location
-z_min = -6.5e6     # minimum z location
-z_max = 6.5e6      # maximum z location
-t_max = 650        # maximum physical time allowed
-dt = 2.0           # ?
+x_min = -1.3e8     # minimum x location, [m]
+x_max = 1.3e8      # maximum x location, [m]
+y_min = -1.3e8     # minimum y location, [m]
+y_max = 1.3e8      # maximum y location, [m]
+z_min = -6.5e6     # minimum z location, [m]
+z_max = 6.5e6      # maximum z location, [m]
+t_max = 650        # maximum physical time allowed, [s]
+dt = 2.0           # fixed timestep if static dt is applied, [s]
 timestep_max = 100 # maximum number of iterations allowed
 ```
 
-I guess there should an internal logic for which restriction comes first for timestepping?
+My guess is that if any of the limits is reached, the simulation will terminate.
 * `dt` is the single time step length (used if dynamic dt is disabled)
 * `timestep_max` is the max number of timesteps taken until the run stops
-* `t_max` is the max simulaton time in seconds until the run stops
+* `t_max` is the max simulaton time until the run stops
+
+Note that if we are running with a fixed timestep, we need to make sure that it is within the CFL condition.
+Based on my tests, the scheme for translation is not TVD when the CFL number goes beyond 0.9.
+I need to check the numerical scheme used underneath.
 
 ### Species & Velocity Space
 
@@ -172,7 +176,7 @@ face = x-
 face = y-
 face = y+
 ```
-  * `Maxwellian`: Takes the values from the provided dat file, `time density temperature Vx Vy Vz Bx By Bz`, partial support for time-variation is already in the code.proton
+  * `Maxwellian`: Takes the values from the provided `.dat` file, `time density temperature Vx Vy Vz Bx By Bz`, partial support for time-variation is already in the code. It might be helpful to add a header line to the `.dat` file!
 ```YAML
 [maxwellian]
 face = x+
