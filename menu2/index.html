@@ -68,24 +68,25 @@
 <span class=hljs-string >x_length</span> <span class=hljs-string >=</span> <span class=hljs-number >20</span>      <span class=hljs-comment ># number of cells in x</span>
 <span class=hljs-string >y_length</span> <span class=hljs-string >=</span> <span class=hljs-number >20</span>      <span class=hljs-comment ># number of cells in x</span>
 <span class=hljs-string >z_length</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>       <span class=hljs-comment ># number of cells in x</span>
-<span class=hljs-string >x_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-1.3e8</span>     <span class=hljs-comment ># minimum x location</span>
-<span class=hljs-string >x_max</span> <span class=hljs-string >=</span> <span class=hljs-number >1.3e8</span>      <span class=hljs-comment ># maximum x location</span>
-<span class=hljs-string >y_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-1.3e8</span>     <span class=hljs-comment ># minimum y location</span>
-<span class=hljs-string >y_max</span> <span class=hljs-string >=</span> <span class=hljs-number >1.3e8</span>      <span class=hljs-comment ># maximum y location</span>
-<span class=hljs-string >z_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-6.5e6</span>     <span class=hljs-comment ># minimum z location</span>
-<span class=hljs-string >z_max</span> <span class=hljs-string >=</span> <span class=hljs-number >6.5e6</span>      <span class=hljs-comment ># maximum z location</span>
-<span class=hljs-string >t_max</span> <span class=hljs-string >=</span> <span class=hljs-number >650</span>        <span class=hljs-comment ># maximum physical time allowed</span>
-<span class=hljs-string >dt</span> <span class=hljs-string >=</span> <span class=hljs-number >2.0</span>           <span class=hljs-comment ># ?</span>
+<span class=hljs-string >x_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-1.3e8</span>     <span class=hljs-comment ># minimum x location, [m]</span>
+<span class=hljs-string >x_max</span> <span class=hljs-string >=</span> <span class=hljs-number >1.3e8</span>      <span class=hljs-comment ># maximum x location, [m]</span>
+<span class=hljs-string >y_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-1.3e8</span>     <span class=hljs-comment ># minimum y location, [m]</span>
+<span class=hljs-string >y_max</span> <span class=hljs-string >=</span> <span class=hljs-number >1.3e8</span>      <span class=hljs-comment ># maximum y location, [m]</span>
+<span class=hljs-string >z_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-6.5e6</span>     <span class=hljs-comment ># minimum z location, [m]</span>
+<span class=hljs-string >z_max</span> <span class=hljs-string >=</span> <span class=hljs-number >6.5e6</span>      <span class=hljs-comment ># maximum z location, [m]</span>
+<span class=hljs-string >t_max</span> <span class=hljs-string >=</span> <span class=hljs-number >650</span>        <span class=hljs-comment ># maximum physical time allowed, [s]</span>
+<span class=hljs-string >dt</span> <span class=hljs-string >=</span> <span class=hljs-number >2.0</span>           <span class=hljs-comment ># fixed timestep if static dt is applied, [s]</span>
 <span class=hljs-string >timestep_max</span> <span class=hljs-string >=</span> <span class=hljs-number >100</span> <span class=hljs-comment ># maximum number of iterations allowed</span></code></pre>
-<p>I guess there should an internal logic for which restriction comes first for timestepping?</p>
+<p>My guess is that if any of the limits is reached, the simulation will terminate.</p>
 <ul>
 <li><p><code>dt</code> is the single time step length &#40;used if dynamic dt is disabled&#41;</p>
 
 <li><p><code>timestep_max</code> is the max number of timesteps taken until the run stops</p>
 
-<li><p><code>t_max</code> is the max simulaton time in seconds until the run stops</p>
+<li><p><code>t_max</code> is the max simulaton time until the run stops</p>
 
 </ul>
+<p>Note that if we are running with a fixed timestep, we need to make sure that it is within the CFL condition. Based on my tests, the scheme for translation is not TVD when the CFL number goes beyond 0.9. I need to check the numerical scheme used underneath.</p>
 <h3 id=species_velocity_space ><a href="#species_velocity_space">Species &amp; Velocity Space</a></h3>
 <p>Normalization, mass and charge</p>
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_properties</span>]
@@ -156,7 +157,7 @@
 <span class=hljs-string >face</span> <span class=hljs-string >=</span> <span class=hljs-string >y-</span>
 <span class=hljs-string >face</span> <span class=hljs-string >=</span> <span class=hljs-string >y+</span></code></pre>
 <ul>
-<li><p><code>Maxwellian</code>: Takes the values from the provided dat file, <code>time density temperature Vx Vy Vz Bx By Bz</code>, partial support for time-variation is already in the code.proton</p>
+<li><p><code>Maxwellian</code>: Takes the values from the provided <code>.dat</code> file, <code>time density temperature Vx Vy Vz Bx By Bz</code>, partial support for time-variation is already in the code. It might be helpful to add a header line to the <code>.dat</code> file&#33;</p>
 
 </ul>
 <pre><code class="YAML hljs">[<span class=hljs-string >maxwellian</span>]
