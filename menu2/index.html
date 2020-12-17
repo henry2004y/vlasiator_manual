@@ -91,26 +91,25 @@
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_properties</span>]
 <span class=hljs-string >mass</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>
 <span class=hljs-string >mass_units</span> <span class=hljs-string >=</span> <span class=hljs-string >PROTON</span>
-<span class=hljs-string >charge</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>
-
-[<span class=hljs-string >proton_vspace</span>]
-<span class=hljs-string >vx_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-600000.0</span> <span class=hljs-comment ># minimum vx value resolved</span>
-<span class=hljs-string >vx_max</span> <span class=hljs-string >=</span> <span class=hljs-string >+600000.0</span> <span class=hljs-comment ># maximum vx value resolved</span>
-<span class=hljs-string >vy_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-600000.0</span> <span class=hljs-comment ># minimum vy value resolved</span>
-<span class=hljs-string >vy_max</span> <span class=hljs-string >=</span> <span class=hljs-string >+600000.0</span> <span class=hljs-comment ># maximum vy value resolved</span>
-<span class=hljs-string >vz_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-600000.0</span> <span class=hljs-comment ># minimum vz value resolved</span>
-<span class=hljs-string >vz_max</span> <span class=hljs-string >=</span> <span class=hljs-string >+600000.0</span> <span class=hljs-comment ># maximum vz value resolved</span>
-<span class=hljs-string >vx_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of blocks in x</span>
-<span class=hljs-string >vy_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of blocks in y</span>
-<span class=hljs-string >vz_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of blocks in z</span>
-
-[<span class=hljs-string >proton_sparse</span>]
-<span class=hljs-string >minValue</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-15</span> <span class=hljs-comment ># distribution function threshold</span></code></pre>
+<span class=hljs-string >charge</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span></code></pre>
 <ul>
 <li><p><code>mass_units</code>: PROTON or ELECTRON &#40;at the latest once the electorn branch is merged&#41;</p>
 
 </ul>
-<p>Each velocity block consists of <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>×</mo><mn>4</mn><mo>×</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">4\times 4\times 4</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >4</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >4</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.64444em;vertical-align:0em;"></span><span class=mord >4</span></span></span></span> cells.</p>
+<pre><code class="YAML hljs">[<span class=hljs-string >proton_vspace</span>]
+<span class=hljs-string >vx_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-600000.0</span> <span class=hljs-comment ># minimum vx value resolved, [m/s]</span>
+<span class=hljs-string >vx_max</span> <span class=hljs-string >=</span> <span class=hljs-string >+600000.0</span> <span class=hljs-comment ># maximum vx value resolved, [m/s]</span>
+<span class=hljs-string >vy_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-600000.0</span> <span class=hljs-comment ># minimum vy value resolved, [m/s]</span>
+<span class=hljs-string >vy_max</span> <span class=hljs-string >=</span> <span class=hljs-string >+600000.0</span> <span class=hljs-comment ># maximum vy value resolved, [m/s]</span>
+<span class=hljs-string >vz_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-600000.0</span> <span class=hljs-comment ># minimum vz value resolved, [m/s]</span>
+<span class=hljs-string >vz_max</span> <span class=hljs-string >=</span> <span class=hljs-string >+600000.0</span> <span class=hljs-comment ># maximum vz value resolved, [m/s]</span>
+<span class=hljs-string >vx_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of blocks in x</span>
+<span class=hljs-string >vy_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of blocks in y</span>
+<span class=hljs-string >vz_length</span> <span class=hljs-string >=</span> <span class=hljs-number >15</span>     <span class=hljs-comment ># number of blocks in z</span></code></pre>
+<p>Each velocity block consists of <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>×</mo><mn>4</mn><mo>×</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">4\times 4\times 4</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >4</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >4</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.64444em;vertical-align:0em;"></span><span class=mord >4</span></span></span></span> cells. The minimum and maximum values set the extensions of the velocity space cells. Note that a mismatch between input and output moment values will occur if the velocity space is poorly sampled. According to my tests, to get within 1&#37; accuracy you need <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>×</mo><mn>6</mn><mo>×</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">6\times 6\times 6</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >6</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >6</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.64444em;vertical-align:0em;"></span><span class=mord >6</span></span></span></span> blocks; to get a satisfying accuracy in most cases you need at least <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mo>×</mo><mn>10</mn><mo>×</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">10\times 10\times 10</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >1</span><span class=mord >0</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >1</span><span class=mord >0</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.64444em;vertical-align:0em;"></span><span class=mord >1</span><span class=mord >0</span></span></span></span> blocks.</p>
+<pre><code class="YAML hljs">[<span class=hljs-string >proton_sparse</span>]
+<span class=hljs-string >minValue</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-15</span> <span class=hljs-comment ># distribution function threshold</span></code></pre>
+<p>This command sets the threshold for resolving a distribution. For typical magnetospheric plasma parameters, phase-space density peaks out between <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>×</mo><mn>1</mn><msup><mn>0</mn><mrow><mo>−</mo><mn>12</mn></mrow></msup></mrow><annotation encoding="application/x-tex">1\times10^{-12}</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >1</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.8141079999999999em;vertical-align:0em;"></span><span class=mord >1</span><span class=mord ><span class=mord >0</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span> and <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>×</mo><mn>1</mn><msup><mn>0</mn><mrow><mo>−</mo><mn>9</mn></mrow></msup><mtext> </mtext><msup><mtext>m</mtext><mrow><mtext>⁻</mtext><mn>6</mn></mrow></msup><msup><mtext>s</mtext><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">1\times 10^{-9}\ \text{m}^{⁻6}\text{s}^3</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >1</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.8141079999999999em;vertical-align:0em;"></span><span class=mord >1</span><span class=mord ><span class=mord >0</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">9</span></span></span></span></span></span></span></span></span><span class=mspace > </span><span class=mord ><span class="mord text"><span class=mord >m</span></span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">⁻</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span><span class=mord ><span class="mord text"><span class=mord >s</span></span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>.</p>
 <h3 id=solvers ><a href="#solvers">Solvers</a></h3>
 <pre><code class="YAML hljs">[<span class=hljs-string >fieldsolver</span>]
 <span class=hljs-string >ohmHallTerm</span> <span class=hljs-string >=</span> <span class=hljs-number >2</span>
@@ -180,7 +179,7 @@
 [<span class=hljs-string >proton_ionosphere</span>]
 <span class=hljs-string >taperRadius</span> <span class=hljs-string >=</span> <span class=hljs-number >100.0e6</span>
 <span class=hljs-string >rho</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e6</span></code></pre>
-<p>Yes I can guess, but shall there be better alternatives? Let&#39;s discuss, but some options are population-specific for example. Maybe something like</p>
+<p>I can guess the meanings, but shall there be better alternatives? Let&#39;s discuss, but some options are population-specific for example. Maybe something like</p>
 <pre><code class="YAML hljs">[<span class=hljs-string >boundary</span>]
 <span class=hljs-string >boundary_x</span> <span class=hljs-string >=</span> <span class=hljs-string >Outflow</span>
 <span class=hljs-string >boundary_y</span> <span class=hljs-string >=</span> <span class=hljs-string >Maxwellian</span>
@@ -190,9 +189,9 @@
 <h3 id=initial_conditions ><a href="#initial_conditions">Initial conditions</a></h3>
 <pre><code class="YAML hljs">[<span class=hljs-string >Flowthrough</span>]
 <span class=hljs-string >emptyBox</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>  <span class=hljs-comment ># ?</span>
-<span class=hljs-string >Bx</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-9</span>   <span class=hljs-comment ># background B field</span>
-<span class=hljs-string >By</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-9</span>   <span class=hljs-comment ># background B field</span>
-<span class=hljs-string >Bz</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-9</span>   <span class=hljs-comment ># background B field</span>
+<span class=hljs-string >Bx</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-9</span>   <span class=hljs-comment ># background B field, [T]</span>
+<span class=hljs-string >By</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-9</span>   <span class=hljs-comment ># background B field, [T]</span>
+<span class=hljs-string >Bz</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-9</span>   <span class=hljs-comment ># background B field, [T]</span>
 <span class=hljs-string >densityModel</span> <span class=hljs-string >=</span> <span class=hljs-string >SheetMaxwellian</span> <span class=hljs-comment ># ?</span></code></pre>
 <ul>
 <li><p><code>emptyBox</code>: deprecated/undocumented, remnant from a separate project by Arto</p>
@@ -202,19 +201,19 @@
 </ul>
 <p>The deprecated command can be safely ignored for now.</p>
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_Flowthrough</span>]
-<span class=hljs-string >T</span> <span class=hljs-string >=</span> <span class=hljs-number >100000.0</span>         <span class=hljs-comment ># initial temperature</span>
-<span class=hljs-string >rho</span>  <span class=hljs-string >=</span> <span class=hljs-number >1000000.0</span>     <span class=hljs-comment ># initial number density</span>
-<span class=hljs-string >VX0</span> <span class=hljs-string >=</span> <span class=hljs-number >4e5</span>            <span class=hljs-comment ># initial velocity in x</span>
-<span class=hljs-string >VY0</span> <span class=hljs-string >=</span> <span class=hljs-number >4e5</span>            <span class=hljs-comment ># initial velocity in y</span>
-<span class=hljs-string >VZ0</span> <span class=hljs-string >=</span> <span class=hljs-number >4e5</span>            <span class=hljs-comment ># initial velocity in z</span>
+<span class=hljs-string >T</span> <span class=hljs-string >=</span> <span class=hljs-number >100000.0</span>         <span class=hljs-comment ># initial temperature, [K]</span>
+<span class=hljs-string >rho</span>  <span class=hljs-string >=</span> <span class=hljs-number >1000000.0</span>     <span class=hljs-comment ># initial number density, [/m^3]</span>
+<span class=hljs-string >VX0</span> <span class=hljs-string >=</span> <span class=hljs-number >4e5</span>            <span class=hljs-comment ># initial velocity in x, [m/s]</span>
+<span class=hljs-string >VY0</span> <span class=hljs-string >=</span> <span class=hljs-number >4e5</span>            <span class=hljs-comment ># initial velocity in y, [m/s]</span>
+<span class=hljs-string >VZ0</span> <span class=hljs-string >=</span> <span class=hljs-number >4e5</span>            <span class=hljs-comment ># initial velocity in z, [m/s]</span>
 <span class=hljs-string >nSpaceSamples</span> <span class=hljs-string >=</span> <span class=hljs-number >2</span>    <span class=hljs-comment ># number of samples per cell per spatial dimension to take to compute the vdf</span>
 <span class=hljs-string >nVelocitySamples</span> <span class=hljs-string >=</span> <span class=hljs-number >2</span> <span class=hljs-comment ># number of samples per cell per veloctiy dimension to take to compute the vdf</span></code></pre>
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_Magnetosphere</span>]
-<span class=hljs-string >T</span> <span class=hljs-string >=</span> <span class=hljs-number >100000.0</span>         <span class=hljs-comment ># initial temperature</span>
-<span class=hljs-string >rho</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e5</span>          <span class=hljs-comment ># initial number density</span>
-<span class=hljs-string >VX0</span> <span class=hljs-string >=</span> <span class=hljs-number >-5.0e5</span>         <span class=hljs-comment ># initial velocity in x</span>
-<span class=hljs-string >VY0</span> <span class=hljs-string >=</span> <span class=hljs-number >0.0</span>            <span class=hljs-comment ># initial velocity in x</span>
-<span class=hljs-string >VZ0</span> <span class=hljs-string >=</span> <span class=hljs-number >0.0</span>            <span class=hljs-comment ># initial velocity in x</span>
+<span class=hljs-string >T</span> <span class=hljs-string >=</span> <span class=hljs-number >100000.0</span>         <span class=hljs-comment ># initial temperature, [K]</span>
+<span class=hljs-string >rho</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e5</span>          <span class=hljs-comment ># initial number density, [/m^3]</span>
+<span class=hljs-string >VX0</span> <span class=hljs-string >=</span> <span class=hljs-number >-5.0e5</span>         <span class=hljs-comment ># initial velocity in x, [m/s] </span>
+<span class=hljs-string >VY0</span> <span class=hljs-string >=</span> <span class=hljs-number >0.0</span>            <span class=hljs-comment ># initial velocity in x, [m/s]</span>
+<span class=hljs-string >VZ0</span> <span class=hljs-string >=</span> <span class=hljs-number >0.0</span>            <span class=hljs-comment ># initial velocity in x, [m/s]</span>
 <span class=hljs-string >nSpaceSamples</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>    <span class=hljs-comment ># number of samples per cell per spatial dimension to take to compute the vdf</span>
 <span class=hljs-string >nVelocitySamples</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span> <span class=hljs-comment ># number of samples per cell per veloctiy dimension to take to compute the vdf</span></code></pre>
 <p>These are two different projects, only one can be active in any given run &#40;and usually only one si set in a given cfg&#41;. However, since they appear essentially the same, we may be able to merge them into one tag.</p>
@@ -224,6 +223,7 @@ v_{th} = \frac{k_B T}{m}
 </annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.58056em;vertical-align:-0.15em;"></span><span class=mord ><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">h</span></span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.15em;"><span></span></span></span></span></span></span><span class=mspace  style="margin-right:0.2777777777777778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2777777777777778em;"></span></span><span class=base ><span class=strut  style="height:2.05744em;vertical-align:-0.686em;"></span><span class=mord ><span class="mopen nulldelimiter"></span><span class=mfrac ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:1.37144em;"><span style="top:-2.314em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class="mord mathnormal">m</span></span></span><span style="top:-3.23em;"><span class=pstrut  style="height:3em;"></span><span class=frac-line  style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class=mord ><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span>
 <p>with a constant factor depending on the dimension and exact definition. For instance, protons of 1K has a thermal speed of about 90 m/s.  This will effect the discrete velocity space in Vlasiator due to finite resolution and width. For example, if the temperature is very low, the distribution is approximately a Dirac distribution. Therefore, the distribution will only locate within one velocity cell, and thus taking the velocity value as the cell center value instead of the input value listed above. The output velocity would be way off if the velocity space resolution is low.</p>
 <p>The other thing worths noticing is that there will be numerical errors. Even if you set a periodic boundary with a set of constant input parameters, the output velocity will still fluctuates on the order of machine precision.</p>
+<p>If for some reason you need to force the number density, you can use the <code>conserve_mass</code> flag which re-scales the VDF to match the original value after it&#39;s been populated.</p>
 <p>Background field</p>
 <pre><code class="YAML hljs">[<span class=hljs-string >Magnetosphere</span>]
 <span class=hljs-string >constBgBX</span> <span class=hljs-string >=</span> <span class=hljs-number >-3.0e-9</span> <span class=hljs-comment ># constant background magnetic field x component</span>
@@ -249,48 +249,27 @@ v_{th} = \frac{k_B T}{m}
 
 <li><p><code>system_write_distribution_stride</code>: write out the velocity distribution function every N cells, this is a modulo on the cell&#39;s ID essentially.</p>
 
-<li><p><code>system_write_distribution_xline_stride</code>: write out the VDf every N cells in x &#40;same for y and z&#41;.</p>
+<li><p><code>system_write_distribution_xline_stride</code>: write out the VDF every N cells in x &#40;same for y and z&#41;.</p>
 
 </ul>
 <pre><code class="YAML hljs">[<span class=hljs-string >variables</span>]
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_rhom</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >fg_e</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >fg_b</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_pressure</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_rho</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_v</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_boundarytype</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_rank</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_blocks</span>
-<span class=hljs-string >diagnostic</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_blocks</span></code></pre>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_rhom</span>            <span class=hljs-comment ># total mass density, [kg/m^3]</span>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >fg_e</span>               <span class=hljs-comment ># electric field, [V/m]</span>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >fg_b</span>               <span class=hljs-comment ># magnetic field, [T]</span>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_pressure</span>        <span class=hljs-comment ># total thermal pressure, [Pa]</span>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_rho</span> <span class=hljs-comment ># number density for each species, [m^-3]</span>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_v</span>   <span class=hljs-comment ># velocity for each species, [m/s]</span>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_boundarytype</span>    <span class=hljs-comment ># ?</span>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_rank</span>            <span class=hljs-comment ># MPI ranks?</span>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_blocks</span> <span class=hljs-comment ># ?</span>
+<span class=hljs-string >diagnostic</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_blocks</span> <span class=hljs-comment ># ?</span></code></pre>
+<p>All the quantities can be listed after either <code>output</code> or <code>diagnostic</code>.</p>
 <ul>
-<li><p><code>output</code>:</p>
-<ul>
-<li><p><code>vg_rhom</code>: ?</p>
+<li><p><code>output</code>: writes to the output vlsv files.</p>
 
-<li><p><code>fg_e</code>: electric field</p>
+<li><p><code>diagnostic</code>: writes out the min, max, mean and sum of that variable over the whole grid into the <code>diagnostic.txt</code> file. It&#39;s a handy way of monitoring some parameters during a run.</p>
 
-<li><p><code>fg_b</code>: magnetic field</p>
-
-<li><p><code>vg_pressure</code>: total ion pressure?</p>
-
-<li><p><code>populations_vg_rho</code>: ?</p>
-
-<li><p><code>populations_vg_v</code>: ?</p>
-
-<li><p><code>vg_boundarytype</code>: ?</p>
-
-<li><p><code>vg_rank</code>: ?</p>
-
-<li><p><code>populations_vg_blocks</code>: ?</p>
-
-</ul>
-
-<li><p><code>diagnostic</code>: this writes out the min, max, mean and sum of that variable over the whole grid into the <code>diagnostic.txt</code> file, it&#39;s a handy way of monitoring some parameters during a run.</p>
-
-<li><p><code>output</code> means that the full snapshot of that variable is written to the vlsv file&#40;s&#41;.</p>
-
-<li><p>Variable name conventions &#40;Markus will write more&#41;:</p>
+<li><p>Variable name conventions:</p>
 <ul>
 <li><p><code>fg</code>: variable on the fsgrid field solver grid, at highest resolution throughout.</p>
 
@@ -306,7 +285,7 @@ v_{th} = \frac{k_B T}{m}
 <p>All the output files are in vlsv format, no matter it&#39;s the restart file or regular outputs. The restart file is used for continuing a run, which contains the full distribution, field information and meta data. Typical output file is called bulk file, which may contain various derived quantities every few cells.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: December 16, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: December 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
