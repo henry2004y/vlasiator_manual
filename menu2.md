@@ -99,25 +99,35 @@ Normalization, mass and charge
 mass = 1
 mass_units = PROTON
 charge = 1
-
-[proton_vspace]
-vx_min = -600000.0 # minimum vx value resolved
-vx_max = +600000.0 # maximum vx value resolved
-vy_min = -600000.0 # minimum vy value resolved
-vy_max = +600000.0 # maximum vy value resolved
-vz_min = -600000.0 # minimum vz value resolved
-vz_max = +600000.0 # maximum vz value resolved
-vx_length = 15     # number of blocks in x
-vy_length = 15     # number of blocks in y
-vz_length = 15     # number of blocks in z
-
-[proton_sparse]
-minValue = 1.0e-15 # distribution function threshold
 ```
 
 * `mass_units`: PROTON or ELECTRON (at the latest once the electorn branch is merged)
 
+```YAML
+[proton_vspace]
+vx_min = -600000.0 # minimum vx value resolved, [m/s]
+vx_max = +600000.0 # maximum vx value resolved, [m/s]
+vy_min = -600000.0 # minimum vy value resolved, [m/s]
+vy_max = +600000.0 # maximum vy value resolved, [m/s]
+vz_min = -600000.0 # minimum vz value resolved, [m/s]
+vz_max = +600000.0 # maximum vz value resolved, [m/s]
+vx_length = 15     # number of blocks in x
+vy_length = 15     # number of blocks in y
+vz_length = 15     # number of blocks in z
+```
+
 Each velocity block consists of $4\times 4\times 4$ cells.
+The minimum and maximum values set the extensions of the velocity space cells.
+Note that a mismatch between input and output moment values will occur if the velocity space is poorly sampled.
+According to my tests, to get within 1% accuracy you need $6\times 6\times 6$ blocks; to get a satisfying accuracy in most cases you need at least $10\times 10\times 10$ blocks.
+
+```YAML
+[proton_sparse]
+minValue = 1.0e-15 # distribution function threshold
+```
+
+This command sets the threshold for resolving a distribution.
+For typical magnetospheric plasma parameters, phase-space density peaks out between $1\times10^{-12}$ and $1\times 10^{-9}\ \text{m}^{⁻6}\text{s}^3$.
 
 ### Solvers
 
@@ -185,7 +195,7 @@ taperRadius = 100.0e6
 rho = 1.0e6
 ```
 
-Yes I can guess, but shall there be better alternatives? Let's discuss, but some options are population-specific for example.
+I can guess the meanings, but shall there be better alternatives? Let's discuss, but some options are population-specific for example.
 Maybe something like
 ```YAML
 [boundary]
@@ -201,9 +211,9 @@ Internally we almost don't need to change anything, except a check on the string
 ```YAML
 [Flowthrough]
 emptyBox = 0  # ?
-Bx = 1.0e-9   # background B field
-By = 1.0e-9   # background B field
-Bz = 1.0e-9   # background B field
+Bx = 1.0e-9   # background B field, [T]
+By = 1.0e-9   # background B field, [T]
+Bz = 1.0e-9   # background B field, [T]
 densityModel = SheetMaxwellian # ?
 ```
 
@@ -214,22 +224,22 @@ The deprecated command can be safely ignored for now.
 
 ```YAML
 [proton_Flowthrough]
-T = 100000.0         # initial temperature
-rho  = 1000000.0     # initial number density
-VX0 = 4e5            # initial velocity in x
-VY0 = 4e5            # initial velocity in y
-VZ0 = 4e5            # initial velocity in z
+T = 100000.0         # initial temperature, [K]
+rho  = 1000000.0     # initial number density, [/m^3]
+VX0 = 4e5            # initial velocity in x, [m/s]
+VY0 = 4e5            # initial velocity in y, [m/s]
+VZ0 = 4e5            # initial velocity in z, [m/s]
 nSpaceSamples = 2    # number of samples per cell per spatial dimension to take to compute the vdf
 nVelocitySamples = 2 # number of samples per cell per veloctiy dimension to take to compute the vdf
 ```
 
 ```YAML
 [proton_Magnetosphere]
-T = 100000.0         # initial temperature
-rho = 1.0e5          # initial number density
-VX0 = -5.0e5         # initial velocity in x
-VY0 = 0.0            # initial velocity in x
-VZ0 = 0.0            # initial velocity in x
+T = 100000.0         # initial temperature, [K]
+rho = 1.0e5          # initial number density, [/m^3]
+VX0 = -5.0e5         # initial velocity in x, [m/s] 
+VY0 = 0.0            # initial velocity in x, [m/s]
+VZ0 = 0.0            # initial velocity in x, [m/s]
 nSpaceSamples = 1    # number of samples per cell per spatial dimension to take to compute the vdf
 nVelocitySamples = 1 # number of samples per cell per veloctiy dimension to take to compute the vdf
 ```
@@ -250,6 +260,8 @@ Therefore, the distribution will only locate within one velocity cell, and thus 
 The output velocity would be way off if the velocity space resolution is low.
 
 The other thing worths noticing is that there will be numerical errors. Even if you set a periodic boundary with a set of constant input parameters, the output velocity will still fluctuates on the order of machine precision.
+
+If for some reason you need to force the number density, you can use the `conserve_mass` flag which re-scales the VDF to match the original value after it's been populated.
 
 Background field
 ```YAML
@@ -285,36 +297,28 @@ system_write_distribution_zline_stride = 0
 
 * `system_write_file_name`: it is arbitrary, although we have used `bulk` for the frequent simulation output files for almost 10 years now.
 * `system_write_distribution_stride`: write out the velocity distribution function every N cells, this is a modulo on the cell's ID essentially.
-* `system_write_distribution_xline_stride`: write out the VDf every N cells in x (same for y and z).
+* `system_write_distribution_xline_stride`: write out the VDF every N cells in x (same for y and z).
 
 
 ```YAML
 [variables]
-output = vg_rhom
-output = fg_e
-output = fg_b
-output = vg_pressure
-output = populations_vg_rho
-output = populations_vg_v
-output = vg_boundarytype
-output = vg_rank
-output = populations_vg_blocks
-diagnostic = populations_vg_blocks
+output = vg_rhom            # total mass density, [kg/m^3]
+output = fg_e               # electric field, [V/m]
+output = fg_b               # magnetic field, [T]
+output = vg_pressure        # total thermal pressure, [Pa]
+output = populations_vg_rho # number density for each species, [m^-3]
+output = populations_vg_v   # velocity for each species, [m/s]
+output = vg_boundarytype    # ?
+output = vg_rank            # MPI ranks?
+output = populations_vg_blocks # ?
+diagnostic = populations_vg_blocks # ?
 ```
 
-* `output`:
-  * `vg_rhom`: ?
-  * `fg_e`: electric field
-  * `fg_b`: magnetic field
-  * `vg_pressure`: total ion pressure?
-  * `populations_vg_rho`: ?
-  * `populations_vg_v`: ?
-  * `vg_boundarytype`: ?
-  * `vg_rank`: ?
-  * `populations_vg_blocks`: ?
-* `diagnostic`: this writes out the min, max, mean and sum of that variable over the whole grid into the `diagnostic.txt` file, it's a handy way of monitoring some parameters during a run.
-* `output` means that the full snapshot of that variable is written to the vlsv file(s).
-* Variable name conventions (Markus will write more):
+All the quantities can be listed after either `output` or `diagnostic`.
+* `output`: writes to the output vlsv files.
+* `diagnostic`: writes out the min, max, mean and sum of that variable over the whole grid into the `diagnostic.txt` file. It's a handy way of monitoring some parameters during a run.
+
+* Variable name conventions:
   * `fg`: variable on the fsgrid field solver grid, at highest resolution throughout.
   * `vg`: variable on the DCCRG Vlasov grid, including AMR in 3D potentially.
   * `populations`: used for moments: write out that (group of) moment(s) for all populations.
