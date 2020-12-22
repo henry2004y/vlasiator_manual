@@ -209,6 +209,10 @@
 <span class=hljs-string >VZ0</span> <span class=hljs-string >=</span> <span class=hljs-number >4e5</span>            <span class=hljs-comment ># initial velocity in z, [m/s]</span>
 <span class=hljs-string >nSpaceSamples</span> <span class=hljs-string >=</span> <span class=hljs-number >2</span>    <span class=hljs-comment ># number of samples per cell per spatial dimension to take to compute the vdf</span>
 <span class=hljs-string >nVelocitySamples</span> <span class=hljs-string >=</span> <span class=hljs-number >2</span> <span class=hljs-comment ># number of samples per cell per veloctiy dimension to take to compute the vdf</span></code></pre>
+<ul>
+<li><p>What does sample mean here?</p>
+
+</ul>
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_Magnetosphere</span>]
 <span class=hljs-string >T</span> <span class=hljs-string >=</span> <span class=hljs-number >100000.0</span>         <span class=hljs-comment ># initial temperature, [K]</span>
 <span class=hljs-string >rho</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e5</span>          <span class=hljs-comment ># initial number density, [/m^3]</span>
@@ -286,7 +290,7 @@ v_{th} = \frac{k_B T}{m}
 <p>All the output files are in vlsv format, no matter it&#39;s the restart file or regular outputs. The restart file is used for continuing a run, which contains the full distribution, field information and meta data. Typical output file is called bulk file, which may contain various derived quantities every few cells.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: December 17, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: December 22, 2020. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
