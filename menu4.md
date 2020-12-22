@@ -87,6 +87,7 @@ Stages:
     * `Velocity-space`: `calculateAcceleration()`
     * `Update system boundaries (Vlasov post-acceleration)`
     * `Compute interp moments`
+  * `Project endTimeStep`: `hook()` for project specified calls
 3. `Finalization`
 
 Questions:
@@ -145,11 +146,12 @@ I have no clue why this local block ID has to be defined here, since it probably
 ## SysBoundary
 
 The top level file is `sysboundarycondition.cpp`, with the declaration of `namespace SBC`.
-It contains a base class called `SysBoundaryCondition`, and 4 derived classes:
+It contains a base class called `SysBoundaryCondition`, and 5 derived classes:
 * `DoNotCompute`
 * `Ionosphere`
 * `Outflow`
 * `SetMaxwellian`
+* `SetByUser`
 
 The base class has a private variable `sysBoundaryCondList` to keep track of all the boundary conditions as strings.
 This can contain multiple options for the same BC class?
@@ -196,3 +198,6 @@ This can be modified to remove the periodicity checking, and the boundary list i
 
 
 `vlasovBoundaryCopyFromTheClosestNbr()`: the last argument, `calculate_V_moments` should be renames, as it looks too similar to a function!
+
+### SetByUser
+

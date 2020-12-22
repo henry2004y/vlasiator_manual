@@ -237,6 +237,8 @@ nSpaceSamples = 2    # number of samples per cell per spatial dimension to take 
 nVelocitySamples = 2 # number of samples per cell per veloctiy dimension to take to compute the vdf
 ```
 
+* What does sample mean here?
+
 ```YAML
 [proton_Magnetosphere]
 T = 100000.0         # initial temperature, [K]
