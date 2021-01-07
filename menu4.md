@@ -7,6 +7,8 @@
 
 # Internal Code Structure
 
+\toc
+
 In C++, the included files should be ordered and grouped.
 This part can be done with an automatic script.
 It should be able to:
@@ -55,40 +57,60 @@ I need to go through the coding standard.
 
 Stages:
 
-1. `Initialization`
-  * `Read parameters`
-  * `open logFile & diagnostic`
-  * `Init project`
-  * `Init fieldsolver grids`
-  * `Init grids`
-  * `Init DROs`
-  * `getFieldsFromFsGrid`
-  * `compute-dt`
-  * `write-initial-state`
-  * `compute-dt`
-  * `propagate-velocity-space-dt/2`
-2. `Simulation`
-  * `IO`
-    * `checkExternalCommands`
-    * `logfile-io`
-    * `diagnostic-io`
-    * `write-system`
-    * `Bailout-allreduce`
-    * `compute-is-restart-written-and-extra-LB`
-    * `write-restart`
-  * `update-dt`
-  * `Propagate`
-    * `Spatial-space`: `calculateSpatialTranslation()`
-    * `Update system boundaries (Vlasov post-translation)`: `sysBoundaries.applySysBoundaryVlasovConditions()`
-    * `Compute interp moments`: `calculateInterpolatedVelocityMoments()`
-    * `Propagate Fields`: `propagateFields()`
-      * `fsgrid-coupling-in`
-      * `getFieldsFromFsGrid`
-    * `Velocity-space`: `calculateAcceleration()`
-    * `Update system boundaries (Vlasov post-acceleration)`
-    * `Compute interp moments`
-  * `Project endTimeStep`: `hook()` for project specified calls
-3. `Finalization`
+1. Initialization
+  * Read parameters
+  * Open logFile & diagnostic
+  * Init project
+  * Init fieldsolver grids
+  * Init grids
+    * `initializeGrids()` creates the `sysBoundaries` object;
+    * `isSysBoundaryCondDynamic` determines if we need to update BCs.
+  * Init DROs
+    * Initialize data reduction operators.
+  * getFieldsFromFsGrid
+    * Obtain initial B field after calling `propagateFields()` with `dt=0`?
+  * compute-dt
+  * write-initial-state
+  * compute-dt
+  * propagate-velocity-space-dt/2
+2. Simulation
+  * IO
+    * Check whether external STOP, KILL or SAVE has been passed
+      * `checkExternalCommands()`
+    * Profiling and diagnosing
+      * phiprof
+      * `writeDiagnostic()`
+    * Write system
+      * not sure if this is the real output?
+    * Bailing out from all processes: what does it mean?
+      * `MPI-Allreduce()`
+    * Write restart if needed
+    * Check load balancing
+  * Calculate the number of solved local cells
+  * Update dt
+    * This step is closely related to the leap frog scheme.
+  * Propagate for one step
+    * Spatial-space
+      * `calculateSpatialTranslation()`
+      * Calculate spatial translation (meaning?)
+    * Update system boundaries
+      * `sysBoundaries.applySysBoundaryVlasovConditions()`
+      * This is probably the upper level call to the BCs?
+    * Compute interp moments
+      * `calculateInterpolatedVelocityMoments()`
+    * Propagate Fields
+      * Copy moments onto the fsgrid.
+      * `propagateFields()`: calculate field for the next time step.
+      * `getFieldsFromFsGrid()`: copy results back from fsgrid.
+    * Update velocity
+      * `calculateAcceleration()`
+    * Update system boundaries
+      * `sysBoundaries.applySysBoundaryVlasovConditions()`
+    * Compute interpolated velocity moments
+      * `calculateInterpolatedVelocityMoments()`
+    * Project specified calls
+      * `project->hook()`
+3. Finalization
 
 Questions:
 * `object_wrapper.h`: it defines a struct named ObjectWrapper which contains the AMR criteria, container for user-defined mesh data, parameters for all particle species, projects, and parameters for velocity meshes.
