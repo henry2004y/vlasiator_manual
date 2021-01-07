@@ -91,11 +91,10 @@ Stages:
     * This step is closely related to the leap frog scheme.
   * Propagate for one step
     * Spatial-space
-      * `calculateSpatialTranslation()`
-      * Calculate spatial translation (meaning?)
+      * `calculateSpatialTranslation()`: for some reason everything is commented out in this function?
     * Update system boundaries
       * `sysBoundaries.applySysBoundaryVlasovConditions()`
-      * This is probably the upper level call to the BCs?
+      * This is the first call to the BCs.
     * Compute interp moments
       * `calculateInterpolatedVelocityMoments()`
     * Propagate Fields
@@ -103,9 +102,10 @@ Stages:
       * `propagateFields()`: calculate field for the next time step.
       * `getFieldsFromFsGrid()`: copy results back from fsgrid.
     * Update velocity
-      * `calculateAcceleration()`
+      * `calculateAcceleration()`: accelerate all particle populations to the next time step.
     * Update system boundaries
       * `sysBoundaries.applySysBoundaryVlasovConditions()`
+      * This is the second call to the BCs.
     * Compute interpolated velocity moments
       * `calculateInterpolatedVelocityMoments()`
     * Project specified calls
@@ -136,7 +136,7 @@ Since they are already imported, there is no need to add `std::` in the rest of 
 * The comments for initializing data reduction operators are confusing.
 * The main loop with while: Phiprof diagnostic output is fixed to 10 steps. We should have the flexibility to change that.
 * The condition `P::propagateField` comments say that it is only for B field? But I can see all the fields in the argument list of propagteFields?
-* `getFieldsFromFsGrid`: since the field solver is working on a regular Cartesian grid, this is supposed to copy field results back to dccrg grid for vdf?
+* `getFieldsFromFsGrid()`: since the field solver is working on a regular Cartesian grid, this is supposed to copy field results back to dccrg grid for vdf?
 
 
 ## Definitions
@@ -167,8 +167,11 @@ I have no clue why this local block ID has to be defined here, since it probably
 
 ## SysBoundary
 
-The top level file is `sysboundarycondition.cpp`, with the declaration of `namespace SBC`.
-It contains a base class called `SysBoundaryCondition`, and 5 derived classes:
+The code structure here is slightly more complicated than I thought.
+In the main function, `sysBoundary.applySysBoundaryVlasovConditions()` is called for setting the BCs.
+`sysBoundary` is a high level wrapper class for initializing, storing, and applying all types of system boundary conditions.
+The actual classes for BCs are defined in `sysboundarycondition.cpp`, within the scope of `namespace SBC`.
+It contains a base abstract class called `SysBoundaryCondition`, and 5 derived classes:
 * `DoNotCompute`
 * `Ionosphere`
 * `Outflow`
@@ -176,21 +179,17 @@ It contains a base class called `SysBoundaryCondition`, and 5 derived classes:
 * `SetByUser`
 
 The base class has a private variable `sysBoundaryCondList` to keep track of all the boundary conditions as strings.
-This can contain multiple options for the same BC class?
-
-The class is declared in the header file.
-On top of the boundary types class, there is a container class `SysBoundary` that is used to initialize, store, and apply boundary conditions.
-
+Can this possess multiple options for the same BC class?
 
 In `Commons.h`, the general information for the grid is defined:
 ```cpp
 struct technical {
-   int sysBoundaryFlag;  /*!< System boundary flags */
-   int sysBoundaryLayer; /*!< System boundary layer index */
-   Real maxFsDt;         /*!< Maximum timestep allowed in ordinary space by fieldsolver for this cell */
-   int fsGridRank;       /*!< Rank in the fsGrids cartesian coordinator */
-   uint SOLVE;           /*!< Bit mask to determine whether a given cell should solve E or B components */
-   int refLevel;         /*!< AMR Refinement Level */
+   int sysBoundaryFlag;  /* System boundary flags */
+   int sysBoundaryLayer; /* System boundary layer index */
+   Real maxFsDt;         /* Maximum timestep allowed in ordinary space by fieldsolver for this cell */
+   int fsGridRank;       /* Rank in the fsGrids cartesian coordinator */
+   uint SOLVE;           /* Bit mask to determine whether a given cell should solve E or B components */
+   int refLevel;         /* AMR Refinement Level */
 };
 ```
 
