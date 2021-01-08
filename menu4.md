@@ -178,6 +178,13 @@ It contains a base abstract class called `SysBoundaryCondition`, and 5 derived c
 * `SetMaxwellian`
 * `SetByUser`
 
+Personally I don't like the name of `SetMaxwellian`. We may change it to `Inflow` and then make `Maxwellian` one option among the available choices. So I envision something like this:
+* `DoNotCompute`
+* `Ionosphere`
+* `Outflow`
+* `Inflow`
+* `User`
+
 The base class has a private variable `sysBoundaryCondList` to keep track of all the boundary conditions as strings.
 Can this possess multiple options for the same BC class?
 
@@ -193,32 +200,37 @@ struct technical {
 };
 ```
 
-The base `getParameters()` function is used to set periodic BC or not.
-This may not be the ideal place to do it.
-By definition this function should only *read* parameters without doing anything further.
+!!! note
+    `Real` is a self-defined type, which can be `float` or `double` depending on the compilation flag. 
 
-`initSysBoundaries()`: loops through the list of system boundary conditions listed as to be used in the configuration file/command line arguments. For each of these it adds the corresponding instance and updates the member `isThisDynamic` to determine whether any `SysBoundaryCondition` is dynamic in time.
+* `getParameters()`: reads from the configuration file and sets periodic BC. It may be better to make periodicity just one type of BCs.
 
-This can be modified to remove the periodicity checking, and the boundary list initialization from `sysBoundaryCondList` is unnecessary. All types of boundary conditions should be prescribed in the class.
+* `initSysBoundaries()`: loops through the list of system boundary conditions listed as to be used in the configuration file/command line arguments. For each of these it adds the corresponding instance and updates the member `isThisDynamic` to determine whether any `SysBoundaryCondition` is dynamic in time. This can be modified to remove the periodicity checking, and the boundary list initialization from `sysBoundaryCondList` is unnecessary. All types of boundary conditions should be prescribed in the class.
 
 `P::xcells_ini`: what does this effect?
 
-`AddSysBoundary()`
+* `checkRefinement()`: for AMR usage presumably?
 
-`initSysBoundary()`
+* `belongsToLayer()`: checks ghost cell layers?
 
-`checkRefinement()`: for AMR usage presumably?
+* `classifyCells()`: loops through all cells and and assigns the correct `sysBoundaryFlag` depending for each BCs. This is a quite long one.
 
-`belongsToLayer()`: check ghost cell layers?
+* `applyInitialState()`: loops through all `SysBoundaryConditions` and calls the corresponding `applyInitialState()` function for all existing particle species.
 
-`classifyCells()`: loops through all cells and and for each assigns the correct `sysBoundaryFlag` depending on the return value of each `SysBoundaryCondition`'s `assignSysBoundary`.
+* `applySysBoundaryVlasovConditions()`: applys the Vlasov system boundary conditions to all system boundary cells. It loops through all `SysBoundaryConditions` and calls the corresponding `vlasovBoundaryCondition()` function for all moments for all particle species. I think this is the place where the dynamic BCs should be called.
 
-`applyInitialState()`: loops through all `SysBoundaryConditions` and calls the corresponding `applyInitialState()` function for all existing particle species.
-
-`applySysBoundaryVlasovConditions()`: loops through all `SysBoundaryConditions` and calls the corresponding `vlasovBoundaryCondition()` function for all moments for all particle species, one at a time.
+* `vlasovBoundaryCopyFromTheClosestNbr()`: the last argument, `calculate_V_moments` should be renames, as it looks too similar to a function!
 
 
-`vlasovBoundaryCopyFromTheClosestNbr()`: the last argument, `calculate_V_moments` should be renames, as it looks too similar to a function!
+### SysBoundaryCondition
+
+* `addSysBoundary()`: called from `initSysBoundaries()` in the `sysBoundary` class.
+
+* `getSysBoundary()`: get the pointer to a specific BC.
+
+* `initSysBoundary()`: initialize a specific BC.
+
+
 
 ### SetByUser
 
