@@ -178,12 +178,26 @@ It contains a base abstract class called `SysBoundaryCondition`, and 5 derived c
 * `SetMaxwellian`
 * `SetByUser`
 
-Personally I don't like the name of `SetMaxwellian`. We may change it to `Inflow` and then make `Maxwellian` one option among the available choices. So I envision something like this:
-* `DoNotCompute`
+The prefix `sys` is used to distinguish between physical simulation domain boundary and MPI process boundary.
+However, in most cases MPI process boundary should be renamed to something else, and the boundary will be interpreted by most people the whole mesh's boundary.
+
+Personally I don't like the name of `SetMaxwellian` for two reasons: firstly it is a verb, secondly it is not descriptive enough. We may change it to `Inflow` and then make `Maxwellian` one option among the available choices. Also currently `SetMaxwellian` is a subclass of `SetByUser`, which I think should not be the case. So I envision the subclasses of `sysBoundaryCondition` like this:
+* `NoCompute`
 * `Ionosphere`
 * `Outflow`
 * `Inflow`
+* `Fixed`
 * `User`
+
+There are 3 choices in the `Outflow` type:
+1. `None`: literally fixed?
+2. `Copy`: copy the values from the last physcial cell
+3. `Limit`: multiply the values from the last physcial cell by a factor between (0,1)?
+
+There are currently bugs related to the `Outflow` BC. 
+
+`Fixed` is equivalent to the previous `SetMaxwellian`, `Inflow` corresponds to the time-varying BCs, and `User` is provided as an interface for extrenal implementations.
+To do this, I also need to modify the enumerators defined in `common.h`. In the definition of classes, variables should always come first, followed by methods!
 
 The base class has a private variable `sysBoundaryCondList` to keep track of all the boundary conditions as strings.
 Can this possess multiple options for the same BC class?
@@ -219,16 +233,19 @@ struct technical {
 
 * `applySysBoundaryVlasovConditions()`: applys the Vlasov system boundary conditions to all system boundary cells. It loops through all `SysBoundaryConditions` and calls the corresponding `vlasovBoundaryCondition()` function for all moments for all particle species. I think this is the place where the dynamic BCs should be called.
 
-* `vlasovBoundaryCopyFromTheClosestNbr()`: the last argument, `calculate_V_moments` should be renames, as it looks too similar to a function!
-
-
 ### SysBoundaryCondition
+
+* `determineFace()`: determine on which faces if any cell at the given coordinates is. I did some syntax optimizations.
 
 * `addSysBoundary()`: called from `initSysBoundaries()` in the `sysBoundary` class.
 
 * `getSysBoundary()`: get the pointer to a specific BC.
 
 * `initSysBoundary()`: initialize a specific BC.
+
+* `vlasovBoundaryCopyFromTheClosestNbr()`: copy the distribution and moments from (one of) the closest cell that is not a boundary. Is this used for the `Outflow` type BC? The last argument, `calculate_V_moments`, is renamed to `doCalcMomentsV` to avoid being too similar to a function.
+
+There are two functions for setting the derivatives to zeroes.
 
 
 
