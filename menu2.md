@@ -237,7 +237,7 @@ nSpaceSamples = 2    # number of samples per cell per spatial dimension to take 
 nVelocitySamples = 2 # number of samples per cell per veloctiy dimension to take to compute the vdf
 ```
 
-* What does sample mean here?
+* The idea is to improve the initial sampling when generating the vdf by sampling/averaging over N^3 points per vcell or spatial cell. However due among others to numerical diffusion and so on, it makes little difference whether you sample with 2³ or 5³ points, except that initialisation takes exponentially longer. Thus Yann suggest to drop these features.
 
 ```YAML
 [proton_Magnetosphere]

@@ -182,7 +182,7 @@ The prefix `sys` is used to distinguish between physical simulation domain bound
 However, in most cases MPI process boundary should be renamed to something else, and the boundary will be interpreted by most people the whole mesh's boundary.
 
 Personally I don't like the name of `SetMaxwellian` for two reasons: firstly it is a verb, secondly it is not descriptive enough. We may change it to `Inflow` and then make `Maxwellian` one option among the available choices. Also currently `SetMaxwellian` is a subclass of `SetByUser`, which I think should not be the case. So I envision the subclasses of `sysBoundaryCondition` like this:
-* `NoCompute`
+* `Nothing`
 * `Ionosphere`
 * `Outflow`
 * `Inflow`
@@ -190,7 +190,7 @@ Personally I don't like the name of `SetMaxwellian` for two reasons: firstly it 
 * `User`
 
 There are 3 choices in the `Outflow` type:
-1. `None`: literally fixed?
+1. `None`: do nothing
 2. `Copy`: copy the values from the last physcial cell
 3. `Limit`: multiply the values from the last physcial cell by a factor between (0,1)?
 
