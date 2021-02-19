@@ -1,49 +1,21 @@
-<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/vlasiator_manual/libs/highlight/github.min.css"> <link rel=stylesheet  href="/vlasiator_manual/css/jtd.css"> <link rel=icon  href="/vlasiator_manual/assets/favicon.ico"> <title>Installation</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/vlasiator_manual/" class=title > Vlasiator </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/vlasiator_manual/" class="menu-list-link ">Home</a> <li class="menu-list-item active"><a href="/vlasiator_manual/menu1/" class="menu-list-link active">Installation</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu2/" class="menu-list-link ">Run</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu3/" class="menu-list-link ">Postprocessing</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu4/" class="menu-list-link ">Internal</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="#" class=menu-list-link >SysBoundary</a> </ul> <li class="menu-list-item "><a href="/vlasiator_manual/menu5/" class="menu-list-link ">Misc</a> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  href="/vlasiator_manual//github.com/fmihpc/vlasiator">Vlasiator on GitHub</a> </div> <div class=franklin-content ><h1 id=installation ><a href="#installation">Installation</a></h1> <p>Vlasiator depends on many packages. These can now be handled with my <code>configure.py</code> at ease. However, the documentation on the dependencies still needs to be improved&#33;</p> <div class=franklin-toc ><ol><li><a href="#dccrg">DCCRG</a><li><a href="#zoltan">Zoltan</a><li><a href="#boost">Boost</a><li><a href="#eigen">Eigen</a><li><a href="#phiprof">PHIPROF</a></ol></div> <p>Now with some modifications, the process looks like the following:</p> <ol> <li><p>For a fresh new machine,</p> </ol> <pre><code class="shell hljs">./configure.py -h</code></pre>
-<p>shows the available options.</p>
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/vlasiator_manual/libs/highlight/github.min.css"> <link rel=stylesheet  href="/vlasiator_manual/css/jtd.css"> <link rel=icon  href="/vlasiator_manual/assets/favicon.ico"> <title>Installation</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/vlasiator_manual/" class=title > Vlasiator </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/vlasiator_manual/" class="menu-list-link ">Home</a> <li class="menu-list-item active"><a href="/vlasiator_manual/menu1/" class="menu-list-link active">Installation</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu2/" class="menu-list-link ">Run</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu3/" class="menu-list-link ">Postprocessing</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu4/" class="menu-list-link ">Internal</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="#" class=menu-list-link >SysBoundary</a> </ul> <li class="menu-list-item "><a href="/vlasiator_manual/menu5/" class="menu-list-link ">Misc</a> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  href="/vlasiator_manual//github.com/fmihpc/vlasiator">Vlasiator on GitHub</a> </div> <div class=franklin-content ><h1 id=installation ><a href="#installation">Installation</a></h1> <p>Vlasiator depends on many packages:</p> <div class=franklin-toc ><ol><li><a href="#dccrg">DCCRG</a><li><a href="#zoltan">Zoltan</a><li><a href="#boost">Boost</a><li><a href="#eigen">Eigen</a><li><a href="#phiprof">PHIPROF</a></ol></div> <p>Previously it took some huge efforts to install the code on a new machine, mainly due to the dependency hell. These can now be handled with the new <code>configure.py</code> at ease. I have come across several versions trying to make it simple and useful.</p> <ol> <li><p>For a fresh new machine,</p> </ol> <pre><code class="shell hljs">./configure.py -h</code></pre>
+<p>shows the available options. By default options with prefix <code>-</code> require no arguments, and options with prefix <code>--</code> require one argument.</p>
 <pre><code class="shell hljs">./configure.py -install</code></pre>
-<p>tries to install all the dependencies in the new <code>lib</code> folder.</p>
+<p>tries to install all the dependencies in the new <code>lib</code> folder except Boost. On Ubuntu it is often installed under the default folder; on supercomputers there is usually a module to load.</p>
 <ol start=2 >
 <li><p>To access an existing customized Makefile in <code>MAKE</code> folder with library paths and compiler flags, e.g.</p>
 
 </ol>
 <pre><code class="shell hljs">./configure.py --machine=yann</code></pre>
-<p>then it will incorporate those into generating the main Makefile.</p>
+<p>then it will include the preset library paths in the main Makefile. By default it links to <code>MAKE/Makefile.default</code>.</p>
 <ol start=3 >
-<li><p>To save the configured paths into a new customized Makefile &#40;by default Makefile.new&#41;</p>
+<li><p>To quickly setup the library paths on a new machine, you create a new makefile <code>MAKE/Makefile.yours</code> and set the required links.</p>
 
 </ol>
-<pre><code class="shell hljs">./configure.py -install -save</code></pre>
-<p>to specify a name</p>
-<pre><code class="shell hljs">./configure.py -install -save --save_machine=mymachine</code></pre>
-<p>or something like</p>
-<pre><code class="shell hljs">python3.6 configure.py -debug -save -mpi -omp -distfloat \
-    --include=src/projects \
-    --include=/usr/include/boost \
-    --include=lib/zoltan/include \
-    --include=lib/vlsv \
-    --include=lib \
-    --vectorclass_path=lib/vectorclass \
-    --fsgrid_path=lib/fsgrid \
-    --dccrg_path=lib/dccrg \
-    --include=lib/fsgrid \
-    --include=lib/jemalloc/include \
-    --include=lib/phiprof/include \
-    --include=lib/vectorclass \
-    --lib=boost_program_options \
-    --lib=zoltan \
-    --lib=vlsv \
-    --lib=jemalloc \
-    --lib=phiprof \
-    --boost_path=/usr/lib/x86_64-linux-gnu \
-    --zoltan_path=lib/zoltan/lib \
-    --vlsv_path=lib/vlsv \
-    --jemalloc_path=lib/jemalloc/lib \
-    --profile_path=lib/phiprof/lib</code></pre>
-<p>If you really want to set everything manually, just remove the <code>-save</code> above and it will generate the main Makefile.</p>
+<p>Then this can be called with <code>./configure.py --machine&#61;yours</code>.</p>
 <p>I still keep the options of changing order of solvers, floating point precisions, etc.. Even though they rarely change, it is still changeable, but the default is set to the most common options.</p>
-<p>By default options with one <code>-</code> require no arguments, and options with two <code>--</code> require one argument.</p>
-<p>I do not provide support for python2, since the official support has also ended by the end of last year. Therefore is the default python in <code>/usr/bin/env</code> is python2, then the configuration file will raise error at one <code>print</code> statement with <code>end</code> argument.</p>
-<p>The tools should in principle also be able to be compiled, but I am having some issues with those.</p>
+<p>I do not provide support for python2, since the official support has also ended by the end of 2020. It will warn you about obsolete python version.</p>
+<p>The tools should in principle also be able to be compiled, but for now it is not guaranteed to work.</p>
 <h2 id=dccrg ><a href="#dccrg">DCCRG</a></h2>
 <p>DCCRG is the underlying grid and MPI library for Vlasiator. I guess this provides similar functionality compared to <strong>AMReX</strong> and <strong>BATL</strong>.</p>
 <h2 id=zoltan ><a href="#zoltan">Zoltan</a></h2>
@@ -64,7 +36,7 @@
 <pre><code class="julia hljs"><span class=hljs-keyword >export</span> LD_LIBRARY_PATH=/home/<span class=hljs-keyword >local</span>/hongyang/Vlasiator/vlasiator/lib/phiprof/lib</code></pre>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: February 09, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: February 19, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
