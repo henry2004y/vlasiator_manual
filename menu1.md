@@ -7,13 +7,22 @@
 
 # Installation
 
-Vlasiator depends on many packages:
-
 \toc
 
-Previously it took some huge efforts to install the code on a new machine, mainly due to the dependency hell.
-These can now be handled with the new `configure.py` at ease.
-I have come across several versions trying to make it simple and useful.
+## A Brief History of the Build System
+
+There are several issues with the current file system:
+* Source files should not be present on the top level.
+* External library linking is a nightmare if you start on a new machine.
+* The Makefile lists every single source file with repetitive flags. The flags and preprocessor settings are buried in the long Makefile which makes it hard to modify if necessary.
+* Vlasiator depends on many packages. It takes a huge effort to install the code on a new machine, mainly due to the dependency hell.
+
+To handle the fore-mentioned problems, I propose three major changes:
+1. Reorganize the file levels.
+2. Rewrite the Makefile.
+3. Add a new configuration file.
+
+I have come across several round of modification trying to make the new build system simple and useful.
 
 1. For a fresh new machine,
 ```shell
