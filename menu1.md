@@ -86,5 +86,14 @@ PHIPROF is the profiler library used, which is very similar to the timer library
 
 Currently I need to load the dynamic library like this:
 ```
-export LD_LIBRARY_PATH=/home/local/hongyang/Vlasiator/vlasiator/lib/phiprof/lib
+export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/phiprof/lib
+```
+
+Alternatively, you can use `rpath` to insert the path into the executable, as has been done on Vorna.
+
+## JEMALLOC
+
+JEMALLOC is a library for improved memory allocation (no idea what it is trying to achieve). This is also a dynamic library that needs to be loaded:
+```
+export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib
 ```
