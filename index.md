@@ -39,7 +39,7 @@ $$
 $$
 These also give the bulk velocity of ions,
 $$
-\mathbf{V}_i = mathbf{j}_i / \rho_q.
+\mathbf{V}_i = \mathbf{j}_i / \rho_q.
 $$
 
 The magnetic field is updated using Faraday's law:
@@ -76,7 +76,7 @@ $$
 $$
 \mathbf{F}_v = \frac{q}{m}\Big( \mathbf{v} - \mathbf{V}_i + \frac{1}{\mu_0 \rho_q}\nabla\times\mathbf{B} \Big)\times\mathbf{B}f.
 $$
-\mathbf{B} is a volume average calculated from face averages using divergence-free reconstruction polynomials given in [Balsara
+$\mathbf{B}$ is a volume average calculated from face averages using divergence-free reconstruction polynomials given in [Balsara
 et al. (2009)](https://doi.org/10.1016/j.jcp.2008.12.003). The propagation of $\tilde{f}$ is given by
 $$
 \tilde{f}(t+\Delta t) = \tilde{f}(t) - \sum_{i=x,y,z}\frac{\Delta t}{\Delta r_i}\big[ F_i(r_i+\Delta r_i) - F_i(r_i) \big] - \sum_{i=vx,vy,vz}\frac{\Delta t}{\Delta v_i}\big[ F_{vi}(v_i+\Delta v_i) - F_{vi}(v_i) \big].
