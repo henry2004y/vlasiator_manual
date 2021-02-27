@@ -24,8 +24,24 @@ There is a tool written in C++ called `vlsvdiff` that can be used to compare two
 
 How to store the reference solutions? Well, they should be saved in a different repository to keep the main source repo clean.
 
+## Comparing Differences
+
+This is a big headache now.
+I get different results with different code versions on different platforms, even if there shouldn't be any.
+
+1. There are two GCC optimization flags that will affect the results even on the same machine with slightly differernt code versions: `-ffast-math`, which boost the floating point operation performance by loosening the IEEE standard; `-mavx`, which turns on the avx instructions on the target machine. I can understand the first, but not the second one. Both flags have influence on the speed beyond `-O3`, which are about 10%. 
+2. Even if I turn off all the optimization flags, there are still differences running on different machines. I don't have any idea how this can happen.
+
 ## Demo
 
+Under the `testpackage` folder:
+
 ```shell
-make test_flowthrough
+make
 ```
+runs all the listed tests in `Makefile`.
+
+```shell
+make TESTS=flowthrough
+```
+runs a specific test.
