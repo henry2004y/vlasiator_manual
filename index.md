@@ -76,14 +76,15 @@ $$
 $$
 \mathbf{F}_v = \frac{q}{m}\Big( \mathbf{v} - \mathbf{V}_i + \frac{1}{\mu_0 \rho_q}\nabla\times\mathbf{B} \Big)\times\mathbf{B}f.
 $$
-$\mathbf{B}$ is a volume average calculated from face averages using divergence-free reconstruction polynomials given in [Balsara
-et al. (2009)](https://doi.org/10.1016/j.jcp.2008.12.003). The propagation of $\tilde{f}$ is given by
+$\mathbf{B}$ is a volume average calculated from face averages using divergence-free reconstruction polynomials given in [Balsara+ (2009)](https://doi.org/10.1016/j.jcp.2008.12.003). The propagation of $\tilde{f}$ is given by
 $$
 \tilde{f}(t+\Delta t) = \tilde{f}(t) - \sum_{i=x,y,z}\frac{\Delta t}{\Delta r_i}\big[ F_i(r_i+\Delta r_i) - F_i(r_i) \big] - \sum_{i=vx,vy,vz}\frac{\Delta t}{\Delta v_i}\big[ F_{vi}(v_i+\Delta v_i) - F_{vi}(v_i) \big].
 $$
 By construction the FVM scheme here guarantees the conservation of mass except at the boundaries of the simulation domain.
 This is further split into the spatial translation $S_T$ and acceleration $S_A$ operators.
 Both operators propagate the distribution function with a $2^{nd}$ order accurate method based on solving 1D Riemann problems at the cell faces and applying flux limiters to suppress oscillations. Each cell face can contribute to the flux in up to 18 adjacent cells.
+
+Here the monotonized central (MC) limiter (van Leer, 1977) has been used since it does not distort the shape of the original Maxwellian distribution. More aggressive limiters such as superbee or Sweby (Roe, 1986; Sweby, 1984) can reduce the diffusion more efficiently even for low velocity resolution but their applicability for kinetic plasma simulations is questionable as they tend to distort the shape by flattening the top and steepening the edges of the distribution function.
 
 [Strang (1968)](https://doi.org/10.1137/0705041) splitting is used to propagate the distribution in time
 $$
@@ -107,6 +108,41 @@ simulations. When we substep, the propagation of the distribution function is no
 
 ## Field Propagation
 
+The magnetic field is propagated using the algorithm by [Londrillo and del Zanna (2004)](https://doi.org/10.1016/j.jcp.2003.09.016), which is a second-order accurate upwind constrained transport method.
+All reconstructions between volume-, face- and edge-averaged values follow [Balsara+ (2009)](https://doi.org/10.1016/j.jcp.2008.12.003). The face-averaged values of $\mathbf{B}$ are propagated forward in time using the integral form of Faraday's law
+$$
+\frac{\partial}{\partial t}\int_{\text{face}}\mathbf{B}\cdot d\mathbf{A} = -\oint_C \mathbf{E}\cdot d\mathbf{S},
+$$
+where the integral on the LHS is taken over the cell face and the line integral is evaluated along the contour of that face. Once $\mathbf{E}$ has been computed based on Ohm's law, it is easy to propagate $\mathbf{B}$ using the discretized form of the above. When
+computing each component of $\mathbf{E}$ on an edge, the solver computes the candidate values on the four neighboring cells of the edge. In the supermagnetosonic case, when the plasma velocity exceeds the speed of the fast magnetosonic wave mode, the upwinded
+value from one of the cells is used. In the submagnetosonic case the value is computed as a weighted average of the electric field on
+the four cells and a diffusive flux is added to stabilize the scheme.
 
+For the time integration a $2^{nd}$ order Runge–Kutta method is used. To propagate the field from $t$ to $t + \Delta t$ we need the $\rho_q$ and $\mathbf{V}_i$ values at both $t$ and $t + \Delta t/2$. With the leap-frog algorithm there are no real values for the distribution function at these times. A $1^{st}$ order accurate interpolation is used to compute the required values:
+$$
+\tilde{f}(t) = \frac{1}{2}\big[ \tilde{f}^v(t) + \tilde{f}^r(t+\frac{1}{2}\Delta t) \big],
+$$
+$$
+\tilde{f}(t+\frac{1}{2}\Delta t) = \frac{1}{2}\big[ \tilde{f}^v(t+\Delta t) + \tilde{f}^r(t+\frac{1}{2}\Delta t) \big].
+$$
+
+The field solver also contributes to the dynamic computation of the timestep. With the simplest form of Ohm's law the fastest characteristic speed is the speed of the fast magnetosonic wave mode and we use that speed to compute the maximum timestep allowed by the field solver. For the field solver Courant numbers $\in [0.4, 0.5]$ is used, as higher values cause numerical instability of the
+scheme.
+
+In Vlasiator the magnetic field has been split into a perturbed field updated during the simulations, and a static background field.
+The electric field is computed based on the total magnetic field and all changes to the magnetic field are only added to the
+perturbed part of the magnetic field. The background field must be curl-free and thus the Hall term can be computed based on the
+perturbed part only. This avoids numerical integration errors arising from strong background field gradients. In magnetospheric
+simulations the background field consists of the Earth's dipole, as well as a constant IMF in all cells.
 
 ## Sparse Velocity Grid
+
+A typical ion population is localized in velocity space, for example a Maxwellian distribution, and a large portion of velocity space is effectively empty. A key technique in saving memory is the sparse velocity grid storage. The velocity grid is divided into velocity blocks comprising 4x4x4 velocity cells. The sparse representation is done at this level: either a block exists with all of its 64 velocity cells, or it does not exist at all. In the sparse representation we define that a block has content if any of its 64 velocity cells has a density above a user-specified threshold value.  A velocity block exists if it has content, or if it is a neighbor to a block with content in any of the six dimensions. In the velocity space all 26 nearest neighbors are included, while in ordinary space blocks within a distance of 2 in the 6 normal directions and a distance of 1 in nodal directions are included.
+
+There are two sources of loss when propagating the distribution function:
+1. fluxes that flow out of the velocity grid;
+2. distributions that go below the storage threshold.
+
+Usually the $1^{st}$ term dominates.[^1]
+
+[^1]: This can be easily observed with a small velocity space, where the moments calculated from the distribution functions deviates from the analytical values.
