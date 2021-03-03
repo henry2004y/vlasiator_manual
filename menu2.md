@@ -305,6 +305,7 @@ system_write_distribution_zline_stride = 0
 * `system_write_distribution_stride`: write out the velocity distribution function every N cells, this is a modulo on the cell's ID essentially.
 * `system_write_distribution_xline_stride`: write out the VDF every N cells in x (same for y and z).
 
+It is indeed very strange to make outputs of raw distribution functions under the IO tag instead of [`variables`].
 
 ```YAML
 [variables]
