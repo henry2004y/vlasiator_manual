@@ -44,7 +44,7 @@ To run that,
   * `vlasiator --help`, if the help text is incomplete, outdated, wrong, missing that has to be added in the code.
 * There are these `proton_` prefix syntax for many tags. Vlasiator supports more than one ion population. That population's name (e.g. `proton`) gets prepended to a host of options that are specific to that population, like densities, temperatures, boundary behaviour etc.
 * How to restart a run?
-  * If the options are set so that restart files come out, you will get files called `restart.INDEX.DATE.vlsv`. INDEX is seven digits in seconds of simulation time, DATE is the date of the file, as this helps in a lot of practical matters.
+  * If the options are set so that restart files come out, you will get files called `restart.INDEX.DATE.vlsv`. INDEX is seven digits in seconds of simulation time, DATE is the date of the file.
   * When you want to restart from a given file, use the option `restart.filename` pointing to that file. In job scripts for multi-stage runs one trick is to use the option on the command line/in the job script as `--restart.filename $( ls -tr | restart.*.vlsv | tail -n 1 )`.
 
 
@@ -66,6 +66,8 @@ ParticlePopulations = proton
 * `propagate_vlasov_translation`: translation on/off
 * `dynamic_timestep`: 0 or 1 to have static or dynamic dt
 * `ParticlePopulations`: ion species name, this is arbitrary and is prepended to all the options relevant to that population. Can be repeated to initialize multiple ion species.
+
+One thing to notice here is that currently local timestepping is not available. This should be added to speed up the steady state runs.
 
 ### Grid
 

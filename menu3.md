@@ -75,12 +75,13 @@ Another thing to note is that the newer XML-based VTK files can take advantage o
 
 ## Visualization
 
-* Documentation on the capabilities of Analysator and VisIt is needed.
+There are currently two main tools for plotting: Analysator in Python and VisIt plugin.
+There will be a third one in Julia: [Vlasiator.jl](https://henry2004y.github.io/Vlasiator.jl/dev/).
 
 ### Reader
 
-There are vlsv readers and writers in C++ and Python.
-I have also coded a new reader in Julia, now sitting in my dev branch in the forked repository.
+Readers are coded in C++, Python and Julia.
+Writer is only available in C++.
 
 Analysator is based on Mayavi (deprecated) and Python packages like Matplotlib and Numpy.
 Mayavi requires VTK and PyQt5 as dependencies.
@@ -103,7 +104,11 @@ This may be partly solved with more examples.
 
 There is a VisIt plugin written in C++ and described in the vlsv manual.
 
-ParaView now provides [a way to import VisIt plugins](https://www.paraview.org/Wiki/VisIt_Database_Bridge), but I haven't tried.
+ParaView now provides [a way to import VisIt plugins](https://www.paraview.org/Wiki/VisIt_Database_Bridge), but it requires to build Paraview from scratch.
 
 I learned before that VisIt does a better job than ParaView for AMR data when the ghost cell info are neglected in the files which are essentially not needed.
 There are bugs in ParaView for, e.g., isosurface contour for parallel VTK format.
+
+### Julia
+
+See more in the Vlasiator.jl [document](https://henry2004y.github.io/Vlasiator.jl/dev/). I recommend Matplotlib for the plotting backend, because as of early 2021, it is still the most complete package for visualization.

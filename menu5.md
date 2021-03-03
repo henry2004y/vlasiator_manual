@@ -1,41 +1,47 @@
-@def title = "Misc"
+@def title = "Testing"
+@def hascode = true
+@def date = Date(2021, 02, 20)
+@def rss = ""
 
+@def tags = ["syntax", "code"]
 
-# Miscellaneous
+# Testing
 
 \toc
 
+There exists some test funtionalities under the `testpackages` folder, but it is not good enough.
+* Currently one can compare the output from one version of the code to another version, but obviously there are many problems with this approach. How can you guarantee the version you select generate the correct "reference" solutions?
+* The shell scripts are written for specific machines, but none of them are running on a regular basis.
+* One has to do many extra work to create tests on a new machine.
+* We cannot pick a specific test to run easily with one command.
 
-## eVlasiator: Dealing with Electrons
+To tackle these problems, I am thinking about redesign the whole test suites. The goal is to
+* define reference solutions to compare with;
+* create a flexible test list with `make`;
+* introduce continuous integration (CI) to validate new development and changes
 
-The main Vlasiator is solving the Vlasov equations for ions; this eVlasiator is conceptually the same, just replace the ion with electron.
-The differences are mainly scales.
-The normal Vlasiator treats electrons as massless fluid. Possible options to improve that are:
-1. fluid with mass;
-2. electron macro paticles;
-3. electron distribution function
+There is a tool written in C++ called `vlsvdiff` that can be used to compare two VLSV files. This can be used to investigate the differences between files. For automated tests, it is enough to know that there are differences. The difficulties for VLSV file format result from the random writing order from MPI processes. If you are running with multiple MPI processes, you may get different SHA values out of the VLSV file even if the data are actually identical.
 
-What is the main difference compared with the test particle approach?
-Given that the field resolution is on the order of ion scales, how can you guarantee that electron tracing is accurate?
+How to store the reference solutions? Well, they should be saved in a different repository to keep the main source repo clean.
 
-1. B remains static, but E is updated --- this may mean that it is only electrostatic, but to what extent does it matter?
+## Comparing Differences
 
-2. Not particles, but distributions functions (by solving electron Vlasov eq.). With enough number of particles, the final result should be the same.
+This is a big headache now.
+I get different results with different code versions on different platforms, even if there shouldn't be any.
 
-Ion precipitation: sharp cutoff due to sparse velocity grid, need full VDF information (not saved everywhere in the past). Now implemented as an output option, and use power law extrapolation to get high energy e-, for instance.
+1. There are two GCC optimization flags that will affect the results even on the same machine with slightly differernt code versions: `-ffast-math`, which boost the floating point operation performance by loosening the IEEE standard; `-mavx`, which turns on the avx instructions on the target machine. I can understand the first, but not the second one. Both flags have influence on the speed beyond `-O3`, which are about 10%. 
+2. Even if I turn off all the optimization flags, there are still differences running on different machines. I don't have any idea how this can happen.
 
-* Electron energy range and spectrum
-* Time resolution and length
-* 2D-3D transformation
-* File formats
+## Demo
 
+Under the `testpackage` folder:
 
+```shell
+make
+```
+runs all the listed tests in `Makefile`.
 
-## Resources
-
-CSC, LUMI
-Now the fastest machine in the US and Europe are both using AMD GPUS.
-This is definitely not a headless choice, but a strong sign that the CUDA-equivalent compiler is strong enough to compete and easier enough to use.
-(HIP)
-
-On first sight, they may do a pretty decent job: they have preinstalled Julia 1.3!
+```shell
+make TESTS=flowthrough
+```
+runs a specific test.

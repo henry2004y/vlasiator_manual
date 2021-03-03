@@ -7,76 +7,52 @@
 
 # Installation
 
-Vlasiator depends on many packages.
-These can now be handled with my `configure.py` at ease.
-However, the documentation on the dependencies still needs to be improved!
-
 \toc
 
+## A Brief History of the Build System
 
-Now with some modifications, the process looks like the following:
+There are several issues with the current file system:
+* Source files should not be present on the top level.
+* External library linking is a nightmare if you start on a new machine.
+* The Makefile lists every single source file with repetitive flags. The flags and preprocessor settings are buried in the long Makefile which makes it hard to modify if necessary.
+* Vlasiator depends on many packages. It takes a huge effort to install the code on a new machine, mainly due to the dependency hell.
+
+To handle the fore-mentioned problems, I propose three major changes:
+1. Reorganize the file levels.
+2. Rewrite the Makefile.
+3. Add a new configuration file.
+
+I have come across several round of modification trying to make the new build system simple and useful.
 
 1. For a fresh new machine,
 ```shell
 ./configure.py -h
 ```
 shows the available options.
+By default options with prefix `-` require no arguments, and options with prefix `--` require one argument.
 
 ```shell
 ./configure.py -install
 ```
-tries to install all the dependencies in the new `lib` folder.
+tries to install all the dependencies in the new `lib` folder except Boost.
+On Ubuntu it is often installed under the default folder; on supercomputers there is usually a module to load.
 
 2. To access an existing customized Makefile in `MAKE` folder with library paths and compiler flags, e.g.
 ```shell
 ./configure.py --machine=yann
 ```
-then it will incorporate those into generating the main Makefile.
+then it will include the preset library paths in the main Makefile.
+By default it links to `MAKE/Makefile.default`.
 
-3. To save the configured paths into a new customized Makefile (by default Makefile.new)
-```shell
-./configure.py -install -save
-```
-to specify a name
-```shell
-./configure.py -install -save --save_machine=mymachine
-```
-or something like
-```shell
-python3.6 configure.py -debug -save -mpi -omp -distfloat \
-    --include=src/projects \
-    --include=/usr/include/boost \
-    --include=lib/zoltan/include \
-    --include=lib/vlsv \
-    --include=lib \
-    --vectorclass_path=lib/vectorclass \
-    --fsgrid_path=lib/fsgrid \
-    --dccrg_path=lib/dccrg \
-    --include=lib/fsgrid \
-    --include=lib/jemalloc/include \
-    --include=lib/phiprof/include \
-    --include=lib/vectorclass \
-    --lib=boost_program_options \
-    --lib=zoltan \
-    --lib=vlsv \
-    --lib=jemalloc \
-    --lib=phiprof \
-    --boost_path=/usr/lib/x86_64-linux-gnu \
-    --zoltan_path=lib/zoltan/lib \
-    --vlsv_path=lib/vlsv \
-    --jemalloc_path=lib/jemalloc/lib \
-    --profile_path=lib/phiprof/lib
-```
-
-If you really want to set everything manually, just remove the `-save` above and it will generate the main Makefile.
+3. To quickly setup the library paths on a new machine, you create a new makefile `MAKE/Makefile.yours` and set the required links.
+Then this can be called with `./configure.py --machine=yours`.
 
 I still keep the options of changing order of solvers, floating point precisions, etc.. Even though they rarely change, it is still changeable, but the default is set to the most common options.
 
-By default options with one `-` require no arguments, and options with two `--` require one argument.
+I do not provide support for python2, since the official support has also ended by the end of 2020.
+It will warn you about obsolete python version.
 
-I do not provide support for python2, since the official support has also ended by the end of last year. Therefore is the default python in `/usr/bin/env` is python2, then the configuration file will raise error at one `print` statement with `end` argument.
-
-The tools should in principle also be able to be compiled, but I am having some issues with those.
+The tools should in principle also be able to be compiled, but for now it is not guaranteed to work.
 
 ## DCCRG
 
@@ -110,5 +86,14 @@ PHIPROF is the profiler library used, which is very similar to the timer library
 
 Currently I need to load the dynamic library like this:
 ```
-export LD_LIBRARY_PATH=/home/local/hongyang/Vlasiator/vlasiator/lib/phiprof/lib
+export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/phiprof/lib
+```
+
+Alternatively, you can use `rpath` to insert the path into the executable, as has been done on Vorna.
+
+## JEMALLOC
+
+JEMALLOC is a library for improved memory allocation (no idea what it is trying to achieve). This is also a dynamic library that needs to be loaded:
+```
+export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib
 ```
