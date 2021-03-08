@@ -21,7 +21,7 @@ One restart file for 3D Earth now is typically ~2TB.
 
 The fundamental description of charged particle motion in an electromagnetic field is given by Vlasov's equation
 $$
-\frac{\partial f_\alpha}{\partial t} + \mathbf{v}\frac{\partial f_\alpha}{\partial \mathbf{r}} + \mathbf{a}\cdot \frac{\partial f_\alpha}{\partial \mathbf{r}} = 0,
+\frac{\partial f_\alpha}{\partial t} + \mathbf{v}\frac{\partial f_\alpha}{\partial \mathbf{r}} + \mathbf{a}\cdot \frac{\partial f_\alpha}{\partial \mathbf{v}} = 0,
 $$
 where $\mathbf{r}$ and $\mathbf{v}$ are the spatial and velocity coordinates, $f(\mathbf{r},\mathbf{v},t)$ is
 the six-dimensional phase-space density of a particle species with mass m and charge q, and acceleration $\mathbf{a}$ is given by the Lorentz force
