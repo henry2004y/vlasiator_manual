@@ -124,8 +124,9 @@ vz_length = 15     # number of blocks in z
 
 Each velocity block consists of $4\times 4\times 4$ cells.
 The minimum and maximum values set the extensions of the velocity space cells.
-Note that a mismatch between input and output moment values will occur if the velocity space is poorly sampled.
-According to my tests, to get within 1% accuracy you need $6\times 6\times 6$ blocks; to get a satisfying accuracy in most cases you need at least $10\times 10\times 10$ blocks.
+Note that discrepencies between input and output moment values will occur if the velocity space is poorly sampled.
+To determine the proper velocity cell resolution, you need to calculate the thermal velocity $\sqrt(k_B T/m_p)$, which acts as a characteristic width of the Maxwellian distribution, and make sure the velocity cell is small enough to resolve the distribution.
+Currently this is still empirical; maybe in the future we can add an assertion check for this criterion.
 
 ```YAML
 [proton_sparse]

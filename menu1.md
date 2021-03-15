@@ -54,6 +54,8 @@ It will warn you about obsolete python version.
 
 The tools should in principle also be able to be compiled, but for now it is not guaranteed to work.
 
+This comes together with a new Makefile borrowed from Athena. I need to think about whether or not we should use a hierarchical Makefile architecture.
+
 ## DCCRG
 
 DCCRG is the underlying grid and MPI library for Vlasiator. I guess this provides similar functionality compared to **AMReX** and **BATL**.
@@ -70,8 +72,12 @@ I don't know what Boost is used for. Maybe argument parsing?
 
 ## Eigen
 
-No idea what Eigen is used for. However, the latest Eigen version has compilation error in assertions:
+Eigen is probably used for some avx instructions in the acceleration part of the Vlasov solver.
+There are two version in-use:
+* AGNER, which aims at ultimate avx performance;
+* FALLBACK, which is homemade and more robust, but may not provide the best performance.
 
+However, the latest Eigen version has compilation error in assertions:
 ```shell
 3.3.8
 /home/hyzhou/include/Eigen/src/Core/products/Parallelizer.h:162:40: error: ‘eigen_assert_exception’ is not a member of ‘Eigen’
@@ -93,7 +99,17 @@ Alternatively, you can use `rpath` to insert the path into the executable, as ha
 
 ## JEMALLOC
 
-JEMALLOC is a library for improved memory allocation (no idea what it is trying to achieve). This is also a dynamic library that needs to be loaded:
+JEMALLOC is a library for improved memory allocation.
+Rumour has it that Firefox is also using this library to reduce the memory fragmentation during heap allocations.
+The idea behind is, I guess, similar to MPI collective IO in essense.
+However, if this is consistently performing better than the standard allocator function `malloc`, I don't know why this is not the standard allocator instead.
+So apparently it comes with some other drawbacks.
+From [an interesting post on StackOverflow](https://stackoverflow.com/questions/13027475/cpu-and-memory-usage-of-jemalloc-as-compared-to-glibc-malloc):
+> If you have reasons to think that your application memory management is not effective because of fragmentation, you have to make tests. It is the only reliable information source for your specific needs. If jemalloc is always better that glibc, glibc will make jemalloc its official allocator. If glibc is always better, jemalloc will stop to exist. When competitors exist long time in parallel, it means that each one has its own usage niche.
+
+One interesting finding is that a MPI communication bug in Vlasiator's DCCRG call will only be triggered by JEMALLOC, at least in some small scale tests.
+
+This is also a dynamic library that needs to be loaded:
 ```
 export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib
 ```
