@@ -16,6 +16,7 @@
 <p>I still keep the options of changing order of solvers, floating point precisions, etc.. Even though they rarely change, it is still changeable, but the default is set to the most common options.</p>
 <p>I do not provide support for python2, since the official support has also ended by the end of 2020. It will warn you about obsolete python version.</p>
 <p>The tools should in principle also be able to be compiled, but for now it is not guaranteed to work.</p>
+<p>This comes together with a new Makefile borrowed from Athena. I need to think about whether or not we should use a hierarchical Makefile architecture.</p>
 <h2 id=dccrg ><a href="#dccrg" class=header-anchor >DCCRG</a></h2>
 <p>DCCRG is the underlying grid and MPI library for Vlasiator. I guess this provides similar functionality compared to <strong>AMReX</strong> and <strong>BATL</strong>.</p>
 <h2 id=zoltan ><a href="#zoltan" class=header-anchor >Zoltan</a></h2>
@@ -24,7 +25,14 @@
 <h2 id=boost ><a href="#boost" class=header-anchor >Boost</a></h2>
 <p>I don&#39;t know what Boost is used for. Maybe argument parsing?</p>
 <h2 id=eigen ><a href="#eigen" class=header-anchor >Eigen</a></h2>
-<p>No idea what Eigen is used for. However, the latest Eigen version has compilation error in assertions:</p>
+<p>Eigen is probably used for some avx instructions in the acceleration part of the Vlasov solver. There are two version in-use:</p>
+<ul>
+<li><p>AGNER, which aims at ultimate avx performance;</p>
+
+<li><p>FALLBACK, which is homemade and more robust, but may not provide the best performance.</p>
+
+</ul>
+<p>However, the latest Eigen version has compilation error in assertions:</p>
 <pre><code class="shell hljs">3.3.8
 /home/hyzhou/include/Eigen/src/Core/products/Parallelizer.h:162:40: error: ‘eigen_assert_exception’ is not a member of ‘Eigen’
   162 |   if (errorCount) EIGEN_THROW_X(Eigen::eigen_assert_exception());
@@ -36,11 +44,16 @@
 <pre><code class="julia hljs"><span class=hljs-keyword >export</span> LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/phiprof/lib</code></pre>
 <p>Alternatively, you can use <code>rpath</code> to insert the path into the executable, as has been done on Vorna.</p>
 <h2 id=jemalloc ><a href="#jemalloc" class=header-anchor >JEMALLOC</a></h2>
-<p>JEMALLOC is a library for improved memory allocation &#40;no idea what it is trying to achieve&#41;. This is also a dynamic library that needs to be loaded:</p>
+<p>JEMALLOC is a library for improved memory allocation. Rumour has it that Firefox is also using this library to reduce the memory fragmentation during heap allocations. The idea behind is, I guess, similar to MPI collective IO in essense. However, if this is consistently performing better than the standard allocator function <code>malloc</code>, I don&#39;t know why this is not the standard allocator instead. So apparently it comes with some other drawbacks. From <a href="https://stackoverflow.com/questions/13027475/cpu-and-memory-usage-of-jemalloc-as-compared-to-glibc-malloc">an interesting post on StackOverflow</a>:</p>
+<blockquote>
+<p>If you have reasons to think that your application memory management is not effective because of fragmentation, you have to make tests. It is the only reliable information source for your specific needs. If jemalloc is always better that glibc, glibc will make jemalloc its official allocator. If glibc is always better, jemalloc will stop to exist. When competitors exist long time in parallel, it means that each one has its own usage niche.</p>
+</blockquote>
+<p>One interesting finding is that a MPI communication bug in Vlasiator&#39;s DCCRG call will only be triggered by JEMALLOC, at least in some small scale tests.</p>
+<p>This is also a dynamic library that needs to be loaded:</p>
 <pre><code class="julia hljs"><span class=hljs-keyword >export</span> LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib</code></pre>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: March 08, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: March 15, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
