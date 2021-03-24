@@ -1,4 +1,4 @@
-<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/vlasiator_manual/libs/katex/katex.min.css"> <link rel=stylesheet  href="/vlasiator_manual/libs/highlight/github.min.css"> <link rel=stylesheet  href="/vlasiator_manual/css/jtd.css"> <link rel=icon  href="/vlasiator_manual/assets/favicon.ico"> <title>Run</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/vlasiator_manual/" class=title > Vlasiator </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/vlasiator_manual/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu1/" class="menu-list-link ">Installation</a> <li class="menu-list-item active"><a href="/vlasiator_manual/menu2/" class="menu-list-link active">Run</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu3/" class="menu-list-link ">Postprocessing</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu4/" class="menu-list-link ">Internal</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="#" class=menu-list-link >SysBoundary</a> </ul> <li class="menu-list-item "><a href="/vlasiator_manual/menu5/" class="menu-list-link ">Misc</a> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  href="/vlasiator_manual//github.com/fmihpc/vlasiator">Vlasiator on GitHub</a> </div> <div class=franklin-content ><h1 id=running_vlasiator ><a href="#running_vlasiator" class=header-anchor >Running Vlasiator</a></h1> <div class=franklin-toc ><ol><li><a href="#input_configuration_file">Input Configuration File</a><ol><li><a href="#general">General</a><li><a href="#grid">Grid</a><li><a href="#species_velocity_space">Species &amp; Velocity Space</a><li><a href="#solvers">Solvers</a><li><a href="#boundary_conditions">Boundary Conditions</a><li><a href="#initial_conditions">Initial conditions</a><li><a href="#parallelization">Parallelization</a><li><a href="#io">IO</a></ol></ol></div> <p>The so-called cellblock, with size <code>4x4x4</code>, is aimed for vectorization. The block sizes are defined as constants.</p> <p>The current executable is designed to be able to read in command line arguments. However, the list is just too long to check and read. Also, you cannot use tab to auto-complete input file names&#33; It is really annoying to type the cfg file name as an argument into the command line everytime when I try to run the code. Maybe we can set some default locations, like looking for cfg files in the current directory?</p> <p>The speed difference between <code>-O0</code> and <code>-O3</code> can be 120/9&#61;13 times&#33; This is quite significant. Thanks compiler&#33;</p> <h2 id=input_configuration_file ><a href="#input_configuration_file" class=header-anchor >Input Configuration File</a></h2> <p>There is no manual for the configuration parameters currently. However, there is a script helping to identify potential errors in the configuration file, <code>tools/check_vlasiator_cfg.sh</code>. To run that,</p> <pre><code class="shell hljs">./check_vlasiator_cfg.sh vlasiator test.cfg</code></pre>
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/vlasiator_manual/libs/katex/katex.min.css"> <link rel=stylesheet  href="/vlasiator_manual/libs/highlight/github.min.css"> <link rel=stylesheet  href="/vlasiator_manual/css/jtd.css"> <link rel=icon  href="/vlasiator_manual/assets/favicon.ico"> <title>Run</title> <div class=page-wrap > <div class=side-bar > <div class=header > <a href="/vlasiator_manual/" class=title > Vlasiator </a> </div> <label for=show-menu  class=show-menu >MENU</label> <input type=checkbox  id=show-menu  role=button > <div class=menu  id=side-menu > <ul class=menu-list > <li class="menu-list-item "><a href="/vlasiator_manual/" class="menu-list-link ">Home</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu1/" class="menu-list-link ">Installation</a> <li class="menu-list-item active"><a href="/vlasiator_manual/menu2/" class="menu-list-link active">Run</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu3/" class="menu-list-link ">Postprocessing</a> <li class="menu-list-item "><a href="/vlasiator_manual/menu4/" class="menu-list-link ">Internal</a> <ul class="menu-list-child-list "> <li class="menu-list-item "><a href="#" class=menu-list-link >SysBoundary</a> </ul> <li class="menu-list-item "><a href="/vlasiator_manual/menu5/" class="menu-list-link ">Misc</a> </ul> </div> <div class=footer > This is <em>Just the docs</em>, adapted from the <a href="https://github.com/pmarsceill/just-the-docs" target=_blank >Jekyll theme</a>. </div> </div> <div class=main-content-wrap > <div class=main-content > <div class=main-header > <a id=github  href="/vlasiator_manual//github.com/fmihpc/vlasiator">Vlasiator on GitHub</a> </div> <div class=franklin-content ><h1 id=running_vlasiator ><a href="#running_vlasiator" class=header-anchor >Running Vlasiator</a></h1> <div class=franklin-toc ><ol><li><a href="#input_configuration_file">Input Configuration File</a><ol><li><a href="#general">General</a><li><a href="#grid">Grid</a><li><a href="#species_velocity_space">Species &amp; Velocity Space</a><li><a href="#solvers">Solvers</a><li><a href="#boundary_conditions">Boundary Conditions</a><li><a href="#initial_conditions">Initial conditions</a><li><a href="#parallelization">Parallelization</a><li><a href="#io">IO</a></ol></ol></div> <p>The so-called cellblock, with size <code>4x4x4</code>, is aimed for vectorization. The block sizes are defined as constants.</p> <p>The current executable is designed to be able to read in command line arguments. However, the list is just too long to check and read. Also, you cannot use tab to auto-complete input file names&#33; It is really annoying to type the cfg file name as an argument into the command line everytime when I try to run the code. Maybe we can set some default locations, like looking for cfg files in the current directory?</p> <p>The speed difference between <code>-O0</code> and <code>-O3</code> can be 120/9&#61;13 times&#33; This is quite significant. Thanks compiler&#33;</p> <h2 id=input_configuration_file ><a href="#input_configuration_file" class=header-anchor >Input Configuration File</a></h2> <p>There is no manual for the configuration parameters currently. However, there is a script helping to identify potential errors in the configuration file, <code>tools/check_vlasiator_cfg.sh</code>. To run that,</p> Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated. Deprecated as of 10.7.0. Please use highlight(code, options) instead. https://github.com/highlightjs/highlight.js/issues/2277 <pre><code class="shell hljs">./check_vlasiator_cfg.sh vlasiator test.cfg</code></pre>
 <ul>
 <li><p>Orders of commands</p>
 <ul>
@@ -38,6 +38,9 @@
 
 </ul>
 <h3 id=general ><a href="#general" class=header-anchor >General</a></h3>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs"><span class=hljs-string >project</span> <span class=hljs-string >=</span> <span class=hljs-string >Flowthrough</span>
 <span class=hljs-string >propagate_field</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>
 <span class=hljs-string >propagate_vlasov_acceleration</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>
@@ -65,6 +68,9 @@
 <p>One thing to notice here is that currently local timestepping is not available. This should be added to speed up the steady state runs.</p>
 <h3 id=grid ><a href="#grid" class=header-anchor >Grid</a></h3>
 <p>All the values are assumed to be in SI units.</p>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >gridbuilder</span>]
 <span class=hljs-string >x_length</span> <span class=hljs-string >=</span> <span class=hljs-number >20</span>      <span class=hljs-comment ># number of cells in x</span>
 <span class=hljs-string >y_length</span> <span class=hljs-string >=</span> <span class=hljs-number >20</span>      <span class=hljs-comment ># number of cells in x</span>
@@ -90,6 +96,9 @@
 <p>Note that if we are running with a fixed timestep, we need to make sure that it is within the CFL condition. Based on my tests, the scheme for translation is not TVD when the CFL number goes beyond 0.9. I need to check the numerical scheme used underneath.</p>
 <h3 id=species_velocity_space ><a href="#species_velocity_space" class=header-anchor >Species &amp; Velocity Space</a></h3>
 <p>Normalization, mass and charge</p>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_properties</span>]
 <span class=hljs-string >mass</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>
 <span class=hljs-string >mass_units</span> <span class=hljs-string >=</span> <span class=hljs-string >PROTON</span>
@@ -98,6 +107,9 @@
 <li><p><code>mass_units</code>: PROTON or ELECTRON &#40;at the latest once the electorn branch is merged&#41;</p>
 
 </ul>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_vspace</span>]
 <span class=hljs-string >vx_min</span> <span class=hljs-string >=</span> <span class=hljs-number >-600000.0</span> <span class=hljs-comment ># minimum vx value resolved, [m/s]</span>
 <span class=hljs-string >vx_max</span> <span class=hljs-string >=</span> <span class=hljs-string >+600000.0</span> <span class=hljs-comment ># maximum vx value resolved, [m/s]</span>
@@ -119,10 +131,16 @@ c-22.3,46.7,-33.8,70.3,-34.5,71c-4.7,4.7,-12.3,7,-23,7s-12,-1,-12,-1
 s-109,-253,-109,-253c-72.7,-168,-109.3,-252,-110,-252c-10.7,8,-22,16.7,-34,26
 c-22,17.3,-33.3,26,-34,26s-26,-26,-26,-26s76,-59,76,-59s76,-60,76,-60z
 M1001 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.30499999999999994em;"><span></span></span></span></span></span><span class=mord ><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03148em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class=mord >/</span><span class=mord ><span class="mord mathnormal">m</span><span class=msupsub ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.286108em;"><span></span></span></span></span></span></span><span class=mclose >)</span></span></span></span>, which acts as a characteristic width of the Maxwellian distribution, and make sure the velocity cell is small enough to resolve the distribution. Currently this is still empirical; maybe in the future we can add an assertion check for this criterion.</p>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_sparse</span>]
 <span class=hljs-string >minValue</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-15</span> <span class=hljs-comment ># distribution function threshold</span></code></pre>
 <p>This command sets the threshold for resolving a distribution. For typical magnetospheric plasma parameters, phase-space density peaks out between <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>×</mo><mn>1</mn><msup><mn>0</mn><mrow><mo>−</mo><mn>12</mn></mrow></msup></mrow><annotation encoding="application/x-tex">1\times10^{-12}</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >1</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.8141079999999999em;vertical-align:0em;"></span><span class=mord >1</span><span class=mord ><span class=mord >0</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span> and <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>×</mo><mn>1</mn><msup><mn>0</mn><mrow><mo>−</mo><mn>9</mn></mrow></msup><mtext> </mtext><msup><mtext>m</mtext><mrow><mtext>⁻</mtext><mn>6</mn></mrow></msup><msup><mtext>s</mtext><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">1\times 10^{-9}\ \text{m}^{⁻6}\text{s}^3</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >1</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.8141079999999999em;vertical-align:0em;"></span><span class=mord >1</span><span class=mord ><span class=mord >0</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">9</span></span></span></span></span></span></span></span></span><span class=mspace > </span><span class=mord ><span class="mord text"><span class=mord >m</span></span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">⁻</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span><span class=mord ><span class="mord text"><span class=mord >s</span></span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>.</p>
 <h3 id=solvers ><a href="#solvers" class=header-anchor >Solvers</a></h3>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >fieldsolver</span>]
 <span class=hljs-string >ohmHallTerm</span> <span class=hljs-string >=</span> <span class=hljs-number >2</span>
 <span class=hljs-string >minCFL</span> <span class=hljs-string >=</span> <span class=hljs-number >0.4</span>
@@ -146,6 +164,9 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >�
 
 </ul>
 <p>Current boundary settings</p>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >boundaries</span>]
 <span class=hljs-string >periodic_x</span> <span class=hljs-string >=</span> <span class=hljs-literal >no</span>
 <span class=hljs-string >periodic_y</span> <span class=hljs-string >=</span> <span class=hljs-literal >yes</span>
@@ -161,6 +182,9 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >�
 </ul>
 
 </ul>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >outflow</span>]
 <span class=hljs-string >precedence</span> <span class=hljs-string >=</span> <span class=hljs-number >3</span>
 [<span class=hljs-string >proton_outflow</span>]
@@ -171,6 +195,9 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >�
 <li><p><code>Maxwellian</code>: Takes the values from the provided <code>.dat</code> file, <code>time density temperature Vx Vy Vz Bx By Bz</code>, partial support for time-variation is already in the code. It might be helpful to add a header line to the <code>.dat</code> file&#33;</p>
 
 </ul>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >maxwellian</span>]
 <span class=hljs-string >face</span> <span class=hljs-string >=</span> <span class=hljs-string >x+</span>
 <span class=hljs-string >precedence</span> <span class=hljs-string >=</span> <span class=hljs-number >4</span>
@@ -181,6 +208,9 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >�
 <li><p><code>Ionosphere</code>: ionospheric inner boundary</p>
 
 </ul>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >ionosphere</span>]
 <span class=hljs-string >centerX</span> <span class=hljs-string >=</span> <span class=hljs-number >0.0</span>   <span class=hljs-comment ># ?</span>
 <span class=hljs-string >centerY</span> <span class=hljs-string >=</span> <span class=hljs-number >0.0</span>   <span class=hljs-comment ># ?</span>
@@ -192,6 +222,9 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >�
 <span class=hljs-string >taperRadius</span> <span class=hljs-string >=</span> <span class=hljs-number >100.0e6</span>
 <span class=hljs-string >rho</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e6</span></code></pre>
 <p>I can guess the meanings, but shall there be better alternatives? Let&#39;s discuss, but some options are population-specific for example. Maybe something like</p>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >boundary</span>]
 <span class=hljs-string >boundary_x</span> <span class=hljs-string >=</span> <span class=hljs-string >Outflow</span>
 <span class=hljs-string >boundary_y</span> <span class=hljs-string >=</span> <span class=hljs-string >Maxwellian</span>
@@ -199,6 +232,9 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >�
 <span class=hljs-string >boundary_inner</span> <span class=hljs-string >=</span> <span class=hljs-string >Ionosphere</span></code></pre>
 <p>Internally we almost don&#39;t need to change anything, except a check on the strings.</p>
 <h3 id=initial_conditions ><a href="#initial_conditions" class=header-anchor >Initial conditions</a></h3>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >Flowthrough</span>]
 <span class=hljs-string >emptyBox</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>  <span class=hljs-comment ># ?</span>
 <span class=hljs-string >Bx</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e-9</span>   <span class=hljs-comment ># background B field, [T]</span>
@@ -212,6 +248,9 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >�
 
 </ul>
 <p>The deprecated command can be safely ignored for now.</p>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_Flowthrough</span>]
 <span class=hljs-string >T</span> <span class=hljs-string >=</span> <span class=hljs-number >100000.0</span>         <span class=hljs-comment ># initial temperature, [K]</span>
 <span class=hljs-string >rho</span>  <span class=hljs-string >=</span> <span class=hljs-number >1000000.0</span>     <span class=hljs-comment ># initial number density, [/m^3]</span>
@@ -224,6 +263,9 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >�
 <li><p>The idea is to improve the initial sampling when generating the vdf by sampling/averaging over N^3 points per vcell or spatial cell. However due among others to numerical diffusion and so on, it makes little difference whether you sample with 2³ or 5³ points, except that initialisation takes exponentially longer. Thus Yann suggest to drop these features.</p>
 
 </ul>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_Magnetosphere</span>]
 <span class=hljs-string >T</span> <span class=hljs-string >=</span> <span class=hljs-number >100000.0</span>         <span class=hljs-comment ># initial temperature, [K]</span>
 <span class=hljs-string >rho</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e5</span>          <span class=hljs-comment ># initial number density, [/m^3]</span>
@@ -241,15 +283,24 @@ v_{th} = \frac{k_B T}{m}
 <p>The other thing worths noticing is that there will be numerical errors. Even if you set a periodic boundary with a set of constant input parameters, the output velocity will still fluctuates on the order of machine precision.</p>
 <p>If for some reason you need to force the number density, you can use the <code>conserve_mass</code> flag which re-scales the VDF to match the original value after it&#39;s been populated.</p>
 <p>Background field</p>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >Magnetosphere</span>]
 <span class=hljs-string >constBgBX</span> <span class=hljs-string >=</span> <span class=hljs-number >-3.0e-9</span> <span class=hljs-comment ># constant background magnetic field x component</span>
 <span class=hljs-string >constBgBY</span> <span class=hljs-string >=</span> <span class=hljs-number >3.0e-9</span>  <span class=hljs-comment ># same in y</span>
 <span class=hljs-string >noDipoleInSW</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0</span>  <span class=hljs-comment ># ? float but not integer? It gets parsed anyway, no impact...</span></code></pre>
 <h3 id=parallelization ><a href="#parallelization" class=header-anchor >Parallelization</a></h3>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >loadBalance</span>]
 <span class=hljs-string >rebalanceInterval</span> <span class=hljs-string >=</span> <span class=hljs-number >10</span> <span class=hljs-comment ># time step interval for load balance</span></code></pre>
 <h3 id=io ><a href="#io" class=header-anchor >IO</a></h3>
 <p>There is a diagnostic file and a log file.</p>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >io</span>]
 <span class=hljs-string >diagnostic_write_interval</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span> <span class=hljs-comment ># time step interval for diagnostic output </span>
 <span class=hljs-string >write_initial_state</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>       <span class=hljs-comment ># initial value output on/off, before any solver (half)steps are taken to get us to t=0.</span>
@@ -269,6 +320,9 @@ v_{th} = \frac{k_B T}{m}
 
 </ul>
 <p>It is indeed very strange to make outputs of raw distribution functions under the IO tag instead of &#91;<code>variables</code>&#93;.</p>
+Deprecated as of 10.7.0. highlight(lang, code, ...args) has been deprecated.
+Deprecated as of 10.7.0. Please use highlight(code, options) instead.
+https://github.com/highlightjs/highlight.js/issues/2277
 <pre><code class="YAML hljs">[<span class=hljs-string >variables</span>]
 <span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_rhom</span>            <span class=hljs-comment ># total mass density, [kg/m^3]</span>
 <span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >fg_e</span>               <span class=hljs-comment ># electric field, [V/m]</span>
@@ -302,7 +356,7 @@ v_{th} = \frac{k_B T}{m}
 <p>All the output files are in vlsv format, no matter it&#39;s the restart file or regular outputs. The restart file is used for continuing a run, which contains the full distribution, field information and meta data. Typical output file is called bulk file, which may contain various derived quantities every few cells.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: March 18, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: March 24, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
