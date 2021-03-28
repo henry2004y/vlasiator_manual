@@ -97,6 +97,21 @@ Note that if we are running with a fixed timestep, we need to make sure that it 
 Based on my tests, the scheme for translation is not TVD when the CFL number goes beyond 0.9.
 I need to check the numerical scheme used underneath.
 
+```YAML
+[AMR]
+max_spatial_level = 2
+box_half_width_x = 1  # Half width of the box that is refined?
+box_half_width_z = 1
+box_half_width_y = 1
+box_center_x = 1.0e6
+box_center_y = 1.0e6
+box_center_z = 1.0e6
+```
+
+I also see a parameter for setting the AMR in velocity space, but it's not been used anywhere probably.
+
+Is it possible to do mesh refinement in 1D or 2D? Probably not, due to the restriction that spatial cells needs to be cubic.
+
 ### Species & Velocity Space
 
 Normalization, mass and charge
