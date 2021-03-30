@@ -291,9 +291,20 @@ Background field
 ```YAML
 [Magnetosphere]
 constBgBX = -3.0e-9 # constant background magnetic field x component
-constBgBY = 3.0e-9  # same in y
-noDipoleInSW = 1.0  # ? float but not integer? It gets parsed anyway, no impact...
+constBgBY = 3.0e-9  # y
+constBgBZ = 3.0e-9  # z
+noDipoleInSW = 1    # if 1, no dipole B in inflow BC cells
+dipoleType = 2      # vector dipole
+dipoleMirrorLocationX = 3.88e8
 ```
+
+
+* `dipoleType`
+  * 0: Normal 3D dipole
+  * 1: line-dipole for 2D polar simulations
+  * 2: line-dipole with mirror
+  * 3: 3D dipole with mirror
+* `dipoleMirrorLocationX`: location of the mirror dipole, which is used to cancel the components of the dipole field in the solar wind as if it is a perfect conductor. It should be set to `2*(xmax-2*cellsize)` manually if inflow is coming from the +x direction.
 
 ### Parallelization
 

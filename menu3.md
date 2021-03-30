@@ -100,6 +100,10 @@ This may be partly solved with more examples.
 3. In Python we may be able to take advantage of the`*args` and `**keyargs` of functions to release the burden of rewriting every existing arguments of the plotting functions in Matplotlib. As some new members like me who has used Matplotlib before but haven't touched the Analysator wrappers so often, it would be very straightforward to return the PyPlot objects from the wrappers, and then I can just rely on the Matplotlib official documentation for the rest.
 4. One Python plotting package worth mentioning is yt for astrophysics. I am not familiar with it, but I am impressed by its automatic unit conversion, simple rendering and some other stuff. Maybe worth keeping an eye on that. 
 
+### Analysator
+
+The VDF plotting function has bugs in the normal direction. The selection criteria by default assumes a certain cell width in the normal direction centered at a peak location instead of full projection.
+
 ### VisIt
 
 There is a VisIt plugin written in C++ and described in the vlsv manual.
