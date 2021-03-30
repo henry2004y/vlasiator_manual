@@ -253,8 +253,27 @@ v_{th} = \frac{k_B T}{m}
 <p>Background field</p>
 <pre><code class="YAML hljs">[<span class=hljs-string >Magnetosphere</span>]
 <span class=hljs-string >constBgBX</span> <span class=hljs-string >=</span> <span class=hljs-number >-3.0e-9</span> <span class=hljs-comment ># constant background magnetic field x component</span>
-<span class=hljs-string >constBgBY</span> <span class=hljs-string >=</span> <span class=hljs-number >3.0e-9</span>  <span class=hljs-comment ># same in y</span>
-<span class=hljs-string >noDipoleInSW</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0</span>  <span class=hljs-comment ># ? float but not integer? It gets parsed anyway, no impact...</span></code></pre>
+<span class=hljs-string >constBgBY</span> <span class=hljs-string >=</span> <span class=hljs-number >3.0e-9</span>  <span class=hljs-comment ># y</span>
+<span class=hljs-string >constBgBZ</span> <span class=hljs-string >=</span> <span class=hljs-number >3.0e-9</span>  <span class=hljs-comment ># z</span>
+<span class=hljs-string >noDipoleInSW</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>    <span class=hljs-comment ># if 1, no dipole B in inflow BC cells</span>
+<span class=hljs-string >dipoleType</span> <span class=hljs-string >=</span> <span class=hljs-number >2</span>      <span class=hljs-comment ># vector dipole</span>
+<span class=hljs-string >dipoleMirrorLocationX</span> <span class=hljs-string >=</span> <span class=hljs-number >3.88e8</span></code></pre>
+<ul>
+<li><p><code>dipoleType</code></p>
+<ul>
+<li><p>0: Normal 3D dipole</p>
+
+<li><p>1: line-dipole for 2D polar simulations</p>
+
+<li><p>2: line-dipole with mirror</p>
+
+<li><p>3: 3D dipole with mirror</p>
+
+</ul>
+
+<li><p><code>dipoleMirrorLocationX</code>: location of the mirror dipole, which is used to cancel the components of the dipole field in the solar wind as if it is a perfect conductor. It should be set to <code>2*&#40;xmax-2*cellsize&#41;</code> manually if inflow is coming from the &#43;x direction.</p>
+
+</ul>
 <h3 id=parallelization ><a href="#parallelization" class=header-anchor >Parallelization</a></h3>
 <pre><code class="YAML hljs">[<span class=hljs-string >loadBalance</span>]
 <span class=hljs-string >rebalanceInterval</span> <span class=hljs-string >=</span> <span class=hljs-number >10</span> <span class=hljs-comment ># time step interval for load balance</span></code></pre>
@@ -312,7 +331,7 @@ v_{th} = \frac{k_B T}{m}
 <p>All the output files are in vlsv format, no matter it&#39;s the restart file or regular outputs. The restart file is used for continuing a run, which contains the full distribution, field information and meta data. Typical output file is called bulk file, which may contain various derived quantities every few cells.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: March 28, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: March 30, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
