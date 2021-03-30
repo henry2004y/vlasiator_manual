@@ -155,18 +155,27 @@ For typical magnetospheric plasma parameters, phase-space density peaks out betw
 
 ```YAML
 [fieldsolver]
-ohmHallTerm = 2
+ohmHallTerm = 0 # spatial order of the Hall term in Ohm's law, {0: 'off', 1, 2}
 minCFL = 0.4
 maxCFL = 0.5
+resistivity = 0.0 # Resistivity for the ηJ term in Ohm's law.
+diffusiveEterms = true # Enable diffusive terms in the computation of E
+ohmGradPeTerm = 0 # spatial order of ∇Pₑ/ne in Ohm's law. 0: off, 1: 1st order.
+electronTemperature = 0.0 # Upstream electron temperature to be used for ∇Pₑ/ne, [K]
+electronDensity = 0.0 # Upstream electron density to be used for ∇Pₑ/ne, [m^-3]
+electronPTindex = 0 # Polytropic index for ∇Pₑ/ne. 0: isobaric, 1: isothermal, 1.667: adiabatic
 
 [vlasovsolver]
 minCFL = 0.8
 maxCFL = 0.99
-maxSlAccelerationRotation = 22 # maximum allowed rotation per subcycle
+maxSlAccelerationRotation = 25 # maximum allowed rotation per subcycle
+maxSlAccelerationSubcycles = 1
 ```
 
+The default values are shown above.
+
 * `ohmHallTerm`: 0, 1 or 2, that is the spatial order of accuracy of the Hall term in the field solver (0 turns it off altogether)
-* `minCFL` and `maxCFL`: set a bracket for the allowed range of the CFL number to run that solver component at (between 0 and 1, 1 meaning that the fastest signal crosses 1 cell per dt). Note that the field solver is instable between 0.5 and 1, so it should not be run at higher than 0.5.
+* `minCFL` and `maxCFL`: set a bracket for the allowed range of the CFL number between [0,1] to run that solver component at. Note that the field solver is instable between 0.5 and 1, so it should not be run at higher than 0.5. I don't know why there is a lower limit for CFL.
 
 ### Boundary Conditions
 
