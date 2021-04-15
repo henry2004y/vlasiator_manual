@@ -146,10 +146,17 @@ Currently this is still empirical; maybe in the future we can add an assertion c
 ```YAML
 [proton_sparse]
 minValue = 1.0e-15 # distribution function threshold
+dynamicAlgorithm = 0 
+dynamicMinValue1 = 1 # The minimum value for the dynamic minValue
 ```
 
 This command sets the threshold for resolving a distribution.
 For typical magnetospheric plasma parameters, phase-space density peaks out between $1\times10^{-12}$ and $1\times 10^{-9}\ \text{m}^{⁻6}\text{s}^3$.
+
+There are some additional options for setting sparsity:
+* `dynamicAlgorithm`: type of algorithm used for calculating the dynamic minValue. `0` is none, `1` is linear algorithm based on rho, `2` is linear algorithm based on Blocks. Example linear algorithm: y = kx+b, where dynamicMinValue1=k*dynamicBulkValue1 + b, and dynamicMinValue2 = k*dynamicBulkValue2 + b.
+
+I need to ask about this.
 
 ### Solvers
 
@@ -164,6 +171,7 @@ ohmGradPeTerm = 0 # spatial order of ∇Pₑ/ne in Ohm's law. 0: off, 1: 1st ord
 electronTemperature = 0.0 # Upstream electron temperature to be used for ∇Pₑ/ne, [K]
 electronDensity = 0.0 # Upstream electron density to be used for ∇Pₑ/ne, [m^-3]
 electronPTindex = 0 # Polytropic index for ∇Pₑ/ne. 0: isobaric, 1: isothermal, 1.667: adiabatic
+maxWaveVelocity = Inf # ?, [m/s]
 
 [vlasovsolver]
 minCFL = 0.8
@@ -176,6 +184,7 @@ The default values are shown above.
 
 * `ohmHallTerm`: 0, 1 or 2, that is the spatial order of accuracy of the Hall term in the field solver (0 turns it off altogether)
 * `minCFL` and `maxCFL`: set a bracket for the allowed range of the CFL number between [0,1] to run that solver component at. Note that the field solver is instable between 0.5 and 1, so it should not be run at higher than 0.5. I don't know why there is a lower limit for CFL.
+* `maxWaveVelocity`: I suspect this sets the maximum wave speed manually in the solver. I will test on this!
 
 ### Boundary Conditions
 
