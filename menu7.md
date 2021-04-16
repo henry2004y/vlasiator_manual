@@ -9,10 +9,7 @@
 # Hybrid Simulation
 
 Currently Vlasiator is still a hybrid code. Therefore it shares many similarity with other hybrid models.
-Here is a review on hybrid models in general.
-
-References:
-A robust method for handling low density regions in hybrid simulations for collisionless plasmas
+Here is a review on hybrid models in general. As this get larger, I turned to LaTeX notes so check further updates there.
 
 \toc
 
@@ -29,7 +26,7 @@ $$
 $$
 
 $$
-\frac{d\mathbf{v}_e}{dt} = -\frac{e}{m_e}\big( \mathbf{E} + \mathbf{v}_e \times \mathbf{B} \big) - \frac{1}{n_e m_e}\nabla\cdot\overleftrightarrow{P}_e - \nu(\mathbf{v}_i - \mathbf{v}_e),
+\frac{d\mathbf{v}_e}{dt} = -\frac{e}{m_e}\big( \mathbf{E} + \mathbf{v}_e \times \mathbf{B} \big) - \frac{1}{n_e m_e}\nabla\cdot\overleftrightarrow{P}_e - \nu m_e(\mathbf{v}_i - \mathbf{v}_e),
 $$
 where the subscript j and e indicate the indices for individual ions and the electron fluid and other notations are standard.
 In equation (3), the last term represents the collision between electrons and ions (is it correct???), which is often neglected in collisionless plasma.
@@ -68,7 +65,7 @@ It is well known that the Alfvén wave at short wavelength comparable to ion ine
 
 The conventional way to include a finite electron inertia correction into the hybrid model is to introduce the following so-called generalized electromagnetic field $\widehat{\mathbf{E}}, \widehat{\mathbf{B}}$, defined as 
 $$
-\widehat{\mathbf{E}} = \mathbf{E} - \frac{\partial}{\partial t}\big( \frac{e}{\omega_{pe}^2}\nabla\times\mathbf{B} \big),
+\widehat{\mathbf{E}} = \mathbf{E} - \frac{\partial}{\partial t}\big( \frac{c}{\omega_{pe}^2}\nabla\times\mathbf{B} \big),
 $$
 $$
 \widehat{\mathbf{B}} = \mathbf{B} + \nabla\times\big( \frac{c^2}{\omega_{pe}^2}\nabla\times\mathbf{B} \big),
@@ -88,7 +85,7 @@ Note that this equation is not exact; we have dropped the terms $\partial n_e/\p
 Given the generalized electric field $\widehat{\mathbf{E}}$, one can advance the generalized magnetic field $\widehat{\mathbf{B}}$ by using Eq. (11).
 Further simplifications are commonly adopted; for example, the electric field correction term and electron-scale spatial variation of density are often ignored. In this case, the magnetic field may be recovered by solving the implicit equation (???)
 $$
-\widehat{\mathbf{B}} = \big( 1 - \frac{c^2}{\omega_{pe}^2\nabla^2} \big)\mathbf{B},
+\widehat{\mathbf{B}} = \big( 1 - \frac{c^2}{\omega_{pe}^2}\nabla^2 \big)\mathbf{B},
 $$
 and $\widehat{\mathbf{E}} = \mathbf{E}$ is assumed. The nice feature with this approach is that the correction can be implemented as a post process to the each integration step of a standard procedure.
 
