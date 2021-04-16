@@ -15,6 +15,8 @@ Here is a review on hybrid models in general. As this get larger, I turned to La
 
 ## Standard hybrid model
 
+Note: I may mix CGS and SI units below!
+
 The basic equations used in the hybrid model are consisting of equation of motion for individual ions and for a fluid electrons
 
 $$
@@ -52,7 +54,7 @@ where $q_s, n_s, \mathbf{V}_s$ are the charge, number density and bulk velocity 
 
 The crucial assumption in the hybrid model is the quasi-neutrality, that is, the electrons move fast enough to cancel any charge-density fluctuations and $\rho=0$ is always satisfied.
 The electron density thus can be written by using ion densities $n_e \approx n_i \equiv \sum_s q_s n_s /e$.
-In addition, the electron bulk velocity may also be eliminated using Ampere's law and the relation $\mathbf{V}_e = \mathbf{V}_i - /mathbf{J}/n_e e$.
+In addition, the electron bulk velocity may also be eliminated using Ampere's law and the relation $\mathbf{V}_e = \mathbf{V}_i - \mathbf{J}/n_e e$.
 Finally, since the conventional hybrid model ignores the inertia of electron completely ($m_e \rightarrow 0$), one can use the equation of motion for the electron fluid to determine the electric field from given ion moment quantities and the magnetic field. This gives the generalized Ohm's law of the form
 $$
 \mathbf{E} = - \mathbf{V}_e \times \mathbf{B} - \frac{1}{n_i e}\nabla\cdot\overleftrightarrow{P}_e = - \mathbf{V}_i \times \mathbf{B} + \frac{1}{n_i e}(\nabla\times\mathbf{B})\times\mathbf{B} - \frac{1}{n_i e}\nabla\cdot\overleftrightarrow{P}_e.
@@ -104,7 +106,7 @@ $$
 where $/mathbf{J}_e \equiv -e n_e \mathbf{V}_e $ is the electron current density. In deriving this equation, $\nabla\cdot\mathbf{E}\sim \mathcal{O}(V_A^2/c^2)$ has been neglected, which is indeed a reasonable assumption. Once the electric field is determined by solving Eq. (14), the magnetic field may be updated using Eq. (4) without invoking the generalized electromagnetic fields.
 The present implementation obviously describes the electron scale physics better than the conventional one because it retains the correction term for the electric field as well. Concerning the ions dynamics, however, the effect will be small as it affects only high frequency waves. Nevertheless, the use of Eq. (14) has a remarkable advantage. It is easy to recognize that the terms in the right-hand side of Eq. (14) are proportional to the density. (Or more precisely, they are first and second order moments of the distribution function.) Therefore, in the limit of low density ($n_e \approx n_i \rightarrow 0$), it correctly reduces to the Laplace's equation:
 $$
-\nabla\cdot\mathbf{E}=0,
+\nabla^2\mathbf{E}=0,
 $$
 implying that there is no essential difficulty with this equation in dealing with low density (or vacuum) regions. This is reflected by the fact that the division-by-density operation is "almost" eliminated in the calculation procedure.
 
