@@ -57,6 +57,7 @@ propagate_vlasov_acceleration = 0
 propagate_vlasov_translation = 1
 dynamic_timestep = 1
 ParticlePopulations = proton
+hallMinimumRho = 1
 ```
 
 * `project`: type of problems to solve (options?)
@@ -66,6 +67,7 @@ ParticlePopulations = proton
 * `propagate_vlasov_translation`: translation on/off
 * `dynamic_timestep`: 0 or 1 to have static or dynamic dt
 * `ParticlePopulations`: ion species name, this is arbitrary and is prepended to all the options relevant to that population. Can be repeated to initialize multiple ion species.
+* `hallMinimumRho`: minimum rho value used for the Hall and electron pressure gradient terms in the Lorentz force and in the field solver. This is a common trick in avoiding near-vaccum region in the hybrid simulations where extremely small timesteps can occur. However, this may not be enough by itself.
 
 One thing to notice here is that currently local timestepping is not available. This should be added to speed up the steady state runs.
 
