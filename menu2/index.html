@@ -43,7 +43,8 @@
 <span class=hljs-string >propagate_vlasov_acceleration</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>
 <span class=hljs-string >propagate_vlasov_translation</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>
 <span class=hljs-string >dynamic_timestep</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>
-<span class=hljs-string >ParticlePopulations</span> <span class=hljs-string >=</span> <span class=hljs-string >proton</span></code></pre>
+<span class=hljs-string >ParticlePopulations</span> <span class=hljs-string >=</span> <span class=hljs-string >proton</span>
+<span class=hljs-string >hallMinimumRho</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span></code></pre>
 <ul>
 <li><p><code>project</code>: type of problems to solve &#40;options?&#41;</p>
 <ul>
@@ -60,6 +61,8 @@
 <li><p><code>dynamic_timestep</code>: 0 or 1 to have static or dynamic dt</p>
 
 <li><p><code>ParticlePopulations</code>: ion species name, this is arbitrary and is prepended to all the options relevant to that population. Can be repeated to initialize multiple ion species.</p>
+
+<li><p><code>hallMinimumRho</code>: minimum rho value used for the Hall and electron pressure gradient terms in the Lorentz force and in the field solver. This is a common trick in avoiding near-vaccum region in the hybrid simulations where extremely small timesteps can occur. However, this may not be enough by itself.</p>
 
 </ul>
 <p>One thing to notice here is that currently local timestepping is not available. This should be added to speed up the steady state runs.</p>
@@ -350,7 +353,7 @@ v_{th} = \frac{k_B T}{m}
 <p>All the output files are in vlsv format, no matter it&#39;s the restart file or regular outputs. The restart file is used for continuing a run, which contains the full distribution, field information and meta data. Typical output file is called bulk file, which may contain various derived quantities every few cells.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: April 16, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: April 18, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
