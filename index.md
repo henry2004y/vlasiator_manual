@@ -21,14 +21,14 @@ One restart file for 3D Earth now is typically ~2TB.
 
 The fundamental description of charged particle motion in an electromagnetic field is given by Vlasov's equation
 $$
-\frac{\partial f_\alpha}{\partial t} + \mathbf{v}\frac{\partial f_\alpha}{\partial \mathbf{r}} + \mathbf{a}\cdot \frac{\partial f_\alpha}{\partial \mathbf{v}} = 0,
+\frac{\partial f_\alpha}{\partial t} + \mathbf{v}_\alpha\frac{\partial f_\alpha}{\partial \mathbf{r}_\alpha} + \mathbf{a}_\alpha\cdot \frac{\partial f_\alpha}{\partial \mathbf{v}_\alpha} = 0,
 $$
-where $\mathbf{r}$ and $\mathbf{v}$ are the spatial and velocity coordinates, $f(\mathbf{r},\mathbf{v},t)$ is
+where $\mathbf{r}_\alpha$ and $\mathbf{v}_\alpha$ are the spatial and velocity coordinates, $f(\mathbf{r},\mathbf{v},t)$ is
 the six-dimensional phase-space density of a particle species with mass m and charge q, and acceleration $\mathbf{a}$ is given by the Lorentz force
 $$
-\mathbf{a} = \frac{q_\alpha}{m_\alpha}<\mathbf{E}_i+\mathbf{v}\times\mathbf{B}>,
+\mathbf{a}_\alpha = \frac{q_\alpha}{m_\alpha}(\mathbf{E}+\mathbf{v}_\alpha\times\mathbf{B}),
 $$
-where $\mathbf{E}_i$ is the electric field affecting ions and $\mathbf{B}$ is the magnetic field.
+where $\mathbf{E}$ is the electric field affecting ions and $\mathbf{B}$ is the magnetic field.
 
 The bulk parameters of the plasma, such as the ion charge density $\rho_q$ and current density $\mathbf{j}_i$, are obtained as velocity moments of the ion velocity distribution function
 $$
