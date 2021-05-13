@@ -81,6 +81,7 @@
 <span class=hljs-string >t_max</span> <span class=hljs-string >=</span> <span class=hljs-number >650</span>        <span class=hljs-comment ># maximum physical time allowed, [s]</span>
 <span class=hljs-string >dt</span> <span class=hljs-string >=</span> <span class=hljs-number >2.0</span>           <span class=hljs-comment ># fixed timestep if static dt is applied, [s]</span>
 <span class=hljs-string >timestep_max</span> <span class=hljs-string >=</span> <span class=hljs-number >100</span> <span class=hljs-comment ># maximum number of iterations allowed</span></code></pre>
+<p>Boundary cells &#40;typically 1 layer?&#41; are included in <code>x_length</code>, etc.</p>
 <p>My guess is that if any of the limits is reached, the simulation will terminate.</p>
 <ul>
 <li><p><code>dt</code> is the single time step length &#40;used if dynamic dt is disabled&#41;</p>
@@ -93,14 +94,17 @@
 <p>Note that if we are running with a fixed timestep, we need to make sure that it is within the CFL condition. Based on my tests, the scheme for translation is not TVD when the CFL number goes beyond 0.9. I need to check the numerical scheme used underneath.</p>
 <pre><code class="YAML hljs">[<span class=hljs-string >AMR</span>]
 <span class=hljs-string >max_spatial_level</span> <span class=hljs-string >=</span> <span class=hljs-number >2</span>
-<span class=hljs-string >box_half_width_x</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>  <span class=hljs-comment ># Half width of the box that is refined?</span>
+<span class=hljs-string >box_half_width_x</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>  <span class=hljs-comment ># Half width of the refined box [# of base grid cells]</span>
 <span class=hljs-string >box_half_width_z</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>
 <span class=hljs-string >box_half_width_y</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>
-<span class=hljs-string >box_center_x</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e6</span>
-<span class=hljs-string >box_center_y</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e6</span>
-<span class=hljs-string >box_center_z</span> <span class=hljs-string >=</span> <span class=hljs-number >1.0e6</span></code></pre>
+<span class=hljs-string >box_center_x</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>      <span class=hljs-comment ># x coord of the center of the refined box</span>
+<span class=hljs-string >box_center_y</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>      <span class=hljs-comment ># y coord of the center of the refined box</span>
+<span class=hljs-string >box_center_z</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>      <span class=hljs-comment ># z coord of the center of the refined box</span>
+<span class=hljs-string >filterpasses</span>          <span class=hljs-comment ># AMR filter passes for each individual refinement level?</span></code></pre>
+<p>The AMR settings are basically hard-coded in each project, which explains why this input parameter list is so simple:&#41;</p>
+<p>Outer boundary cells must have identical refinement levels as the first layer of physical cells as of Vlasiator 5.1.</p>
 <p>I also see a parameter for setting the AMR in velocity space, but it&#39;s not been used anywhere probably.</p>
-<p>Is it possible to do mesh refinement in 1D or 2D? Probably not, due to the restriction that spatial cells needs to be cubic.</p>
+<p>Is it possible to do mesh refinement in 1D or 2D? Yes, but it also depends on what kind of boundary we are using.</p>
 <h3 id=species_velocity_space ><a href="#species_velocity_space" class=header-anchor >Species &amp; Velocity Space</a></h3>
 <p>Normalization, mass and charge</p>
 <pre><code class="YAML hljs">[<span class=hljs-string >proton_properties</span>]
@@ -353,7 +357,7 @@ v_{th} = \frac{k_B T}{m}
 <p>All the output files are in vlsv format, no matter it&#39;s the restart file or regular outputs. The restart file is used for continuing a run, which contains the full distribution, field information and meta data. Typical output file is called bulk file, which may contain various derived quantities every few cells.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: April 19, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: May 13, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
