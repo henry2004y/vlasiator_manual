@@ -90,6 +90,8 @@ dt = 2.0           # fixed timestep if static dt is applied, [s]
 timestep_max = 100 # maximum number of iterations allowed
 ```
 
+Boundary cells (typically 1 layer?) are included in `x_length`, etc.
+
 My guess is that if any of the limits is reached, the simulation will terminate.
 * `dt` is the single time step length (used if dynamic dt is disabled)
 * `timestep_max` is the max number of timesteps taken until the run stops
@@ -102,17 +104,22 @@ I need to check the numerical scheme used underneath.
 ```YAML
 [AMR]
 max_spatial_level = 2
-box_half_width_x = 1  # Half width of the box that is refined?
+box_half_width_x = 1  # Half width of the refined box [# of base grid cells]
 box_half_width_z = 1
 box_half_width_y = 1
-box_center_x = 1.0e6
-box_center_y = 1.0e6
-box_center_z = 1.0e6
+box_center_x = 0      # x coord of the center of the refined box
+box_center_y = 0      # y coord of the center of the refined box
+box_center_z = 0      # z coord of the center of the refined box
+filterpasses          # AMR filter passes for each individual refinement level?
 ```
+
+The AMR settings are basically hard-coded in each project, which explains why this input parameter list is so simple:)
+
+Outer boundary cells must have identical refinement levels as the first layer of physical cells as of Vlasiator 5.1.
 
 I also see a parameter for setting the AMR in velocity space, but it's not been used anywhere probably.
 
-Is it possible to do mesh refinement in 1D or 2D? Probably not, due to the restriction that spatial cells needs to be cubic.
+Is it possible to do mesh refinement in 1D or 2D? Yes, but it also depends on what kind of boundary we are using.
 
 ### Species & Velocity Space
 
