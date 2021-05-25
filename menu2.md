@@ -333,6 +333,25 @@ dipoleMirrorLocationX = 3.88e8
   * 3: 3D dipole with mirror
 * `dipoleMirrorLocationX`: location of the mirror dipole, which is used to cancel the components of the dipole field in the solar wind as if it is a perfect conductor. It should be set to `2*(xmax-2*cellsize)` manually if inflow is coming from the +x direction.
 
+```YAML
+[proton_thermal]
+radius = 6.92480e5
+vx = -7.5e5
+vy = 0.0
+vz = 0.0
+```
+
+Center coordinate for the maxwellian distribution. Used for calculating the suprathermal moments.
+
+
+```YAML
+[proton_energydensity]
+solarwindspeed = 0
+solarwindenergy = 0
+```
+
+Incoming solar wind velocity magnitude in [m/s] and ram energy in [eV]. Used for calculating energy densities.
+
 ### Parallelization
 
 ```YAML
