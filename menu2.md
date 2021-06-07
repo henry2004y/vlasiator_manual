@@ -409,3 +409,7 @@ All the quantities can be listed after either `output` or `diagnostic`.
 All the output files are in vlsv format, no matter it's the restart file or regular outputs.
 The restart file is used for continuing a run, which contains the full distribution, field information and meta data.
 Typical output file is called bulk file, which may contain various derived quantities every few cells.
+
+## Runtime Control
+
+There are some ways to force load balancing and stop a run during runtime. After each timestep Vlasiator looks for a file named `DOLB`: if it finds the file, it will immediately do load balance once after that timestep.
