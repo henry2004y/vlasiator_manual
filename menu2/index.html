@@ -210,9 +210,12 @@ M1001 80h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >â€
 <pre><code class="YAML hljs">[<span class=hljs-string >maxwellian</span>]
 <span class=hljs-string >face</span> <span class=hljs-string >=</span> <span class=hljs-string >x+</span>
 <span class=hljs-string >precedence</span> <span class=hljs-string >=</span> <span class=hljs-number >4</span>
+<span class=hljs-string >reapplyUponRestart</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span>
+
 [<span class=hljs-string >proton_maxwellian</span>]
 <span class=hljs-string >dynamic</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>
 <span class=hljs-string >file_x+</span> <span class=hljs-string >=</span> <span class=hljs-string >sw1.dat</span></code></pre>
+<p>Note: <code>reapplyUponRestart</code> by default is 0, which means keeping going with the state existing in the restart file. If set to 1, it calls again <code>applyInitialState&#40;&#41;</code>. This can be used to change boundary condition behaviour during a run, and currently it must be set to 1 for applying time varying boundary condition&#33;</p>
 <ul>
 <li><p><code>Ionosphere</code>: ionospheric inner boundary</p>
 
@@ -369,7 +372,7 @@ v_{th} = \frac{k_B T}{m}
 <p>There are some ways to force load balancing and stop a run during runtime. After each timestep Vlasiator looks for a file named <code>DOLB</code>: if it finds the file, it will immediately do load balance once after that timestep.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: June 07, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: June 13, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
