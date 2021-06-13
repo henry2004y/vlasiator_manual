@@ -226,10 +226,15 @@ face = y+
 [maxwellian]
 face = x+
 precedence = 4
+reapplyUponRestart = 1
+
 [proton_maxwellian]
 dynamic = 0
 file_x+ = sw1.dat
 ```
+
+Note: `reapplyUponRestart` by default is 0, which means keeping going with the state existing in the restart file. If set to 1, it calls again `applyInitialState()`. This can be used to change boundary condition behaviour during a run, and currently it must be set to 1 for applying time varying boundary condition!
+
   * `Ionosphere`: ionospheric inner boundary
 ```YAML
 [ionosphere]
