@@ -417,4 +417,13 @@ Typical output file is called bulk file, which may contain various derived quant
 
 ## Runtime Control
 
-There are some ways to force load balancing and stop a run during runtime. After each timestep Vlasiator looks for a file named `DOLB`: if it finds the file, it will immediately do load balance once after that timestep.
+Quick cheat list:
+
+* `touch KILL` stops the run without a restart written.
+* `touch STOP` stops the run with a restart.
+* `touch SAVE` writes an extra restart (not counted in the number given in the cfg).
+* `touch DOLB` triggers an additional load balance.
+
+All of these are going through the once-per-timestep check if any of these files are present on disk. They get renamed to `<file>_<date>` to avoid re-triggering and keep a record. However this relies on timesteps proceeding, so if a run is hanging indefinitely there's nothing you can do bar killing it through linux or queuing system commands.
+
+For more information, check `ioread.cpp`.
