@@ -283,11 +283,11 @@ rho  = 1000000.0     # initial number density, [/m^3]
 VX0 = 4e5            # initial velocity in x, [m/s]
 VY0 = 4e5            # initial velocity in y, [m/s]
 VZ0 = 4e5            # initial velocity in z, [m/s]
-nSpaceSamples = 2    # number of samples per cell per spatial dimension to take to compute the vdf
-nVelocitySamples = 2 # number of samples per cell per veloctiy dimension to take to compute the vdf
+nSpaceSamples = 2    # number of samples per cell per spatial dimension to take to compute the VDF
+nVelocitySamples = 2 # number of samples per cell per veloctiy dimension to take to compute the VDF
 ```
 
-* The idea is to improve the initial sampling when generating the vdf by sampling/averaging over N^3 points per vcell or spatial cell. However due among others to numerical diffusion and so on, it makes little difference whether you sample with 2³ or 5³ points, except that initialisation takes exponentially longer. Thus Yann suggest to drop these features.
+* The idea is to improve the initial sampling when generating the VDF by sampling/averaging over N^3 points per vcell or spatial cell. However due among others to numerical diffusion and so on, it makes little difference whether you sample with 2³ or 5³ points, except that initialization takes exponentially longer. Thus Yann suggest to drop these features.
 
 ```YAML
 [proton_Magnetosphere]
@@ -296,8 +296,8 @@ rho = 1.0e5          # initial number density, [/m^3]
 VX0 = -5.0e5         # initial velocity in x, [m/s] 
 VY0 = 0.0            # initial velocity in x, [m/s]
 VZ0 = 0.0            # initial velocity in x, [m/s]
-nSpaceSamples = 1    # number of samples per cell per spatial dimension to take to compute the vdf
-nVelocitySamples = 1 # number of samples per cell per veloctiy dimension to take to compute the vdf
+nSpaceSamples = 1    # number of samples per cell per spatial dimension to take to compute the VDF
+nVelocitySamples = 1 # number of samples per cell per veloctiy dimension to take to compute the VDF
 ```
 
 These are two different projects, only one can be active in any given run (and usually only one si set in a given cfg).
@@ -306,14 +306,14 @@ However, since they appear essentially the same, we may be able to merge them in
 The temperature determines the initial width of the Maxwellian distribution function.
 As an estimation, the thermal speed is
 \[
-v_{th} = \frac{k_B T}{m}
+v_{th} = \sqrt{\frac{k_B T}{m}}
 \]
 with a constant factor depending on the dimension and exact definition.
 For instance, protons of 1K has a thermal speed of about 90 m/s. 
 This will effect the discrete velocity space in Vlasiator due to finite resolution and width.
 For example, if the temperature is very low, the distribution is approximately a Dirac distribution.
 Therefore, the distribution will only locate within one velocity cell, and thus taking the velocity value as the cell center value instead of the input value listed above.
-The output velocity would be way off if the velocity space resolution is low.
+The output velocity (and other moments) would be way off if the velocity space resolution is low w.r.t. the thermal speed.
 
 The other thing worths noticing is that there will be numerical errors. Even if you set a periodic boundary with a set of constant input parameters, the output velocity will still fluctuates on the order of machine precision.
 
