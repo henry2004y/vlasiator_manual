@@ -19,6 +19,8 @@ One restart file for 3D Earth now is typically ~2TB.
 * 3D mesh refinement in Cartesian boxes
 * Up to isotropic $\nabla P_e$ term in the Ohm's law when solving for the electric field?
 
+## Overview
+
 The fundamental description of charged particle motion in an electromagnetic field is given by Vlasov's equation
 $$
 \frac{\partial f_\alpha}{\partial t} + \mathbf{v}_\alpha\frac{\partial f_\alpha}{\partial \mathbf{r}_\alpha} + \mathbf{a}_\alpha\cdot \frac{\partial f_\alpha}{\partial \mathbf{v}_\alpha} = 0,
@@ -60,6 +62,16 @@ The total current density $\mathbf{j}$ is obtained from Ampère–Maxwell's law 
 $$
 \nabla\times\mathbf{B} = \mu_0 \mathbf{j}.
 $$
+
+## Vlasov solver
+
+The kernal of the model is a Vlasov equation solver for the phase space distribution function $f(\mathbf{r},\mathbf{v},t)$. This is a scalar appeared in an advection equation in high dimension space, so basically we need to look for a scheme that can propagate a scalar in high dimension space accurately.
+
+Semi-Lagrangian method is chosen in Vlasiator. It has "semi" as prefix due to the fact that it is a mixture of Eulerian grid and Lagrangian method[^1]. The idea is that unknowns are still defined in a Eulerian grid, and to calculate the quantities at the next step n+1, we trace the control volume one step before at n and find the corresponding volume integrated value through an interpolation approach. Due to the conservation law, this is exactly the value we seek at the next timestep.
+
+Actually this part is not hard to implement. Maybe there are some tricks for multi-dimensions.
+
+Interestingly, the same idea appears in theoretical plasma physics for studying the phase space evolution. An extremely hard to solve problem can become quite easy and straightforward by moving in the phase space and shift your calculation completely to another spatial-temporal location.
 
 ## Ion propagation
 
@@ -143,6 +155,8 @@ There are two sources of loss when propagating the distribution function:
 1. fluxes that flow out of the velocity grid;
 2. distributions that go below the storage threshold.
 
-Usually the $1^{st}$ term dominates.[^1]
+Usually the $1^{st}$ term dominates.[^2]
 
-[^1]: This can be easily observed with a small velocity space, where the moments calculated from the distribution functions deviates from the analytical values.
+[^1]: Eulerian and Lagrangian descriptions of field appear most notably in fluid mechanics.
+
+[^2]: This can be easily observed with a small velocity space, where the moments calculated from the distribution functions deviates from the analytical values.
