@@ -43,6 +43,7 @@
 <p>Currently I need to load the dynamic library like this:</p>
 <pre><code class="julia hljs"><span class=hljs-keyword >export</span> LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/phiprof/lib</code></pre>
 <p>Alternatively, you can use <code>rpath</code> to insert the path into the executable, as has been done on Vorna.</p>
+<p>PHIPROF write outputs to <code>phiprof_x.txt</code>, and they get overwritten every diagnostic interval.</p>
 <h2 id=jemalloc ><a href="#jemalloc" class=header-anchor >JEMALLOC</a></h2>
 <p>JEMALLOC is a library for improved memory allocation. Rumour has it that Firefox is also using this library to reduce the memory fragmentation during heap allocations. The idea behind is, I guess, similar to MPI collective IO in essense. However, if this is consistently performing better than the standard allocator function <code>malloc</code>, I don&#39;t know why this is not the standard allocator instead. So apparently it comes with some other drawbacks. From <a href="https://stackoverflow.com/questions/13027475/cpu-and-memory-usage-of-jemalloc-as-compared-to-glibc-malloc">an interesting post on StackOverflow</a>:</p>
 <blockquote>
