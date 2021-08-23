@@ -71,6 +71,14 @@ hallMinimumRho = 1
 
 One thing to notice here is that currently local timestepping is not available. This should be added to speed up the steady state runs.
 
+```YAML
+[bailout]
+max_memory = 55
+min_dt = 1e-3
+```
+
+Stop the run if any of the criteria is violated. The memory limit is only working when PAPI is used!
+
 ### Grid
 
 All the values are assumed to be in SI units.
