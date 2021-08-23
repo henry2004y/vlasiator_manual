@@ -97,6 +97,8 @@ export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/phiprof/lib
 
 Alternatively, you can use `rpath` to insert the path into the executable, as has been done on Vorna.
 
+PHIPROF write outputs to `phiprof_x.txt`, and they get overwritten every diagnostic interval.
+
 ## JEMALLOC
 
 JEMALLOC is a library for improved memory allocation.
