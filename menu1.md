@@ -66,9 +66,11 @@ Zoltan is used to do loading balancing, or spatial partitioning of the computati
 
 It can be downloaded from Sandia's website: [Zoltan](http://cs.sandia.gov/Zoltan/Zoltan_Distributions/zoltan_distrib_v3.83.tar.gz).
 
+It works smoothly on my local Ubuntu, but not on a supercomputer in my first attempt.
+
 ## Boost
 
-I don't know what Boost is used for. Maybe argument parsing?
+Boost is used in Vlasiator solely for argument parsing.
 
 ## Eigen
 
