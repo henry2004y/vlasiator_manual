@@ -387,6 +387,8 @@ system_write_distribution_stride = 1
 system_write_distribution_xline_stride = 0
 system_write_distribution_yline_stride = 0
 system_write_distribution_zline_stride = 0
+
+write_as_float = 0 # convert to single precision outputs or not
 ```
 
 * `system_write_file_name`: it is arbitrary, although we have used `bulk` for the frequent simulation output files for almost 10 years now.
