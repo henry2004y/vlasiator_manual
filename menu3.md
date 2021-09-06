@@ -75,8 +75,10 @@ Another thing to note is that the newer XML-based VTK files can take advantage o
 
 ## Visualization
 
-There are currently two main tools for plotting: Analysator in Python and VisIt plugin.
-There will be a third one in Julia: [Vlasiator.jl](https://henry2004y.github.io/Vlasiator.jl/dev/).
+There are currently three main tools for plotting:
+* [Analysator](https://github.com/fmihpc/analysator) in Python;
+* VisIt with [VLSV plugin](https://github.com/fmihpc/vlsv/tree/master/visit-plugin);
+* [Vlasiator.jl](https://henry2004y.github.io/Vlasiator.jl/dev/).
 
 ### Reader
 
@@ -106,9 +108,7 @@ The VDF plotting function has bugs in the normal direction. The selection criter
 
 ### VisIt
 
-There is a VisIt plugin written in C++ and described in the vlsv manual.
-
-ParaView now provides [a way to import VisIt plugins](https://www.paraview.org/Wiki/VisIt_Database_Bridge), but it requires to build Paraview from scratch.
+There is a VisIt plugin written in C++ and described in the VLSV manual.
 
 I learned before that VisIt does a better job than ParaView for AMR data when the ghost cell info are neglected in the files which are essentially not needed.
 There are bugs in ParaView for, e.g., isosurface contour for parallel VTK format.
@@ -116,3 +116,9 @@ There are bugs in ParaView for, e.g., isosurface contour for parallel VTK format
 ### Julia
 
 See more in the Vlasiator.jl [document](https://henry2004y.github.io/Vlasiator.jl/dev/). I recommend Matplotlib for the plotting backend, because as of early 2021, it is still the most complete package for visualization.
+
+### ParaView
+
+ParaView now provides [a way to import VisIt plugins](https://www.paraview.org/Wiki/VisIt_Database_Bridge), but it requires to build Paraview from scratch.
+
+In [Vlasiator.jl](https://henry2004y.github.io/Vlasiator.jl/dev/), there is a method `write_vtk` for converting VLSV format into VTK format. With this we can directly visualize Vlasiator outputs in ParaView except phase space information. However, note that as of ParaView 5.9 there are bugs in supporting the UniformOverlappingAMR class.
