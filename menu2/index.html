@@ -343,6 +343,9 @@ h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span>
 <span class=hljs-string >system_write_distribution_yline_stride</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>
 <span class=hljs-string >system_write_distribution_zline_stride</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>
 
+<span class=hljs-string >restart_walltime_interval</span> <span class=hljs-string >=</span> <span class=hljs-number >-1</span> <span class=hljs-comment ># Save in given wall time interval. Negative numbers disables writes</span>
+<span class=hljs-string >number_of_restarts</span> <span class=hljs-string >=</span> <span class=hljs-number >4294967295</span> <span class=hljs-comment ># Exit the simulation after a certain number of saving restarts above</span>
+
 <span class=hljs-string >write_as_float</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span> <span class=hljs-comment ># convert to single precision outputs or not</span></code></pre>
 <ul>
 <li><p><code>system_write_file_name</code>: it is arbitrary, although we have used <code>bulk</code> for the frequent simulation output files for almost 10 years now.</p>
@@ -400,7 +403,7 @@ h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span>
 <p>For more information, check <code>ioread.cpp</code>.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: September 06, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: September 11, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
