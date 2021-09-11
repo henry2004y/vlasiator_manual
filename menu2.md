@@ -388,6 +388,9 @@ system_write_distribution_xline_stride = 0
 system_write_distribution_yline_stride = 0
 system_write_distribution_zline_stride = 0
 
+restart_walltime_interval = -1 # Save in given wall time interval. Negative numbers disables writes
+number_of_restarts = 4294967295 # Exit the simulation after a certain number of saving restarts above
+
 write_as_float = 0 # convert to single precision outputs or not
 ```
 
