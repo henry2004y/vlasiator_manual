@@ -346,25 +346,6 @@ dipoleMirrorLocationX = 3.88e8
   * 3: 3D dipole with mirror
 * `dipoleMirrorLocationX`: location of the mirror dipole, which is used to cancel the components of the dipole field in the solar wind as if it is a perfect conductor. It should be set to `2*(xmax-2*cellsize)` manually if inflow is coming from the +x direction.
 
-```YAML
-[proton_thermal]
-radius = 6.92480e5
-vx = -7.5e5
-vy = 0.0
-vz = 0.0
-```
-
-Center coordinate for the maxwellian distribution. Used for calculating the suprathermal moments.
-
-
-```YAML
-[proton_energydensity]
-solarwindspeed = 0
-solarwindenergy = 0
-```
-
-Incoming solar wind velocity magnitude in [m/s] and ram energy in [eV]. Used for calculating energy densities.
-
 ### Parallelization
 
 ```YAML
@@ -375,6 +356,26 @@ rebalanceInterval = 10 # time step interval for load balance
 ### IO
 
 There is a diagnostic file and a log file.
+
+```YAML
+[proton_thermal]
+radius = 0 # radius of the Maxwellian distribution, [m/s]
+vx = -5e5  # center of the Maxwellian distribution, [m/s]
+vy = 0.0
+vz = 0.0
+```
+
+Thermal component paramters used for calculating the thermal/suprathermal moments.
+A rule of thumb for the choice of `radius` is to be within a few times the thermal speed obtained upstream.
+You can also plot some VDFs and look at how the distribution falls off: for non-thermal particle moments, we want values to not be contaminated by the dense solar wind core.
+
+```YAML
+[proton_energydensity]
+solarwindspeed = 0
+solarwindenergy = 0
+```
+
+Incoming solar wind velocity magnitude in [m/s] and ram energy in [eV]. Used for calculating energy densities.
 
 ```YAML
 [io]
@@ -408,10 +409,10 @@ output = fg_b               # magnetic field, [T]
 output = vg_pressure        # total thermal pressure, [Pa]
 output = populations_vg_rho # number density for each species, [m^-3]
 output = populations_vg_v   # velocity for each species, [m/s]
-output = vg_boundarytype    # ?
-output = vg_rank            # MPI ranks?
-output = populations_vg_blocks # ?
-diagnostic = populations_vg_blocks # ?
+output = vg_boundarytype    # type of boundaries
+output = vg_rank            # MPI rank for each cell
+output = populations_vg_blocks # number of vblocks
+diagnostic = populations_vg_blocks # number of vblocks
 ```
 
 All the quantities can be listed after either `output` or `diagnostic`.
@@ -423,6 +424,7 @@ All the quantities can be listed after either `output` or `diagnostic`.
   * `vg`: variable on the DCCRG Vlasov grid, including AMR in 3D potentially.
   * `populations`: used for moments: write out that (group of) moment(s) for all populations.
   * `rho`: number density, `rhom`: mass density, `rhoq`: charge density, `v`: velocity.
+  * `_thermal/_nonthermal`: suffix for isolating thermal/nonthermal moments, used with parameters defined in `[populations_thermal]`.
 
 All the output files are in vlsv format, no matter it's the restart file or regular outputs.
 The restart file is used for continuing a run, which contains the full distribution, field information and meta data.
