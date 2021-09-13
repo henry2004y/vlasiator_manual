@@ -317,21 +317,21 @@ h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span>
 <li><p><code>dipoleMirrorLocationX</code>: location of the mirror dipole, which is used to cancel the components of the dipole field in the solar wind as if it is a perfect conductor. It should be set to <code>2*&#40;xmax-2*cellsize&#41;</code> manually if inflow is coming from the &#43;x direction.</p>
 
 </ul>
-<pre><code class="YAML hljs">[<span class=hljs-string >proton_thermal</span>]
-<span class=hljs-string >radius</span> <span class=hljs-string >=</span> <span class=hljs-number >6.92480e5</span>
-<span class=hljs-string >vx</span> <span class=hljs-string >=</span> <span class=hljs-number >-7.5e5</span>
-<span class=hljs-string >vy</span> <span class=hljs-string >=</span> <span class=hljs-number >0.0</span>
-<span class=hljs-string >vz</span> <span class=hljs-string >=</span> <span class=hljs-number >0.0</span></code></pre>
-<p>Center coordinate for the maxwellian distribution. Used for calculating the suprathermal moments.</p>
-<pre><code class="YAML hljs">[<span class=hljs-string >proton_energydensity</span>]
-<span class=hljs-string >solarwindspeed</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>
-<span class=hljs-string >solarwindenergy</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span></code></pre>
-<p>Incoming solar wind velocity magnitude in &#91;m/s&#93; and ram energy in &#91;eV&#93;. Used for calculating energy densities.</p>
 <h3 id=parallelization ><a href="#parallelization" class=header-anchor >Parallelization</a></h3>
 <pre><code class="YAML hljs">[<span class=hljs-string >loadBalance</span>]
 <span class=hljs-string >rebalanceInterval</span> <span class=hljs-string >=</span> <span class=hljs-number >10</span> <span class=hljs-comment ># time step interval for load balance</span></code></pre>
 <h3 id=io ><a href="#io" class=header-anchor >IO</a></h3>
 <p>There is a diagnostic file and a log file.</p>
+<pre><code class="YAML hljs">[<span class=hljs-string >proton_thermal</span>]
+<span class=hljs-string >radius</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span> <span class=hljs-comment ># radius of the Maxwellian distribution, [m/s]</span>
+<span class=hljs-string >vx</span> <span class=hljs-string >=</span> <span class=hljs-number >-5e5</span>  <span class=hljs-comment ># center of the Maxwellian distribution, [m/s]</span>
+<span class=hljs-string >vy</span> <span class=hljs-string >=</span> <span class=hljs-number >0.0</span>
+<span class=hljs-string >vz</span> <span class=hljs-string >=</span> <span class=hljs-number >0.0</span></code></pre>
+<p>Thermal component paramters used for calculating the thermal/suprathermal moments. A rule of thumb for the choice of <code>radius</code> is to be within a few times the thermal speed obtained upstream. You can also plot some VDFs and look at how the distribution falls off: for non-thermal particle moments, we want values to not be contaminated by the dense solar wind core.</p>
+<pre><code class="YAML hljs">[<span class=hljs-string >proton_energydensity</span>]
+<span class=hljs-string >solarwindspeed</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>
+<span class=hljs-string >solarwindenergy</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span></code></pre>
+<p>Incoming solar wind velocity magnitude in &#91;m/s&#93; and ram energy in &#91;eV&#93;. Used for calculating energy densities.</p>
 <pre><code class="YAML hljs">[<span class=hljs-string >io</span>]
 <span class=hljs-string >diagnostic_write_interval</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span> <span class=hljs-comment ># time step interval for diagnostic output </span>
 <span class=hljs-string >write_initial_state</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>       <span class=hljs-comment ># initial value output on/off, before any solver (half)steps are taken to get us to t=0.</span>
@@ -363,10 +363,10 @@ h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span>
 <span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_pressure</span>        <span class=hljs-comment ># total thermal pressure, [Pa]</span>
 <span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_rho</span> <span class=hljs-comment ># number density for each species, [m^-3]</span>
 <span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_v</span>   <span class=hljs-comment ># velocity for each species, [m/s]</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_boundarytype</span>    <span class=hljs-comment ># ?</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_rank</span>            <span class=hljs-comment ># MPI ranks?</span>
-<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_blocks</span> <span class=hljs-comment ># ?</span>
-<span class=hljs-string >diagnostic</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_blocks</span> <span class=hljs-comment ># ?</span></code></pre>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_boundarytype</span>    <span class=hljs-comment ># type of boundaries</span>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >vg_rank</span>            <span class=hljs-comment ># MPI rank for each cell</span>
+<span class=hljs-string >output</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_blocks</span> <span class=hljs-comment ># number of vblocks</span>
+<span class=hljs-string >diagnostic</span> <span class=hljs-string >=</span> <span class=hljs-string >populations_vg_blocks</span> <span class=hljs-comment ># number of vblocks</span></code></pre>
 <p>All the quantities can be listed after either <code>output</code> or <code>diagnostic</code>.</p>
 <ul>
 <li><p><code>output</code>: writes to the output vlsv files.</p>
@@ -382,6 +382,8 @@ h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span>
 <li><p><code>populations</code>: used for moments: write out that &#40;group of&#41; moment&#40;s&#41; for all populations.</p>
 
 <li><p><code>rho</code>: number density, <code>rhom</code>: mass density, <code>rhoq</code>: charge density, <code>v</code>: velocity.</p>
+
+<li><p><code>_thermal/_nonthermal</code>: suffix for isolating thermal/nonthermal moments, used with parameters defined in <code>&#91;populations_thermal&#93;</code>.</p>
 
 </ul>
 
@@ -403,7 +405,7 @@ h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span>
 <p>For more information, check <code>ioread.cpp</code>.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: September 11, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: September 13, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
