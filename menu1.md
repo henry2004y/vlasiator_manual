@@ -90,7 +90,7 @@ However, the latest Eigen version has compilation error in assertions:
 
 ## PHIPROF
 
-PHIPROF is the profiler library used, which is very similar to the timer library in SWMF written in Fortran.
+_PHIPROF_ is the profiler library used, which is very similar to the timer library in SWMF written in Fortran.
 
 Currently I need to load the dynamic library like this:
 ```
@@ -103,14 +103,13 @@ PHIPROF write outputs to `phiprof_x.txt`, and they get overwritten every diagnos
 
 ## JEMALLOC
 
-JEMALLOC is a library for improved memory allocation.
+_JEMALLOC_ is a library for memory allocation, as an alternative to the standard C allocator _glibc_.
 Rumour has it that Firefox is also using this library to reduce the memory fragmentation during heap allocations.
-The idea behind is, I guess, similar to MPI collective IO in essense.
-However, if this is consistently performing better than the standard allocator function `malloc`, I don't know why this is not the standard allocator instead.
-So apparently it comes with some other drawbacks.
+However, if this is consistently performing better in all aspects than the standard allocator function `malloc`, then this would become the standard allocator instead. So apparently it comes with some other drawbacks or trade-offs.
 From [an interesting post on StackOverflow](https://stackoverflow.com/questions/13027475/cpu-and-memory-usage-of-jemalloc-as-compared-to-glibc-malloc):
 > If you have reasons to think that your application memory management is not effective because of fragmentation, you have to make tests. It is the only reliable information source for your specific needs. If jemalloc is always better that glibc, glibc will make jemalloc its official allocator. If glibc is always better, jemalloc will stop to exist. When competitors exist long time in parallel, it means that each one has its own usage niche.
 
+When you search on the web, you will find all kinds of confusing results. The proper way is to test for our case.
 One interesting finding is that a MPI communication bug in Vlasiator's DCCRG call will only be triggered by JEMALLOC, at least in some small scale tests.
 
 This is also a dynamic library that needs to be loaded:
