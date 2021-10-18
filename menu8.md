@@ -28,6 +28,14 @@ Extra care is needed when resolving the velocity space. Velocity is the 1st mome
 
 Even in 1D simulations, Vlasiator treats the other 2 spatial dimensions as 1 cell with periodic boundaries. If the velocity space grid is too small in these two extra dimensions, the sampling scheme used in Vlasiator 5.1 still generate significant discrepancy for the integrals. Under my tests, within 1% error we need 6 blocks (24 cells) in the extra dimensions, and 10 blocks (40 cells) would be better.
 
+## Velocity Space Limit
+
+Currently Vlasiator will generate wrong physics when the velocity space distribution goes beyond the limit. A better question to ask will be: what is a proper boundary condition for the velocity space?
+
+## Ordinary Space Resolution
+
+A person coming from the PIC world may think that it requires resolving the ion inertial length to produce correct ion physics. However, one key claim from the Vlasiator experiments is that this is not necessarily true for a vlasov ion model: _we don't need to fully resolve the ion scales to produce ion physics_. For example, in Maxime's paper about mirror modes and EMIC waves in the meriodional plane 2D3V simulation, he showed that at a resolution of the ion scale 300km given the upstream parameters we could already capture ion-related wave pretty well.
+
 ## AMR Filtering
 
 The Vlasov solver provides moments of the distribution function as input for the field solver, which are spatially filtered to minimize refinement artefacts. In Vlasiator 5.1 it was found to be buggy, but I know little about this currently.
