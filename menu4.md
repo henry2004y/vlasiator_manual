@@ -114,6 +114,7 @@ Stages:
 3. Finalization
 
 Questions:
+
 * `object_wrapper.h`: it defines a struct named ObjectWrapper which contains the AMR criteria, container for user-defined mesh data, parameters for all particle species, projects, and parameters for velocity meshes.
 * `fieldsolver/gridGlue.hpp`: names are not following the same standard!
 * `phiprof.hpp`
@@ -122,7 +123,7 @@ The usage of this profiler is quite similar to Gabor’s library, both of which 
 During compilation, there is a warning about `narrowing conversion of ...`.
 What does it mean and why do we need this?
 
-```c++
+```cpp
 using namespace phiprof
 using namespace std
 ```
@@ -130,7 +131,7 @@ using namespace std
 Since they are already imported, there is no need to add `std::` in the rest of code.
 
 * `recalculateLocalCellsCache()`: why do we need another local block for the 2 lines?
-* What is “ad” in the following comments? "and"?
+* What is "ad" in the following comments? "and"?
 > needs to be done here already ad the background field will be set right away,
 * As one can see, there are many FsGrid objects, but they now all share some common values like dx, dy, dz, etc. Why do we need separate values of those?
 * The cubic spatial cell requirement is to restrict. Users have to calculate it themselves and even if the cells are not cubic the code will only give a warning message but still run. Maybe we should just add something to the kernel functions.
@@ -248,7 +249,4 @@ struct technical {
 
 There are two functions for setting the derivatives to zeroes.
 
-
-
 ### SetByUser
-
