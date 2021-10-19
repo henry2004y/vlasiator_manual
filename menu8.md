@@ -12,9 +12,12 @@ All kinds of weird error messages may pop up due to runtime out-of-memory error:
 * `Segmentation fault`
 * `Out-of-memory`
 * `malloc failed`
+* `Bus error: nonexistent physical address`
 
 Even if you set the maximum memory limit for bailing-out when compiled with PAPI in configuration files, it may still crash because of memory fragmentations.
 Check `memoryallocation.cpp` in the source code if you want to see the details.
+
+One thing to be careful about is that the initial memory usage reported by PAPI significantly underestimates the actual usage, e.g. by 25%. It may actually be better to look at system memory usage for a better estimation.
 
 ## Timestepping
 
