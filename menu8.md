@@ -9,6 +9,7 @@
 Memory is often the bottleneck for Vlasiator. Vlasiator is not constant in memory usage: as the plasma system evolves from initial state, which is mostly described by a Maxwellian distribution, the system shifts away from thermal equilibrium states and the blocks it requires to resolve the nonMaxwellian distribution may drastically increase. The total block counts can easily increase 5x as the system evolves into a quasi-steady state.
 
 All kinds of weird error messages may pop up due to runtime out-of-memory error:
+
 * `Segmentation fault`
 * `Out-of-memory`
 * `malloc failed`
@@ -18,6 +19,13 @@ Even if you set the maximum memory limit for bailing-out when compiled with PAPI
 Check `memoryallocation.cpp` in the source code if you want to see the details.
 
 One thing to be careful about is that the initial memory usage reported by PAPI significantly underestimates the actual usage, e.g. by 25%. It may actually be better to look at system memory usage for a better estimation.
+
+There are currently two ways to solve the out-of-memory issue:
+
+1. Replace some MPI processes with OpenMP threads.
+2. Run with larger memory.
+
+Multithreading runs can save memory mostly because there will be fewer ghost cells required for communication.
 
 ## Timestepping
 
@@ -43,17 +51,18 @@ A person coming from the PIC world may think that it requires resolving the ion 
 
 The Vlasov solver provides moments of the distribution function as input for the field solver, which are spatially filtered to minimize refinement artefacts. In Vlasiator 5.1 it was found to be buggy, but I know little about this currently.
 
-
 ## Performance
 
 Vlasiator is distributed with MPI+OpenMP, but the optimal MPI tasks + OpenMP threads combination differs case by case. Hyperthreading may or may not help.
 
 On many clusters with Slurm job scheduler, hyperthreading is on by adding
+
 ```shell
 #SBATCH --hint=multithread
 ```
 
 A general MPI + OpenMP with simultaneous multithreading example Slurm script:
+
 ```shell
 #!/bin/bash
 #SBATCH --job-name=example
