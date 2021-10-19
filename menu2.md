@@ -10,7 +10,6 @@
 
 \toc
 
-
 The so-called cellblock, with size `4x4x4`, is aimed for vectorization.
 The block sizes are defined as constants.
 
@@ -20,7 +19,6 @@ Also, you cannot use tab to auto-complete input file names!
 It is really annoying to type the cfg file name as an argument into the command line everytime when I try to run the code.
 Maybe we can set some default locations, like looking for cfg files in the current directory?
 
-
 The speed difference between `-O0` and `-O3` can be 120/9=13 times! This is quite significant. Thanks compiler!
 
 ## Input Configuration File
@@ -28,6 +26,7 @@ The speed difference between `-O0` and `-O3` can be 120/9=13 times! This is quit
 There is no manual for the configuration parameters currently.
 However, there is a script helping to identify potential errors in the configuration file, `tools/check_vlasiator_cfg.sh`.
 To run that,
+
 ```shell
 ./check_vlasiator_cfg.sh vlasiator test.cfg
 ```
@@ -46,7 +45,6 @@ To run that,
 * How to restart a run?
   * If the options are set so that restart files come out, you will get files called `restart.INDEX.DATE.vlsv`. INDEX is seven digits in seconds of simulation time, DATE is the date of the file.
   * When you want to restart from a given file, use the option `restart.filename` pointing to that file. In job scripts for multi-stage runs one trick is to use the option on the command line/in the job script as `--restart.filename $( ls -tr | restart.*.vlsv | tail -n 1 )`.
-
 
 ### General
 
@@ -82,6 +80,7 @@ Stop the run if any of the criteria is violated. The memory limit is only workin
 ### Grid
 
 All the values are assumed to be in SI units.
+
 ```YAML
 [gridbuilder]
 x_length = 20      # number of cells in x
@@ -101,6 +100,7 @@ timestep_max = 100 # maximum number of iterations allowed
 Boundary cells (typically 1 layer?) are included in `x_length`, etc.
 
 My guess is that if any of the limits is reached, the simulation will terminate.
+
 * `dt` is the single time step length (used if dynamic dt is disabled)
 * `timestep_max` is the max number of timesteps taken until the run stops
 * `t_max` is the max simulaton time until the run stops
@@ -132,6 +132,7 @@ Is it possible to do mesh refinement in 1D or 2D? Yes, but it also depends on wh
 ### Species & Velocity Space
 
 Normalization, mass and charge
+
 ```YAML
 [proton_properties]
 mass = 1
@@ -171,6 +172,7 @@ This command sets the threshold for resolving a distribution.
 For typical magnetospheric plasma parameters, phase-space density peaks out between $1\times10^{-12}$ and $1\times 10^{-9}\ \text{m}^{⁻6}\text{s}^3$.
 
 There are some additional options for setting sparsity:
+
 * `dynamicAlgorithm`: type of algorithm used for calculating the dynamic minValue. `0` is none, `1` is linear algorithm based on rho, `2` is linear algorithm based on Blocks. Example linear algorithm: y = kx+b, where dynamicMinValue1=k*dynamicBulkValue1 + b, and dynamicMinValue2 = k*dynamicBulkValue2 + b.
 
 I need to ask about this.
@@ -209,6 +211,7 @@ The default values are shown above.
 * `+`,`-`: (see --help, + is the positive side/highest coordinate, - is the negative/lower side)
 
 Current boundary settings
+
 ```YAML
 [boundaries]
 periodic_x = no
@@ -221,6 +224,7 @@ boundary = Ionosphere
 
 * `boundary`: type of boundary class that will be initialised and usable in the run. The actual boundary type for each face is explicitly controlled by the tag with the same boundary type below.
   * `Outflow`: so far this is a Neumann condition (copy-condition fo the nearest simulation cell)
+
 ```YAML
 [outflow]
 precedence = 3
@@ -229,7 +233,9 @@ face = x-
 face = y-
 face = y+
 ```
+
   * `Maxwellian`: Takes the values from the provided `.dat` file, `time density temperature Vx Vy Vz Bx By Bz`, partial support for time-variation is already in the code. It might be helpful to add a header line to the `.dat` file!
+
 ```YAML
 [maxwellian]
 face = x+
@@ -244,6 +250,7 @@ file_x+ = sw1.dat
 Note: `reapplyUponRestart` by default is 0, which means keeping going with the state existing in the restart file. If set to 1, it calls again `applyInitialState()`. This can be used to change boundary condition behaviour during a run, and currently it must be set to 1 for applying time varying boundary condition!
 
   * `Ionosphere`: ionospheric inner boundary
+
 ```YAML
 [ionosphere]
 centerX = 0.0   # ?
@@ -259,6 +266,7 @@ rho = 1.0e6
 
 I can guess the meanings, but shall there be better alternatives? Let's discuss, but some options are population-specific for example.
 Maybe something like
+
 ```YAML
 [boundary]
 boundary_x = Outflow
@@ -266,6 +274,7 @@ boundary_y = Maxwellian
 boundary_z = Periodic
 boundary_inner = Ionosphere
 ```
+
 Internally we almost don't need to change anything, except a check on the strings.
 
 ### Initial conditions
@@ -328,6 +337,7 @@ The other thing worths noticing is that there will be numerical errors. Even if 
 If for some reason you need to force the number density, you can use the `conserve_mass` flag which re-scales the VDF to match the original value after it's been populated.
 
 Background field
+
 ```YAML
 [Magnetosphere]
 constBgBX = -3.0e-9 # constant background magnetic field x component
@@ -416,6 +426,7 @@ diagnostic = populations_vg_blocks # number of vblocks
 ```
 
 All the quantities can be listed after either `output` or `diagnostic`.
+
 * `output`: writes to the output vlsv files.
 * `diagnostic`: writes out the min, max, mean and sum of that variable over the whole grid into the `diagnostic.txt` file. It's a handy way of monitoring some parameters during a run.
 

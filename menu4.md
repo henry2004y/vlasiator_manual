@@ -12,6 +12,7 @@
 In C++, the included files should be ordered and grouped.
 This part can be done with an automatic script.
 It should be able to:
+
 * Correct function and file names according to naming standard (`.hpp → .h`, `datareducer → dataReducer`)
 * Switch orders of #include if required
 * Correct comments indentation and argument indentations.
@@ -121,7 +122,7 @@ The usage of this profiler is quite similar to Gabor’s library, both of which 
 During compilation, there is a warning about `narrowing conversion of ...`.
 What does it mean and why do we need this?
 
-```
+```c++
 using namespace phiprof
 using namespace std
 ```
@@ -138,7 +139,6 @@ Since they are already imported, there is no need to add `std::` in the rest of 
 * The condition `P::propagateField` comments say that it is only for B field? But I can see all the fields in the argument list of propagteFields?
 * `getFieldsFromFsGrid()`: since the field solver is working on a regular Cartesian grid, this is supposed to copy field results back to dccrg grid for vdf?
 
-
 ## Definitions
 
 * What should go into `common.h`, `definitions.h`, and `parameters.h` respectively?
@@ -152,8 +152,6 @@ I have no clue why this local block ID has to be defined here, since it probably
 
 `common.h`
 
-
-
 `Namespace sysboundarytype`: is SET_MAXWELLIAN for the fixed inflow?
 
 ## Parameters
@@ -164,7 +162,6 @@ I have no clue why this local block ID has to be defined here, since it probably
 
 * What is the difference between `vector<CellID>` and `vector<CellID>&`? Does the second one mean that it is essentially the same vector without copying?
 
-
 ## SysBoundary
 
 The code structure here is slightly more complicated than I thought.
@@ -172,6 +169,7 @@ In the main function, `sysBoundary.applySysBoundaryVlasovConditions()` is called
 `sysBoundary` is a high level wrapper class for initializing, storing, and applying all types of system boundary conditions.
 The actual classes for BCs are defined in `sysboundarycondition.cpp`, within the scope of `namespace SBC`.
 It contains a base abstract class called `SysBoundaryCondition`, and 5 derived classes:
+
 * `DoNotCompute`
 * `Ionosphere`
 * `Outflow`
@@ -182,6 +180,7 @@ The prefix `sys` is used to distinguish between physical simulation domain bound
 However, in most cases MPI process boundary should be renamed to something else, and the boundary will be interpreted by most people the whole mesh's boundary.
 
 Personally I don't like the name of `SetMaxwellian` for two reasons: firstly it is a verb, secondly it is not descriptive enough. We may change it to `Inflow` and then make `Maxwellian` one option among the available choices. Also currently `SetMaxwellian` is a subclass of `SetByUser`, which I think should not be the case. So I envision the subclasses of `sysBoundaryCondition` like this:
+
 * `Nothing`
 * `Ionosphere`
 * `Outflow`
@@ -190,6 +189,7 @@ Personally I don't like the name of `SetMaxwellian` for two reasons: firstly it 
 * `User`
 
 There are 3 choices in the `Outflow` type:
+
 1. `None`: do nothing
 2. `Copy`: copy the values from the last physcial cell
 3. `Limit`: multiply the values from the last physcial cell by a factor between (0,1)?
@@ -203,6 +203,7 @@ The base class has a private variable `sysBoundaryCondList` to keep track of all
 Can this possess multiple options for the same BC class?
 
 In `Commons.h`, the general information for the grid is defined:
+
 ```cpp
 struct technical {
    int sysBoundaryFlag;  /* System boundary flags */

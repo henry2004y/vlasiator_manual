@@ -12,12 +12,14 @@
 ## A Brief History of the Build System
 
 There are several issues with the current file system:
+
 * Source files should not be present on the top level.
 * External library linking is a nightmare if you start on a new machine.
 * The Makefile lists every single source file with repetitive flags. The flags and preprocessor settings are buried in the long Makefile which makes it hard to modify if necessary.
 * Vlasiator depends on many packages. It takes a huge effort to install the code on a new machine, mainly due to the dependency hell.
 
 To handle the fore-mentioned problems, I propose three major changes:
+
 1. Reorganize the file levels.
 2. Rewrite the Makefile.
 3. Add a new configuration file.
@@ -25,22 +27,27 @@ To handle the fore-mentioned problems, I propose three major changes:
 I have come across several round of modification trying to make the new build system simple and useful.
 
 1. For a fresh new machine,
+
 ```shell
 ./configure.py -h
 ```
+
 shows the available options.
 By default options with prefix `-` require no arguments, and options with prefix `--` require one argument.
 
 ```shell
 ./configure.py -install
 ```
+
 tries to install all the dependencies in the new `lib` folder except Boost.
 On Ubuntu it is often installed under the default folder; on supercomputers there is usually a module to load.
 
 2. To access an existing customized Makefile in `MAKE` folder with library paths and compiler flags, e.g.
+
 ```shell
 ./configure.py --machine=yann
 ```
+
 then it will include the preset library paths in the main Makefile.
 By default it links to `MAKE/Makefile.default`.
 
@@ -76,10 +83,12 @@ Boost is used in Vlasiator solely for argument parsing.
 
 Eigen is probably used for some avx instructions in the acceleration part of the Vlasov solver.
 There are two version in-use:
+
 * AGNER, which aims at ultimate avx performance;
 * FALLBACK, which is homemade and more robust, but may not provide the best performance.
 
 However, the latest Eigen version has compilation error in assertions:
+
 ```shell
 3.3.8
 /home/hyzhou/include/Eigen/src/Core/products/Parallelizer.h:162:40: error: ‘eigen_assert_exception’ is not a member of ‘Eigen’
@@ -93,6 +102,7 @@ However, the latest Eigen version has compilation error in assertions:
 _PHIPROF_ is the profiler library used, which is very similar to the timer library in SWMF written in Fortran.
 
 Currently I need to load the dynamic library like this:
+
 ```
 export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/phiprof/lib
 ```
@@ -113,6 +123,7 @@ When you search on the web, you will find all kinds of confusing results. The pr
 One interesting finding is that a MPI communication bug in Vlasiator's DCCRG call will only be triggered by JEMALLOC, at least in some small scale tests.
 
 This is also a dynamic library that needs to be loaded:
+
 ```
 export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib
 ```

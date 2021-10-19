@@ -23,8 +23,8 @@ Nice thing about this is that it is a light weight reference to the "correct" re
 But it may not be so bad: when you debug the code, you typically generate an old reference data and compare against it directly.
 Eventually there should be some automated checks, bundled in the CI workflow.
 
-
 The first thing that works:
+
 ```shell
 ../../../vlsvdiff_DP bulk.0000001.vlsv bulk.0000001.vlsv proton/vg_rho 0
 ```
@@ -46,6 +46,7 @@ I can now successfully compare results1.
 VLSV is a self-created XML based file format for Vlasiator, and the first format I know that outputs metadata at the end of file.
 
 Key concepts:
+
 * One vlsv file may contain multiple meshes (fsgrid, dccrg grid, etc.)
 * Each mesh may contain multiple zones.
 * Each mesh is logically Cartesian.
@@ -76,6 +77,7 @@ Another thing to note is that the newer XML-based VTK files can take advantage o
 ## Visualization
 
 There are currently three main tools for plotting:
+
 * [Analysator](https://github.com/fmihpc/analysator) in Python;
 * VisIt with [VLSV plugin](https://github.com/fmihpc/vlsv/tree/master/visit-plugin);
 * [Vlasiator.jl](https://henry2004y.github.io/Vlasiator.jl/dev/).
@@ -96,6 +98,7 @@ PyQt5 cannot be installed from pip, because it does not provide a `setup.py` fil
 However, it can be installed through `apt-get`.
 
 Questions:
+
 1. In the Python version, I notice a `cellids` dictionary which is a lookup table for data ordering. Does this correspond to the concept of blocks as described in vlsv? There is a sorting call somewhere in the plotting function like `plot_colormap`. It may be better to do the sorting while reading the `cellids` and save it as an array.
 2. It is hard to tell what can I do if someone randomly throws me a vlsv file. For example, I don't know if it's 1D, 2D, or 3D, and what kind of plots are available.
 This may be partly solved with more examples.

@@ -1,16 +1,15 @@
 @def title = "Misc"
 
-
 # Miscellaneous
 
 \toc
-
 
 ## eVlasiator: Dealing with Electrons
 
 The main Vlasiator is solving the Vlasov equations for ions; this eVlasiator is conceptually the same, just replace the ion with electron.
 The differences are mainly scales.
 The normal Vlasiator treats electrons as massless fluid. Possible options to improve that are:
+
 1. fluid with mass;
 2. electron macro paticles;
 3. electron distribution function

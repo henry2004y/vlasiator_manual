@@ -10,12 +10,14 @@
 \toc
 
 There exists some test funtionalities under the `testpackages` folder, but it is not good enough.
+
 * Currently one can compare the output from one version of the code to another version, but obviously there are many problems with this approach. How can you guarantee the version you select generate the correct "reference" solutions?
 * The shell scripts are written for specific machines, but none of them are running on a regular basis.
 * One has to do many extra work to create tests on a new machine.
 * We cannot pick a specific test to run easily with one command.
 
 To tackle these problems, I am thinking about redesign the whole test suites. The goal is to
+
 * define reference solutions to compare with;
 * create a flexible test list with `make`;
 * test one thing at a time;
@@ -41,11 +43,13 @@ Under the `testpackage` folder:
 ```shell
 make
 ```
+
 runs all the listed tests in `Makefile`.
 
 ```shell
 make TESTS=flowthrough
 ```
+
 runs a specific test.
 
 It would be nice to save the test log somewhere, but for now just ignore it. Also `vlsvdiff` can substitute julia for comparing differences.
