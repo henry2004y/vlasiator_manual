@@ -131,3 +131,16 @@ export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib
 ## PAPI
 
 [PAPI](http://icl.cs.utk.edu/papi/) is a memory tracker, activated only when `-DPAPI_MEM` is added to the compiler flags.
+
+A typical output of PAPI in Vlasiator looks like the following
+
+```
+(MEM) Resident per node (avg, min, max): 150.348 144.319 161.92
+(MEM) High water mark per node (GiB) avg: 201.933 min: 185.869 max: 217.764 sum (TiB): 5.91601 on 30 nodes
+```
+
+The resident is how much the code uses when the memory report is done. High water mark is the highest it has been[^1]. These differ because the memory usage is very dynamic with blocks being added and then removed in acceleration and block adjustment. 
+
+[^1]: So this is different from high water mark in Linux kernel.
+
+MPI communication requires memory buffers where to store received data. These are for the neighbor spatial cells which are empty right after the restart. After the first step with communication they have been initialized and contain block data representing the neighboring cells., therefore the numbers will be larger than the first report after restart, e.g. by a factor of ~30%.
