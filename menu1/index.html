@@ -55,9 +55,20 @@
 <pre><code class="julia hljs"><span class=hljs-keyword >export</span> LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib</code></pre>
 <h2 id=papi ><a href="#papi" class=header-anchor >PAPI</a></h2>
 <p><a href="http://icl.cs.utk.edu/papi/">PAPI</a> is a memory tracker, activated only when <code>-DPAPI_MEM</code> is added to the compiler flags.</p>
+<p>A typical output of PAPI in Vlasiator looks like the following</p>
+<pre><code class="julia hljs">(MEM) Resident per node (avg, min, max): <span class=hljs-number >150.348</span> <span class=hljs-number >144.319</span> <span class=hljs-number >161.92</span>
+(MEM) High water mark per node (GiB) avg: <span class=hljs-number >201.933</span> min: <span class=hljs-number >185.869</span> max: <span class=hljs-number >217.764</span> sum (TiB): <span class=hljs-number >5.91601</span> on <span class=hljs-number >30</span> nodes</code></pre>
+<p>The resident is how much the code uses when the memory report is done. High water mark is the highest it has been<sup id="fnref:1"><a href="#fndef:1" class=fnref >[1]</a></sup>. These differ because the memory usage is very dynamic with blocks being added and then removed in acceleration and block adjustment. </p>
+<p><table class=fndef  id="fndef:1">
+    <tr>
+        <td class=fndef-backref ><a href="#fnref:1">[1]</a>
+        <td class=fndef-content >So this is different from high water mark in Linux kernel.
+    
+</table>
+ MPI communication requires memory buffers where to store received data. These are for the neighbor spatial cells which are empty right after the restart. After the first step with communication they have been initialized and contain block data representing the neighboring cells., therefore the numbers will be larger than the first report after restart, e.g. by a factor of ~30&#37;.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: October 19, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: October 20, 2021. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
