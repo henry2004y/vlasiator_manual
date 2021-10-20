@@ -81,3 +81,24 @@ export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
 srun myprog <options>
 ```
+
+Slurm now comes with a efficiency report script called `seff`. An example output of `seff $SLURM_JOBID` looks like
+
+```
+Job ID: 766237
+Cluster: mahti
+User/Group: hongyang/hongyang
+State: RUNNING
+Nodes: 30
+Cores per node: 256
+CPU Utilized: 680-03:29:31
+CPU Efficiency: 14.69% of 4630-20:16:00 core-walltime
+Job Wall-clock time: 14:28:17
+Memory Utilized: 7.40 TB (estimated maximum)
+Memory Efficiency: 107.77% of 6.87 TB (234.38 GB/node)
+Job consumed 43414.17 CSC billing units based on following used resources
+Billed project: project_2004873
+Non-Interactive BUs: 43414.17
+```
+
+In general, if the processor usage is far below 100%, the code may not be working efficiently; if the memory usage is far below 100% or above 100%, you may have a problem with the RAM requirements. In this particular case, we have very low CPU efficiency because we were not running with all the cores on a compute node and Vlasiator is a memory-bound program; we have over 100% memory efficiency which indicates that the memory pressure is very high and we may need to consider increase the memory requirement.
