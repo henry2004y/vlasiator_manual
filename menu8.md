@@ -51,6 +51,12 @@ A person coming from the PIC world may think that it requires resolving the ion 
 
 The Vlasov solver provides moments of the distribution function as input for the field solver, which are spatially filtered to minimize refinement artefacts. In Vlasiator 5.1 it was found to be buggy, but I know little about this currently.
 
+## Units
+
+It seems like SI units are used for both I/O and internal computations. Since electron is treated as massless fluid, no scaling of mass is present.
+
+Double precision is sufficient even if all the physical constants across our known scales are involved. However, if we use single precision floating numbers, we need to be careful about physical constants!
+
 ## Performance
 
 Vlasiator is distributed with MPI+OpenMP, but the optimal MPI tasks + OpenMP threads combination differs case by case. Hyperthreading may or may not help.
