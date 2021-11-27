@@ -63,6 +63,10 @@ The tools should in principle also be able to be compiled, but for now it is not
 
 This comes together with a new Makefile borrowed from Athena. I need to think about whether or not we should use a hierarchical Makefile architecture.
 
+### Even better approach
+
+CMake-like tools will make your life much easier.
+
 ## DCCRG
 
 DCCRG is the underlying grid and MPI library for Vlasiator. I guess this provides similar functionality compared to **AMReX** and **BATL**.
