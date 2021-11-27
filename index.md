@@ -5,6 +5,15 @@
 
 \tableofcontents <!-- you can use \toc as well -->
 
+\newcommand{\figenv}[3]{
+~~~
+<figure style="text-align:center;">
+<img src="!#2" style="padding:0;#3" alt="#1"/>
+<figcaption>#1</figcaption>
+</figure>
+~~~
+}
+
 Vlasiator is a numerical model for *collisionless* *ion*-kinetic plasma physics.
 
 ## Features
@@ -67,16 +76,9 @@ $$
 
 The kernal of the model is a Vlasov equation solver for the phase space distribution function $f(\mathbf{r},\mathbf{v},t)$. This is a scalar appeared in an advection equation in high dimension space, so basically we need to look for a scheme that can propagate a scalar in high dimension space accurately.
 
-Semi-Lagrangian method is chosen in Vlasiator. It has "semi" as prefix due to the fact that it is a mixture of Eulerian grid and Lagrangian method[^1]. The idea is that unknowns are still defined in a Eulerian grid, and to calculate the quantities at the next step n+1, we trace the control volume one step before at n and find the corresponding volume integrated value through an interpolation approach. Due to the conservation law, this is exactly the value we seek at the next timestep.
+## Finite volume method
 
-Actually this part is not hard to implement. Maybe there are some tricks for multi-dimensions.
-
-Interestingly, the same idea appears in theoretical plasma physics for studying the phase space evolution. An extremely hard to solve problem can become quite easy and straightforward by moving in the phase space and shift your calculation completely to another spatial-temporal location.
-
-## Ion propagation
-
-Using finite volume method, the full 6D spatial and velocity space is discretized into ordinary and velocity cells.
-Each spatial cell contains the field variables ($\mathbf{B},\mathbf{E}$), which are stored on a staggered grid with $\mathbf{B}$ on the face centers and $\mathbf{E}$ on the edges. Each spatial cell also contains a 3D Cartesian velocity mesh where each velocity cell contains ths volume average $\tilde{f}$ of the distribution function over the ordinary space volume of the spatial cell, and the velocity space volume of the velocity mesh cell:
+The early versions of Vlasiator applied a finite volume method for the Vlasov solver. The full 6D spatial and velocity space is discretized into ordinary and velocity cells. Each spatial cell contains the field variables ($\mathbf{B},\mathbf{E}$), which are stored on a staggered grid with $\mathbf{B}$ on the face centers and $\mathbf{E}$ on the edges. Each spatial cell also contains a 3D Cartesian velocity mesh where each velocity cell contains ths volume average $\tilde{f}$ of the distribution function over the ordinary space volume of the spatial cell, and the velocity space volume of the velocity mesh cell
 $$
 \tilde{f} = \frac{1}{\Delta^3 r \Delta^3 v}\int_{cell} d^3r d^3 v f(\mathbf{r},\mathbf{v},t),
 $$
@@ -117,6 +119,26 @@ middle of the allowed range. The magnetic field is constant during the substeppi
 recompute the bulk velocity $\mathbf{V}_i$ in Eq. (12) after each substep. By substepping the acceleration operator we can keep the global timestep reasonable, which minimizes the total number of timesteps in a simulation.
 The length of the substep is computed on a cell-by-cell basis, thus substepping only happens close to Earth in magnetospheric
 simulations. When we substep, the propagation of the distribution function is not $2^nd$ order accurate in time.
+
+### Semi-Lagrangian method
+
+Semi-Lagrangian method is chosen in Vlasiator. It has "semi" as prefix due to the fact that it is a mixture of Eulerian grid and Lagrangian method[^1]. The idea is that unknowns are still defined in a Eulerian grid, and to calculate the quantities at the next step n+1, we trace the control volume one step before at n and find the corresponding volume integrated value through an interpolation approach. Due to the conservation law, this is exactly the value we seek at the next timestep. As of Vlasiator 5.0, the semi-Lagrangian method being used is SLICE3D.
+
+In the implementation, the 6 phase space dimensions (3 regular space, 3 velocity space dimensions, i.e. "3D3V") are treated independently. This is known as the Strang-splitting approach. There are three terms in Vlasov equation: the time-derivative, the spatial derivative (which is called *translation*), and the velocity derivative (which is called *acceleration*). Translation and acceleration are performed consecutively. For each dimension, transport in the $(x_i,v_{xi})$ subspace forms a linear shear of the distribution, as illustrated in Figure 1.
+
+\figenv{Figure 1: Illustration of the elementary semi-Lagrangian shear step that underlies the Vlasiator Vlasov solver.  Phase space density information from adjacent cells in the update direction is assembled into a linear pencil structure.  An interpolating polynomial is reconstructed with the phase space densities as control points.  This polynomial is translated, and the resulting target phase space values are evaluated at the cell coordinates and written back into the phase space datastructure. Courtesy of Urs Ganse.}{/assets/img/semilag2.png}{width:50%;border: 1px solid red;}
+
+In a similar way, the acceleration update profits from the structure of the electromagnetic forces acting on the particles. In the nonrelativistic Vlasov equation, the action of the Lorentz force $\mathbf{F}_l = q_\alpha (\mathbf{E}+\mathbf{v}\times\mathbf{B})$ transforms the phase space distribution inside one simulation time step ∆t like a solid rotator in velocity space: the magnetic field causes a gyration of the distribution function by the Larmor motion
+$$
+\frac{\partial \mathbf{v}}{\partial t} = q_\alpha \mathbf{v}\times\mathbf{B}
+$$
+while the electric field causes (1) acceleration and (2) drift motion perpendicular to the magnetic field direction.
+
+Hence, the overall velocity space transformation is a rotation around the local magnetic field direction, with the gyration center given by the $\mathbf{E}\times\mathbf{B}$ drift velocity. This transformation can be decomposed into three successive shear motions along the coordinate axes, thus repeating the same fundamental algorithmic structure as the spatial translation update. The acceleration update affects the velocity space completely locally within each spatial simulation cell.
+
+Actually this part is not hard to implement. Maybe there are some tricks for multi-dimensions.
+
+Interestingly, the same idea appears in theoretical plasma physics for studying the phase space evolution. An extremely hard to solve problem can become quite easy and straightforward by moving in the phase space and shift your calculation completely to another spatial-temporal location.
 
 ## Field Propagation
 
