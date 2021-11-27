@@ -82,7 +82,7 @@ The early versions of Vlasiator applied a finite volume method for the Vlasov so
 $$
 \tilde{f} = \frac{1}{\Delta^3 r \Delta^3 v}\int_{cell} d^3r d^3 v f(\mathbf{r},\mathbf{v},t),
 $$
-where $\Delta^3 r = \Delta x \Delta y \Delta z$ and $\Delta v = \Delta v_x \Delta v_y \Delta v_z$ denote the phase space integration volumes, and $\Delta x$ e.t.c are the sizes of the cell in each dimension.
+where $\Delta^3 r = \Delta x \Delta y \Delta z$ and $\Delta^3 v = \Delta v_x \Delta v_y \Delta v_z$ denote the phase space integration volumes, and $\Delta x$ e.t.c are the sizes of the cell in each dimension.
 The volume average $\tilde{f}$ is propagated forward in time by calculating fluxes at every cell face in each of the six dimensions. In the case of Vlasov's equation the spatial ($F_x, F_y, F_z$) and velocity ($F_{vx}, F_{vy}, F_{vz}$) fluxes take on particularly simple forms,
 $$
 \mathbf{F}_\mathbf{r} = \mathbf{v}f,
@@ -109,8 +109,7 @@ Courant–Friedrichs–Lewy (CFL) condition. The Courant number is for each dime
 $$
 C = \frac{u\Delta t}{\Delta s},
 $$
-where $u$ corresponds to the velocity: $v_x$, $v_y$ and $v_z$ in ordinary space and $a_x$, $a_y$ and $a_z$ in velocity space. $\Delta s$ corresponds to the size of the simulation cell: Δx, Δy and Δz in ordinary space and $\Delta v_x$, $\Delta v_y$
-and $\Delta v_z$ in velocity space.
+where $u$ corresponds to the velocity: $v_x$, $v_y$ and $v_z$ in ordinary space and $a_x$, $a_y$ and $a_z$ in velocity space. $\Delta s$ corresponds to the size of the simulation cell: $\Delta x$, $\Delta y$ and $\Delta z$ in ordinary space and $\Delta v_x$, $\Delta v_y$ and $\Delta v_z$ in velocity space.
 
 In simulations with strong local fields leading to high acceleration, e.g., Earth's dipole magnetic field, the timestep is limited
 by the acceleration $S_A$ operator. To enable larger timesteps we split the propagation in velocity space into shorter substeps,
@@ -126,9 +125,9 @@ Semi-Lagrangian method is chosen in Vlasiator. It has "semi" as prefix due to th
 
 In the implementation, the 6 phase space dimensions (3 regular space, 3 velocity space dimensions, i.e. "3D3V") are treated independently. This is known as the Strang-splitting approach. There are three terms in Vlasov equation: the time-derivative, the spatial derivative (which is called *translation*), and the velocity derivative (which is called *acceleration*). Translation and acceleration are performed consecutively. For each dimension, transport in the $(x_i,v_{xi})$ subspace forms a linear shear of the distribution, as illustrated in Figure 1.
 
-\figenv{Figure 1: Illustration of the elementary semi-Lagrangian shear step that underlies the Vlasiator Vlasov solver.  Phase space density information from adjacent cells in the update direction is assembled into a linear pencil structure.  An interpolating polynomial is reconstructed with the phase space densities as control points.  This polynomial is translated, and the resulting target phase space values are evaluated at the cell coordinates and written back into the phase space datastructure. Courtesy of Urs Ganse.}{/assets/img/semilag2.png}{width:50%;border: 1px solid red;}
+\figenv{Figure 1: Illustration of the elementary semi-Lagrangian shear step that underlies the Vlasiator Vlasov solver.  Phase space density information from adjacent cells in the update direction is assembled into a linear pencil structure.  An interpolating polynomial is reconstructed with the phase space densities as control points.  This polynomial is translated, and the resulting target phase space values are evaluated at the cell coordinates and written back into the phase space datastructure. Courtesy of Urs Ganse.}{/assets/img/semilag2.png}{width:100%;border: 1px solid red;}
 
-In a similar way, the acceleration update profits from the structure of the electromagnetic forces acting on the particles. In the nonrelativistic Vlasov equation, the action of the Lorentz force $\mathbf{F}_l = q_\alpha (\mathbf{E}+\mathbf{v}\times\mathbf{B})$ transforms the phase space distribution inside one simulation time step ∆t like a solid rotator in velocity space: the magnetic field causes a gyration of the distribution function by the Larmor motion
+In a similar way, the acceleration update profits from the structure of the electromagnetic forces acting on the particles. In the nonrelativistic Vlasov equation, the action of the Lorentz force $\mathbf{F}_l = q_\alpha (\mathbf{E}+\mathbf{v}\times\mathbf{B})$ transforms the phase space distribution inside one simulation time step $\Delta t$ like a solid rotator in velocity space: the magnetic field causes a gyration of the distribution function by the Larmor motion
 $$
 \frac{\partial \mathbf{v}}{\partial t} = q_\alpha \mathbf{v}\times\mathbf{B}
 $$
@@ -168,6 +167,8 @@ The electric field is computed based on the total magnetic field and all changes
 perturbed part of the magnetic field. The background field must be curl-free and thus the Hall term can be computed based on the
 perturbed part only. This avoids numerical integration errors arising from strong background field gradients. In magnetospheric
 simulations the background field consists of the Earth's dipole, as well as a constant IMF in all cells.
+
+When adapting to AMR, Vlasiator developers made the decision of first keeping the same field solver on the finest level only. This makes the efficient implementation easier, at the cost of memory usage.
 
 ## Sparse Velocity Grid
 
