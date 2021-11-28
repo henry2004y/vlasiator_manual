@@ -91,18 +91,18 @@ Stages:
   * Update dt
     * This step is closely related to the leap frog scheme.
   * Propagate for one step
-    * Spatial-space
+    * Spatial-space translation in Vlasov solver
       * `calculateSpatialTranslation()`: for some reason everything is commented out in this function?
     * Update system boundaries
       * `sysBoundaries.applySysBoundaryVlasovConditions()`
       * This is the first call to the BCs.
-    * Compute interp moments
+    * Compute interpolated moments
       * `calculateInterpolatedVelocityMoments()`
     * Propagate Fields
       * Copy moments onto the fsgrid.
       * `propagateFields()`: calculate field for the next time step.
       * `getFieldsFromFsGrid()`: copy results back from fsgrid.
-    * Update velocity
+    * Acceleration term in Vlasov solver
       * `calculateAcceleration()`: accelerate all particle populations to the next time step.
     * Update system boundaries
       * `sysBoundaries.applySysBoundaryVlasovConditions()`
@@ -250,3 +250,90 @@ struct technical {
 There are two functions for setting the derivatives to zeroes.
 
 ### SetByUser
+
+## Vlasov Solver
+
+Reference paper: A three‐dimensional monotone and conservative semi‐Lagrangian scheme (SLICE‐3D) for transport problems.
+
+Two controlling parameters:
+
+* `P::propagateVlasovTranslation`
+* `P::propagateVlasovAcceleration`
+
+Two main steps:
+
+* `calculateSpatialTranslation(mpiGrid, dt)`
+* `calculateAcceleration(mpiGrid, dt)`
+
+The top level entrance for the solver is `vlasovmover.cpp`.
+
+I found terrifying `goto` statements for calculating moments. It may look easier to implement, but don't do it: there are always modern alternatives. Otherwise we can implement everything with `goto`, just like the "good" old days.
+
+### Translation
+
+A single-dispatch is used for `calculateSpatialTranslation` for each species.
+`trans_map_1d()` is repeated for X, Y, and Z directions if the number of cells in that direction is larger than 1.
+
+### Acceleration
+
+Subcycling is applied for the acceleration term. A single-dispatch is used for `calculateAcceleration` for each species. There is a random number being used inside for specifying the order in which velocity mappings are performed
+
+```cpp
+signed int rndInt;
+random_r(&rngDataBuffer, &rndInt);
+uint map_order = rndInt % 3; // Order in which vx,vy,vz mappings are performed.
+cpu_accelerate_cell(mpiGrid[cellID], popID, map_order, subcycleDt);
+```
+
+but I don't know why.
+
+Now inside `cpu_accelerate_cell`, first we obtain the velocity mesh information through
+
+```cpp
+vmesh::VelocityMesh<vmesh::GlobalID,vmesh::LocalID>& vmesh    = spatial_cell->get_velocity_mesh(popID);
+vmesh::VelocityBlockContainer<vmesh::LocalID>& blockContainer = spatial_cell->get_velocity_blocks(popID);
+```
+
+The Eigen library seems to provide some basic data structures for transformation. There are two types being used: the forward transformation and backward transformation. The intersections are computed in `map_order`, and then 1D mappings are done in consecutive order. The current implementation explicitly list all 3 possible orderings --- this can be refactored by referencing to variables and write the function call only once.
+
+#### Transformation
+
+`cpu_acc_transform.cpp`
+
+#### Intersection
+
+`cpu_acc_intersections.cpp`
+
+* `compute_intersections_1st`
+
+Computes the first intersection data; this is z~ in section 2.4 in Zerroukat et al (2012). We assume all velocity cells have the same dimensions. Intersection z coordinate for (i,j,k) is
+> intersection + i * intersection_di + j * intersection_dj + k * intersection_dk 
+
+  * `spatial_cell`: spatial cell that is accelerated
+  * `fwd_transform`: transform that describes acceleration forward in time
+  * `bwd_transform`: transform that describes acceleration backward in time, used to compute the lagrangian departure gri
+  * `dimension`: along which dimension is this intersection/mapping computation done. It is assumed the three mappings are in order 012, 120 or 201 
+  * `refLevel`: refinement level at which intersections are computed
+  * `intersection`: intersection z coordinate at i,j,k=0
+  * `intersection_di`: change in z-coordinate for a change in i index of 1
+  * `intersection_dj`: change in z-coordinate for a change in j index of 1
+  * `intersection_dk`: change in z-coordinate for a change in k index of 1
+
+* `compute_intersections_2nd`
+  * for x
+
+* `compute_intersections_3rd`
+  * for y
+  * euclidian y goes from vy_min to vy_max, this is mapped to wherever y plane is in lagrangian (???)
+
+#### Mapping
+
+```cpp
+map_1d(
+  SpatialCell* spatial_cell,
+  const uint popID,     
+  Realv intersection, Realv intersection_di, Realv intersection_dj,Realv intersection_dk,
+  const uint dimension)
+```
+
+Map from the current time step grid, to a target grid which is the lagrangian departure grid (so the grid at timestep +dt, tracked backwards by -dt).
