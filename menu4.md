@@ -272,7 +272,34 @@ I found terrifying `goto` statements for calculating moments. It may look easier
 ### Translation
 
 A single-dispatch is used for `calculateSpatialTranslation` for each species.
-`trans_map_1d()` is repeated for X, Y, and Z directions if the number of cells in that direction is larger than 1.
+
+* Find spatial cells to be translated.
+* X, Y, Z directions can be disentangled.
+  * `trans_map_1d()` is repeated for X, Y, and Z directions if the number of cells in that direction is larger than 1.
+  * `trans_map_1d_amr()` is the AMR extension.
+
+The ordinary space backward tracing for the departure grid
+
+```cpp
+bool trans_map_1d(const dccrg::Dccrg<SpatialCell,dccrg::Cartesian_Geometry>& mpiGrid,
+                  const vector<CellID>& localPropagatedCells,
+                  const vector<CellID>& remoteTargetCells,
+                  const uint dimension,
+                  const Realv dt,
+                  const uint popID)
+```
+
+The velocity cells in each ordinary cell are organized in blocks for kernel performance. An `unordered_set`(i.e. dictionary) is used to store all the required block indexes (because of the sparsity storage). It seems to me that the workflow here is
+
+1. Identify all the spatial cells.
+2. Find all the velocity blocks within each spatial cell.
+3. Create buffers for the semi-Lagrangian scheme.
+4. Choose a certain interpolation scheme for filling the buffers.
+5. Fill the velocity blocks with values from each buffer.
+
+There are these concepts of `source` and `target`, which I am not entirely sure if I understand.
+
+There are inconsistencies in the condition used to check if it is AMR or not, very confusing.
 
 ### Acceleration
 
