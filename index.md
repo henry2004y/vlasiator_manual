@@ -135,13 +135,15 @@ while the electric field causes (1) acceleration and (2) drift motion perpendicu
 
 Hence, the overall velocity space transformation is a rotation around the local magnetic field direction, with the gyration center given by the $\mathbf{E}\times\mathbf{B}$ drift velocity. This transformation can be decomposed into three successive shear motions along the coordinate axes, thus repeating the same fundamental algorithmic structure as the spatial translation update. The acceleration update affects the velocity space completely locally within each spatial simulation cell.
 
+In Vlasiator 5, the default solver uses a 5th order scheme for the acceleration of f w.r.t. $\Delta v$, a 3rd order scheme for the translation of f w.r.t. $\Delta x$. The Strang splitting scheme in time is 2nd order.
+
 Actually this part is not hard to implement. Maybe there are some tricks for multi-dimensions.
 
 Interestingly, the same idea appears in theoretical plasma physics for studying the phase space evolution. An extremely hard to solve problem can become quite easy and straightforward by moving in the phase space and shift your calculation completely to another spatial-temporal location.
 
 ## Field Propagation
 
-The magnetic field is propagated using the algorithm by [Londrillo and del Zanna (2004)](https://doi.org/10.1016/j.jcp.2003.09.016), which is a second-order accurate upwind constrained transport method.
+The magnetic field is propagated using the algorithm by [Londrillo and del Zanna (2004)](https://doi.org/10.1016/j.jcp.2003.09.016), which is a 2nd-order accurate (both in time and space) upwind constrained transport method.
 All reconstructions between volume-, face- and edge-averaged values follow [Balsara+ (2009)](https://doi.org/10.1016/j.jcp.2008.12.003). The face-averaged values of $\mathbf{B}$ are propagated forward in time using the integral form of Faraday's law
 $$
 \frac{\partial}{\partial t}\int_{\text{face}}\mathbf{B}\cdot d\mathbf{A} = -\oint_C \mathbf{E}\cdot d\mathbf{S},
