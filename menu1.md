@@ -69,7 +69,19 @@ CMake-like tools will make your life much easier.
 
 ## DCCRG
 
-DCCRG is the underlying grid and MPI library for Vlasiator. I guess this provides similar functionality compared to **AMReX** and **BATL**.
+DCCRG is the underlying grid and MPI library for Vlasiator. It provides similar functionality compared to **AMReX** and **BATL**.
+
+### Pros & Cons
+
+Pros:
+
+* Simplicity. Given the grid size on the base level, each positive integer corresponds to a unique cell index on any refinement level.
+* Localization. There is no need for global information to know the location of a given cell or the neighboring cell indexes.
+
+Cons:
+
+* It is purely cell-based, which makes any spatial-related computation slow
+* It is purely based on MPI, without considering multithreading or hetergeneous architectures.
 
 ## Zoltan
 
