@@ -177,6 +177,7 @@ When adapting to AMR, Vlasiator developers made the decision of first keeping th
 A typical ion population is localized in velocity space, for example a Maxwellian distribution, and a large portion of velocity space is effectively empty. A key technique in saving memory is the sparse velocity grid storage. The velocity grid is divided into velocity blocks comprising 4x4x4 velocity cells. The sparse representation is done at this level: either a block exists with all of its 64 velocity cells, or it does not exist at all. In the sparse representation we define that a block has content if any of its 64 velocity cells has a density above a user-specified threshold value.  A velocity block exists if it has content, or if it is a neighbor to a block with content in any of the six dimensions. In the velocity space all 26 nearest neighbors are included, while in ordinary space blocks within a distance of 2 in the 6 normal directions and a distance of 1 in nodal directions are included.
 
 There are two sources of loss when propagating the distribution function:
+
 1. fluxes that flow out of the velocity grid;
 2. distributions that go below the storage threshold.
 
