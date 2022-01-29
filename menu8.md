@@ -47,6 +47,10 @@ Currently Vlasiator will generate wrong physics when the velocity space distribu
 
 A person coming from the PIC world may think that it requires resolving the ion inertial length to produce correct ion physics. However, one key claim from the Vlasiator experiments is that this is not necessarily true for a vlasov ion model: _we don't need to fully resolve the ion scales to produce ion physics_. For example, in Maxime's paper about mirror modes and EMIC waves in the meriodional plane 2D3V simulation, he showed that at a resolution of the ion scale 300km given the upstream parameters we could already capture ion-related wave pretty well.
 
+## Error Propagation
+
+I am not a fan of the error propagations used in Vlasiator: for most of the functions I see, they return `false` after something goes wrong, which are unecessary simply because the code will generate wrong results anyway. Error propagation is useful when we want to continue the service even if some parts go down, not in a situation like a physical model where any tiny error will generate completely wrong results.
+
 ## AMR Filtering
 
 The Vlasov solver provides moments of the distribution function as input for the field solver, which are spatially filtered to minimize refinement artefacts. In Vlasiator 5.1 it was found to be buggy, but I know little about this currently.
