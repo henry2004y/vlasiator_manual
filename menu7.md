@@ -27,7 +27,6 @@ $$
 
 where $q_s, n_s, \mathbf{V}_s$ are the charge, number density and bulk velocity of ion species s calculated by taking moments of the distribution function
 
-
 $$
 n_s = \int d^3 v f_s(\mathbf{r}_s,\mathbf{v}_s,t),
 $$
@@ -38,9 +37,11 @@ $$
 
 or in the corresponding discrete forms where the distribution function is represented as a group of super-particles with a specific shape function. In this way it behaves more like a particle cloud.
 
+The crucial assumption in the hybrid model is the *quasi-neutrality*, that is, the electrons move fast enough to cancel any charge-density fluctuations and $\rho=0$ is always satisfied. By assuming quasi-neutrality, we can
 
+* avoid solving the conservation equations for electrons
+* avoid solving the Maxwell's equations entirely and instead use the generalized Ohm's law instead
 
-The crucial assumption in the hybrid model is the *quasi-neutrality*, that is, the electrons move fast enough to cancel any charge-density fluctuations and $\rho=0$ is always satisfied.
 The electron density thus can be written by using ion densities $n_e \approx n_i \equiv \sum_s q_s n_s /e$.
 In addition, the electron bulk velocity may also be eliminated using Ampere's law
 $$
@@ -61,8 +62,6 @@ $$
 
 where the subscript j and e indicate the indices for individual ions and the electron fluid and other notations are standard. The lowercase velocities are velocities for each super-particle.
 
-
-
 Alternatively, if we rely on a Vlasov system, we directly solve for the distribution function $f(\mathbf{r}_s, \mathbf{v}_s, t)$ from the Vlasov equation
 $$
 \frac{\partial f_s}{\partial t} + \mathbf{v}_s\frac{\partial f_s}{\partial \mathbf{r}_s} + \mathbf{a}_s\cdot \frac{\partial f_s}{\partial \mathbf{v}_s} = 0,
@@ -77,22 +76,16 @@ $$
 $$
 where the current in the Hall term has already been replaced by the curvature of B. The last term can either represent collision/physical resistivity, or artificial resistivity/numerical diffusion.
 
-
 The magnetic fields evolve according to Faraday's law
 $$
 \frac{\partial \mathbf{B}}{\partial t} = -\nabla\times\mathbf{E},
 $$
-
-
-
 
 Finally, by determining the electron pressure tensor by using an appropriate equation of state, the evolution of the system can be followed in time. For example, let $\overleftrightarrow{P}_e = P_e \overleftrightarrow{I}$ where $P_e$ is the isotropic scalar electron pressure. In the simplest form
 $$
 P_e = n_e k_B T_e,
 $$
 where $n_e \approx n_i$ and $T_e$ ???
-
-
 
 ## Finite electron inertia
 
