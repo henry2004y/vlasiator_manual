@@ -61,6 +61,14 @@ It seems like SI units are used for both I/O and internal computations. Since el
 
 Double precision is sufficient even if all the physical constants across our known scales are involved. However, if we use single precision floating numbers, we need to be careful about physical constants!
 
+## Magnetic Flux Conservation
+
+When I performed a closed magnetic flux calculation for a 2D meridional run, I found that the total closed dayside magnetic flux is not conserved. Several possibilities:
+
+- The inner boundary, with a fixed line dipole and a perturbed magnetic field shielded by a perfect conductor, acts as a source to maintain the flux inside the closed field region.
+- Simply the numerical solver does not consider this at all.
+- I made a mistake in extracting the last-closed field line or performing the integral.
+
 ## Performance
 
 Vlasiator is distributed with MPI+OpenMP, but the optimal MPI tasks + OpenMP threads combination differs case by case. Hyperthreading may or may not help.
