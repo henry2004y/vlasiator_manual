@@ -389,7 +389,7 @@ Incoming solar wind velocity magnitude in [m/s] and ram energy in [eV]. Used for
 
 ```YAML
 [io]
-diagnostic_write_interval = 1 # time step interval for diagnostic output 
+diagnostic_write_interval = 1 # time step interval for diagnostic output in diagnostic.txt and PAPI memory report
 write_initial_state = 0       # initial value output on/off, before any solver (half)steps are taken to get us to t=0.
 
 system_write_t_interval = 649.0 # Interval in simulation seconds to write that type of file
