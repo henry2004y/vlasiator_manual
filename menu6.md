@@ -49,6 +49,10 @@ As a brief overview, the EM solver updates the magnetic field with Faradays' law
 
 So, how do we calculate the loss terms? Well, by introducing an artificial resistivity/conductivity as a function of space. The exact form differs case by case.
 
+## Output Sampling
+
+The normal output cadence 0.5 s is barely enough for analyzing ULF wave signals. If the wave frequency is about 0.5 Hz, then at this sampling rate we can only have 4 points per period, which is too low. It would be great if we can allow virtual satellite outputs at a different sampling rate than the other bulk files.
+
 ## Resources
 
 CSC, LUMI
