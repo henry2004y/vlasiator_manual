@@ -87,23 +87,38 @@ Cons:
 
 Zoltan is used to do loading balancing, or spatial partitioning of the computation.
 
-It can be downloaded from Sandia's website: [Zoltan](http://cs.sandia.gov/Zoltan/Zoltan_Distributions/zoltan_distrib_v3.83.tar.gz).
+It can be downloaded and installed from Sandia's server.
+
+```shell
+git clone git@github.com:sandialabs/Zoltan.git
+mkdir zoltan-build
+cd zoltan-build
+../Zoltan/configure --prefix="current_working_directory/zoltan" --enable-mpi --with-mpi-compilers=yes --with-gnumake --with-id-type=ullong CC=mpicc CXX=mpicxx
+make -j 4
+make install
+cd ..
+rm -r zoltan-build
+```
 
 It works smoothly on my local Ubuntu, but not on a supercomputer in my first attempt.
 
 ## Boost
 
-Boost is used in Vlasiator solely for argument parsing.
+Boost is used in Vlasiator solely for argument parsing. It is typically installed as a HPC module.
 
 ## Eigen
 
-Eigen is probably used for some avx instructions in the acceleration part of the Vlasov solver.
-There are two version in-use:
+Eigen is used for linear algebra, but I don't know where exactly it is used in Vlasiator.
 
-* AGNER, which aims at ultimate avx performance;
-* FALLBACK, which is homemade and more robust, but may not provide the best performance.
+Assuming you are on the top level and want to install Eigen under directory `lib`,
 
-However, the latest Eigen version has compilation error in assertions:
+```shell
+wget https://gitlab.com/libeigen/eigen/-/archive/3.2.8/eigen-3.2.8.tar.bz2
+tar -xf eigen-3.2.8.tar.bz2
+cp -r eigen-3.2.8/Eigen lib
+```
+
+However, the latest Eigen version 3.3.8 has compilation error in assertions:
 
 ```shell
 3.3.8
@@ -113,13 +128,40 @@ However, the latest Eigen version has compilation error in assertions:
 /home/hyzhou/include/Eigen/src/Core/util/Macros.h:1017:34: note: in definition of macro ‘EIGEN_THROW_X’
 ```
 
+## Vectorclass
+
+Vectorclass used for some avx instructions in the acceleration part of the Vlasov solver.
+
+Assuming you are on the top level and want to install Vectorclass under directory `lib`,
+
+```shell
+git clone https://github.com/vectorclass/version1.git
+git clone https://github.com/vectorclass/add-on.git
+cp add-on/vector3d/vector3d.h version1/
+mv version1 lib/vectorclass
+```
+
+There are two versions in-use:
+
+* AGNER, which aims at ultimate avx performance;
+* FALLBACK, which is homemade and more robust, but does not provide the best performance.
+
+
 ## PHIPROF
 
 _PHIPROF_ is the profiler library used, which is very similar to the timer library in SWMF written in Fortran.
 
+```shell
+git clone https://github.com/fmihpc/phiprof
+cd phiprof/src
+make clean
+make -j 4
+cd ../..
+```
+
 Currently I need to load the dynamic library like this:
 
-```
+```shell
 export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/phiprof/lib
 ```
 
@@ -138,6 +180,15 @@ From [an interesting post on StackOverflow](https://stackoverflow.com/questions/
 When you search on the web, you will find all kinds of confusing results. The proper way is to test for our case.
 One interesting finding is that a MPI communication bug in Vlasiator's DCCRG call will only be triggered by JEMALLOC, at least in some small scale tests.
 
+```shell
+git clone https://github.com/jemalloc/jemalloc/releases/download/4.0.4/jemalloc-4.0.4.tar.bz2
+tar -xf jemalloc-4.0.4.tar.bz2
+cd jemalloc-4.0.4
+./configure --prefix="current_working_directory/jemalloc" --with-jemalloc-prefix="je_"
+make
+make install
+```
+
 This is also a dynamic library that needs to be loaded:
 
 ```
@@ -148,6 +199,14 @@ export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib
 
 [PAPI](http://icl.cs.utk.edu/papi/) is a memory tracker, activated only when `-DPAPI_MEM` is added to the compiler flags.
 
+```shell
+git clone https://bitbucket.org/icl/papi.git
+cd papi/src/
+./configure --prefix="current_working_directory/papi" CC=mpicc CXX=mpicxx
+make -j 4
+make install
+```
+
 A typical output of PAPI in Vlasiator looks like the following
 
 ```
@@ -155,7 +214,7 @@ A typical output of PAPI in Vlasiator looks like the following
 (MEM) High water mark per node (GiB) avg: 201.933 min: 185.869 max: 217.764 sum (TiB): 5.91601 on 30 nodes
 ```
 
-The resident is how much the code uses when the memory report is done. High water mark is the highest it has been[^1]. These differ because the memory usage is very dynamic with blocks being added and then removed in acceleration and block adjustment. 
+The resident is how much the code uses when the memory report is done. High water mark is the highest it has been[^1]. These differ because the memory usage is very dynamic with blocks being added and then removed in acceleration and block adjustment.
 
 [^1]: So this is different from high water mark in Linux kernel.
 
