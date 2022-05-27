@@ -66,7 +66,7 @@ The electric field exerted on the ion is given by
 $$
 \mathbf{E}_i = -\mathbf{V}_i \times\mathbf{B} + \frac{1}{\rho_q}\mathbf{j}\times\mathbf{B}.
 $$
-The second term on the right hand side is the Hall term, which must be included otherwide no bulk force is exerted on the ions.
+The second term on the right hand side is the Hall term, which must be included otherwise no bulk force is exerted on the ions.
 The total current density $\mathbf{j}$ is obtained from Ampère–Maxwell's law where the displacement current has been neglected:
 $$
 \nabla\times\mathbf{B} = \mu_0 \mathbf{j}.
