@@ -164,11 +164,8 @@ $$
 The field solver also contributes to the dynamic computation of the timestep. With the simplest form of Ohm's law the fastest characteristic speed is the speed of the fast magnetosonic wave mode and we use that speed to compute the maximum timestep allowed by the field solver. For the field solver Courant numbers $\in [0.4, 0.5]$ is used, as higher values cause numerical instability of the
 scheme.
 
-In Vlasiator the magnetic field has been split into a perturbed field updated during the simulations, and a static background field.
-The electric field is computed based on the total magnetic field and all changes to the magnetic field are only added to the
-perturbed part of the magnetic field. The background field must be curl-free and thus the Hall term can be computed based on the
-perturbed part only. This avoids numerical integration errors arising from strong background field gradients. In magnetospheric
-simulations the background field consists of the Earth's dipole, as well as a constant IMF in all cells.
+In Vlasiator the magnetic field has been split into a perturbed field updated during the simulations, and a static background field. The electric field is computed based on the total magnetic field and all changes to the magnetic field are only added to the perturbed part of the magnetic field. The background field must be curl-free and thus the Hall term can be computed based on the perturbed part only. This avoids numerical integration errors arising from strong background field gradients. In magnetospheric simulations the background field consists of the Earth's dipole, as well as a constant IMF in all cells.
+As can be seen in [ldz_main.cpp](https://github.com/henry2004y/vlasiator/blob/82a5bdf17eb3fcebdd397d4fa834099b0371de04/fieldsolver/ldz_main.cpp#L102), to handle the potential stiffness of the generalized Ohm's law, the subcycling technique (typically within 50 cycles) is applied for all terms on the RHS. Compared this to the MHD treatment in BATSRUS: BATSRUS solves the advection term $-\mathbf{u}\times\mathbf{B}$ and electron pressure gradient term $\nabla P_e/n$ are marched with explicit scheme, while the Hall term $\mathbf{j}\times\mathbf{B}$ is marched with implicit GMRES scheme (typically ~ 10 steps). This lies in the fact that the Hall term is mathematically stiff, while other terms are nonstiff. This makes me wondering if it is possible to use different treatment for different terms in Vlasiator as well.
 
 When adapting to AMR, Vlasiator developers made the decision of first keeping the same field solver on the finest level only. This makes the efficient implementation easier, at the cost of memory usage.
 
