@@ -100,11 +100,11 @@ cd ..
 rm -r zoltan-build
 ```
 
-It works smoothly on my local Ubuntu, but not on a supercomputer in my first attempt.
+It worked smoothly on my local Ubuntu, but not on the cluster Mahti in my first attempt. It worked on Pleiades in my first attempt.
 
 ## Boost
 
-Boost is used in Vlasiator solely for argument parsing. It is typically installed as a HPC module.
+Boost is used in Vlasiator solely for argument parsing (`Boost.Program_options`). It is typically installed as a HPC module. If not, download it from [boost.org](https://www.boost.org/) and follow the installation instructions.
 
 ## Eigen
 
@@ -181,7 +181,7 @@ When you search on the web, you will find all kinds of confusing results. The pr
 One interesting finding is that a MPI communication bug in Vlasiator's DCCRG call will only be triggered by JEMALLOC, at least in some small scale tests.
 
 ```shell
-git clone https://github.com/jemalloc/jemalloc/releases/download/4.0.4/jemalloc-4.0.4.tar.bz2
+wget https://github.com/jemalloc/jemalloc/releases/download/4.0.4/jemalloc-4.0.4.tar.bz2
 tar -xf jemalloc-4.0.4.tar.bz2
 cd jemalloc-4.0.4
 ./configure --prefix="current_working_directory/jemalloc" --with-jemalloc-prefix="je_"
@@ -194,6 +194,8 @@ This is also a dynamic library that needs to be loaded:
 ```
 export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib
 ```
+
+On a cluster, we may also choose to set `rpath`.
 
 ## PAPI
 
