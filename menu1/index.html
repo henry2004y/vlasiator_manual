@@ -47,9 +47,9 @@ make -j 4
 make install
 cd ..
 rm -r zoltan-build</code></pre>
-<p>It works smoothly on my local Ubuntu, but not on a supercomputer in my first attempt.</p>
+<p>It worked smoothly on my local Ubuntu, but not on the cluster Mahti in my first attempt. It worked on Pleiades in my first attempt.</p>
 <h2 id=boost ><a href="#boost" class=header-anchor >Boost</a></h2>
-<p>Boost is used in Vlasiator solely for argument parsing. It is typically installed as a HPC module.</p>
+<p>Boost is used in Vlasiator solely for argument parsing &#40;<code>Boost.Program_options</code>&#41;. It is typically installed as a HPC module. If not, download it from <a href="https://www.boost.org/">boost.org</a> and follow the installation instructions.</p>
 <h2 id=eigen ><a href="#eigen" class=header-anchor >Eigen</a></h2>
 <p>Eigen is used for linear algebra, but I don&#39;t know where exactly it is used in Vlasiator.</p>
 <p>Assuming you are on the top level and want to install Eigen under directory <code>lib</code>,</p>
@@ -93,7 +93,7 @@ cd ../..</code></pre>
 <p>If you have reasons to think that your application memory management is not effective because of fragmentation, you have to make tests. It is the only reliable information source for your specific needs. If jemalloc is always better that glibc, glibc will make jemalloc its official allocator. If glibc is always better, jemalloc will stop to exist. When competitors exist long time in parallel, it means that each one has its own usage niche.</p>
 </blockquote>
 <p>When you search on the web, you will find all kinds of confusing results. The proper way is to test for our case. One interesting finding is that a MPI communication bug in Vlasiator&#39;s DCCRG call will only be triggered by JEMALLOC, at least in some small scale tests.</p>
-<pre><code class="shell hljs">git clone https://github.com/jemalloc/jemalloc/releases/download/4.0.4/jemalloc-4.0.4.tar.bz2
+<pre><code class="shell hljs">wget https://github.com/jemalloc/jemalloc/releases/download/4.0.4/jemalloc-4.0.4.tar.bz2
 tar -xf jemalloc-4.0.4.tar.bz2
 cd jemalloc-4.0.4
 ./configure --prefix=&quot;current_working_directory/jemalloc&quot; --with-jemalloc-prefix=&quot;je_&quot;
@@ -101,6 +101,7 @@ make
 make install</code></pre>
 <p>This is also a dynamic library that needs to be loaded:</p>
 <pre><code class="julia hljs"><span class=hljs-keyword >export</span> LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib</code></pre>
+<p>On a cluster, we may also choose to set <code>rpath</code>.</p>
 <h2 id=papi ><a href="#papi" class=header-anchor >PAPI</a></h2>
 <p><a href="http://icl.cs.utk.edu/papi/">PAPI</a> is a memory tracker, activated only when <code>-DPAPI_MEM</code> is added to the compiler flags.</p>
 <pre><code class="shell hljs">git clone https://bitbucket.org/icl/papi.git
@@ -121,7 +122,7 @@ make install</code></pre>
  MPI communication requires memory buffers where to store received data. These are for the neighbor spatial cells which are empty right after the restart. After the first step with communication they have been initialized and contain block data representing the neighboring cells., therefore the numbers will be larger than the first report after restart, e.g. by a factor of ~30&#37;.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: May 27, 2022. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: June 03, 2022. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
