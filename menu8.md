@@ -69,6 +69,14 @@ When I performed a closed magnetic flux calculation for a 2D meridional run, I f
 - Simply the numerical solver does not consider this at all.
 - I made a mistake in extracting the last-closed field line or performing the integral.
 
+## VLSV Writing Bug
+
+The VLSV library has a file writing bug with OpenMPI4. Current workaround it to set
+
+```bash
+export OMPI_MCA_io=^ompio
+```
+
 ## Performance
 
 Vlasiator is distributed with MPI+OpenMP, but the optimal MPI tasks + OpenMP threads combination differs case by case. Hyperthreading may or may not help.
