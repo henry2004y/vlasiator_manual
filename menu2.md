@@ -2,7 +2,7 @@
 @def hascode = true
 @def rss = ""
 @def rss_title = "Run"
-@def rss_pubdate = Date(2020, 12, 8)
+@def rss_pubdate = Date(2022, 07, 29)
 
 @def tags = ["syntax", "code", "image"]
 
@@ -10,8 +10,23 @@
 
 \toc
 
-The so-called cellblock, with size `4x4x4`, is aimed for vectorization.
-The block sizes are defined as constants.
+To run the code,
+
+```shell
+vlasiator --run_config run.cfg
+```
+
+To run from restart,
+
+```shell
+vlasiator --run_config run.cfg --restart.filename restart.vlsv
+```
+
+To check all the available options,
+
+```shell
+vlasiator --help
+```
 
 The current executable is designed to be able to read in command line arguments.
 However, the list is just too long to check and read.
@@ -39,8 +54,7 @@ To run that,
 * Normalization
   * All input units are SI.
   * All plasma parameters are set in the project you choose.
-* We need to describe all the available options for each command.
-  * `vlasiator --help`, if the help text is incomplete, outdated, wrong, missing that has to be added in the code.
+* The help message printed from `vlasiator --help` may be incomplete,outdated, wrong, or missing. When in doubt, check out the source code instead.
 * There are these `proton_` prefix syntax for many tags. Vlasiator supports more than one ion population. That population's name (e.g. `proton`) gets prepended to a host of options that are specific to that population, like densities, temperatures, boundary behaviour etc.
 * How to restart a run?
   * If the options are set so that restart files come out, you will get files called `restart.INDEX.DATE.vlsv`. INDEX is seven digits in seconds of simulation time, DATE is the date of the file.
@@ -155,7 +169,7 @@ vy_length = 15     # number of blocks in y
 vz_length = 15     # number of blocks in z
 ```
 
-Each velocity block consists of $4\times 4\times 4$ cells.
+Each velocity block consists of $4\times 4\times 4$ cells. These so-called cellblocks are aimed for vectorization. The block sizes are defined as constants.
 The minimum and maximum values set the extensions of the velocity space cells.
 Note that discrepencies between input and output moment values will occur if the velocity space is poorly sampled.
 To determine the proper velocity cell resolution, you need to calculate the thermal velocity $\sqrt(k_B T/m_p)$, which acts as a characteristic width of the Maxwellian distribution, and make sure the velocity cell is small enough to resolve the distribution.
@@ -173,7 +187,7 @@ For typical magnetospheric plasma parameters, phase-space density peaks out betw
 
 There are some additional options for setting sparsity:
 
-* `dynamicAlgorithm`: type of algorithm used for calculating the dynamic minValue. `0` is none, `1` is linear algorithm based on rho, `2` is linear algorithm based on Blocks. Example linear algorithm: y = kx+b, where dynamicMinValue1=k*dynamicBulkValue1 + b, and dynamicMinValue2 = k*dynamicBulkValue2 + b.
+* `dynamicAlgorithm`: type of algorithm used for calculating the dynamic minValue. `0` is none, `1` is linear algorithm based on rho, `2` is linear algorithm based on blocks. Example linear algorithm: y = kx+b, where dynamicMinValue1=k*dynamicBulkValue1 + b, and dynamicMinValue2 = k*dynamicBulkValue2 + b.
 
 I need to ask about this.
 
