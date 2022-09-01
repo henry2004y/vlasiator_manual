@@ -115,7 +115,7 @@ Stages:
 
 Questions:
 
-* `object_wrapper.h`: it defines a struct named ObjectWrapper which contains the AMR criteria, container for user-defined mesh data, parameters for all particle species, projects, and parameters for velocity meshes.
+* `object_wrapper.h`: it defines a struct named ObjectWrapper which contains the AMR criteria, container for user-defined mesh data, parameters for all particle species, projects, and parameters for velocity meshes. It works as a global struct with a horrible name. How should we improve on this and replace the call `getObjectWrapper()`?
 * `fieldsolver/gridGlue.hpp`: names are not following the same standard!
 * `phiprof.hpp`
 The usage of this profiler is quite similar to Gabor’s library, both of which should be using `mpi_wtime` on the lower level.
@@ -202,6 +202,8 @@ To do this, I also need to modify the enumerators defined in `common.h`. In the 
 
 The base class has a private variable `sysBoundaryCondList` to keep track of all the boundary conditions as strings.
 Can this possess multiple options for the same BC class?
+
+The output values of the field for the inflow boundary cells are still not correct!
 
 In `Commons.h`, the general information for the grid is defined:
 
@@ -364,3 +366,85 @@ map_1d(
 ```
 
 Map from the current time step grid, to a target grid which is the lagrangian departure grid (so the grid at timestep +dt, tracked backwards by -dt).
+
+## Projects
+
+A _project_ is a class for handling specific physical problems in Vlasiator. Each instance of projects requires
+
+```cpp
+addParameters();
+getCorrectNumberDensity();
+getParameters();
+initialize();
+hook(); // This is usually known as callbacks in many other languages
+setProjectBField(); // The name is simply duplicating what's already been known for a class method call!
+setCell(); // Set the perturbed fields and distribution of a cell according to the default simulation settings ???
+setVelocityBlock(); // Calculate the volume-averaged VDF for the given particle population in a spatial cell.
+refineSpatialCells();
+
+// protected methods
+findBlocksToInitialize();
+setVelocitySpace();
+calcCellParameters();
+calcPhaseSpaceDensity();
+getRandomNumber();
+printPopulations();
+rescalesDensity();
+setRandomSeed();
+setRandomCellSeed();
+
+// private
+uint seed;
+static char rngStateBuffer[256];
+static random_data rngDataBuffer;
+#pragma omp threadprivate(rngStateBuffer,rngDataBuffer)
+
+bool baseClassInitialized; // don't needed at all!
+```
+
+The random number related methods are general for all projects. The most important methods for a project are those related to phase space initialization. A child class `ProjectTriSearch` implements a slightly better vspace initialization search starting from the bulk velocity.
+
+## Field Solver
+
+```cpp
+propagateFields(perBGrid, perBDt2Grid, EGrid, EDt2Grid, EHallGrid, EGradPeGrid, momentsGrid, momentsDt2Grid, dPerBGrid, dMomentsGrid, BgBGrid, volGrid, technicalGrid, sysBoundaries, dt, subcycles) {
+   
+  // for each spatial grid point, set maxFsDt to inf
+   
+  if (subcycles == 1) {
+    // RK2
+    propagateMagneticFieldSimple();
+    calculateDerivativesSimple();
+    calculateGradPeTermSimple();
+    calculateHallTermSimple();
+    calculateUpwindedElectricFieldSimple();   
+  } else {
+    // subcycling until dt is reached
+  }
+}
+```
+
+The $\nabla P_e$ term in the generalized Ohm's law is assumed to follow an adiabatic process, i.e. $P/\rho^\gamma = \text{const}$. The constant is determined from upstream electron density and temperature read from the configuration file.
+
+## Time Step
+
+I still does not fully understand how the time steps are computed.
+
+The time step calculation is not correct, especially for 1D/2D with noncubic cells! For instance, in ths following grid setup
+
+```yaml
+[gridbuilder]
+x_length = 25
+y_length = 1
+z_length = 8
+x_min = -3.266135944994248e6
+x_max =  3.266135944994248e6
+y_min = -1.0
+y_max =  1.0
+z_min = 0.0
+z_max = 1.672261603837055e7
+t_max = 1.0
+dt = 0.33
+```
+
+the time step will be greated limited by y, which is actually not used at all in the code. If a fixed time step is much larger than the "wrong" CFL limits, it will take forever in the subcycling steps in the field solver!
