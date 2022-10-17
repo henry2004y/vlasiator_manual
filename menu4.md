@@ -161,7 +161,7 @@ I have no clue why this local block ID has to be defined here, since it probably
 
 * Why are there a max and a min CFL number?
 
-* What is the difference between `vector<CellID>` and `vector<CellID>&`? Does the second one mean that it is essentially the same vector without copying?
+There is a global `struct Parameters` that stores almost all the input parameters. If say in a new project you need access to the grid structure, include `parameters.h` and this `P` object of type `Parameters` can grant you the information.
 
 ## SysBoundary
 

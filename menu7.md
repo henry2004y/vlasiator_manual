@@ -43,7 +43,7 @@ The crucial assumption in the hybrid model is the *quasi-neutrality*, that is, t
 * avoid solving the Maxwell's equations entirely and instead use the generalized Ohm's law instead
 
 The electron density thus can be written by using ion densities $n_e \approx n_i \equiv \sum_s q_s n_s /e$.
-In addition, the electron bulk velocity may also be eliminated using Ampere's law
+In addition, the electron bulk velocity may also be eliminated using Ampère's law
 $$
 \mathbf{J} = \mu_0\nabla\times\mathbf{B}
 $$

@@ -14,7 +14,7 @@
 ~~~
 }
 
-Vlasiator is a numerical model for *collisionless* *ion*-kinetic plasma physics.
+Vlasiator is a numerical model for *collisionless* *ion*-kinetic plasma physics. Urs Ganse gave a [lecture of Vlasiator for ISSS14](https://urs.nerd2nerd.org/vlasov_lecture2.svg).
 
 ## Features
 
@@ -78,7 +78,7 @@ The kernal of the model is a Vlasov equation solver for the phase space distribu
 
 ## Finite volume method
 
-The early versions of Vlasiator applied a finite volume method for the Vlasov solver. The full 6D spatial and velocity space is discretized into ordinary and velocity cells. Each spatial cell contains the field variables ($\mathbf{B},\mathbf{E}$), which are stored on a staggered grid with $\mathbf{B}$ on the face centers and $\mathbf{E}$ on the edges. Each spatial cell also contains a 3D Cartesian velocity mesh where each velocity cell contains ths volume average $\tilde{f}$ of the distribution function over the ordinary space volume of the spatial cell, and the velocity space volume of the velocity mesh cell
+The early versions of Vlasiator adopted a finite volume method for the Vlasov solver. The full 6D spatial and velocity space is discretized into ordinary and velocity cells. Each spatial cell contains the field variables ($\mathbf{B},\mathbf{E}$), which are stored on a staggered grid with $\mathbf{B}$ on the face centers and $\mathbf{E}$ on the edges. Each spatial cell also contains a 3D Cartesian velocity mesh where each velocity cell contains ths volume average $\tilde{f}$ of the distribution function over the ordinary space volume of the spatial cell, and the velocity space volume of the velocity mesh cell
 $$
 \tilde{f} = \frac{1}{\Delta^3 r \Delta^3 v}\int_{cell} d^3r d^3 v f(\mathbf{r},\mathbf{v},t),
 $$
@@ -111,17 +111,16 @@ C = \frac{u\Delta t}{\Delta s},
 $$
 where $u$ corresponds to the velocity: $v_x$, $v_y$ and $v_z$ in ordinary space and $a_x$, $a_y$ and $a_z$ in velocity space. $\Delta s$ corresponds to the size of the simulation cell: $\Delta x$, $\Delta y$ and $\Delta z$ in ordinary space and $\Delta v_x$, $\Delta v_y$ and $\Delta v_z$ in velocity space.
 
-In simulations with strong local fields leading to high acceleration, e.g., Earth's dipole magnetic field, the timestep is limited
-by the acceleration $S_A$ operator. To enable larger timesteps we split the propagation in velocity space into shorter substeps,
-where the length of each substep is set according to the CFL condition so that the Courant number of the substep is in the
-middle of the allowed range. The magnetic field is constant during the substepping, but the effective electric field does change as we
-recompute the bulk velocity $\mathbf{V}_i$ in Eq. (12) after each substep. By substepping the acceleration operator we can keep the global timestep reasonable, which minimizes the total number of timesteps in a simulation.
-The length of the substep is computed on a cell-by-cell basis, thus substepping only happens close to Earth in magnetospheric
-simulations. When we substep, the propagation of the distribution function is not $2^nd$ order accurate in time.
+In simulations with strong local fields leading to high acceleration, e.g., Earth's dipole magnetic field, the timestep is limited by the acceleration $S_A$ operator. To enable larger timesteps we split the propagation in velocity space into shorter substeps, where the length of each substep is set according to the CFL condition so that the Courant number of the substep is in the middle of the allowed range. The magnetic field is constant during the substepping, but the effective electric field does change as we recompute the bulk velocity $\mathbf{V}_i$ in Eq. (12) after each substep. By substepping the acceleration operator we can keep the global timestep reasonable, which minimizes the total number of timesteps in a simulation. The length of the substep is computed on a cell-by-cell basis, thus substepping only happens close to Earth in magnetospheric simulations. When we substep, the propagation of the distribution function is not $2^nd$ order accurate in time.
 
 ### Semi-Lagrangian method
 
-Semi-Lagrangian method is chosen in Vlasiator. It has "semi" as prefix due to the fact that it is a mixture of Eulerian grid and Lagrangian method[^1]. The idea is that unknowns are still defined in a Eulerian grid, and to calculate the quantities at the next step n+1, we trace the control volume one step before at n and find the corresponding volume integrated value through an interpolation approach. Due to the conservation law, this is exactly the value we seek at the next timestep. As of Vlasiator 5.0, the semi-Lagrangian method being used is SLICE3D.
+Why not continuing using the FV Vlasov solver?
+
+* FVM has a CFL timestep limitation, where in the Vlasov equation is mostly constrained by the rotation in the acceleration term $\mathbf{v}\times\mathbf{B}$.
+* For whatever reason numerical heating is significant, even in free-stream test. For example, a fixed-state solar wind propagating $10\,\text{R}_E$ from the upstream boundary to the bow shock would be heated drastically. (Note: this is still a problem even for SLM!)
+
+Therefore after version 4 Vlasiator switched to a _Semi-Lagrangian method_. It has "semi" as prefix due to the fact that it is a mixture of Eulerian grid and Lagrangian method[^1]. The idea is that unknowns are still defined in a Eulerian grid, and to calculate the quantities at the next step n+1, we trace the control volume one step before at n and find the corresponding volume integrated value through an interpolation approach. Due to the conservation law, this is exactly the value we seek at the next timestep. As of Vlasiator 5.0, the semi-Lagrangian method being used is SLICE3D.
 
 In the implementation, the 6 phase space dimensions (3 regular space, 3 velocity space dimensions, i.e. "3D3V") are treated independently. This is known as the Strang-splitting approach. There are three terms in Vlasov equation: the time-derivative, the spatial derivative (which is called *translation*), and the velocity derivative (which is called *acceleration*). Translation and acceleration are performed consecutively. For each dimension, transport in the $(x_i,v_{xi})$ subspace forms a linear shear of the distribution, as illustrated in Figure 1.
 
@@ -135,9 +134,8 @@ while the electric field causes (1) acceleration and (2) drift motion perpendicu
 
 Hence, the overall velocity space transformation is a rotation around the local magnetic field direction, with the gyration center given by the $\mathbf{E}\times\mathbf{B}$ drift velocity. This transformation can be decomposed into three successive shear motions along the coordinate axes, thus repeating the same fundamental algorithmic structure as the spatial translation update. The acceleration update affects the velocity space completely locally within each spatial simulation cell.
 
-In Vlasiator 5, the default solver uses a 5th order scheme for the acceleration of f w.r.t. $\Delta v$, a 3rd order scheme for the translation of f w.r.t. $\Delta x$. The Strang splitting scheme in time is 2nd order.
-
-Actually this part is not hard to implement. Maybe there are some tricks for multi-dimensions.
+In Vlasiator 5, the default solver uses a 5th-order interpolation for the acceleration of $f$ w.r.t. $\Delta v$, a 3rd-order interpolation for the translation of $f$ w.r.t. $\Delta x$. The Strang splitting scheme in time is 2nd order.
+(Actually this part is not hard to implement. Strangely from my advection test results, Vlasiator is only 1st-order in space for translation and 1st-order in time?)
 
 Interestingly, the same idea appears in theoretical plasma physics for studying the phase space evolution. An extremely hard to solve problem can become quite easy and straightforward by moving in the phase space and shift your calculation completely to another spatial-temporal location.
 
@@ -148,10 +146,7 @@ All reconstructions between volume-, face- and edge-averaged values follow [Bals
 $$
 \frac{\partial}{\partial t}\int_{\text{face}}\mathbf{B}\cdot d\mathbf{A} = -\oint_C \mathbf{E}\cdot d\mathbf{S},
 $$
-where the integral on the LHS is taken over the cell face and the line integral is evaluated along the contour of that face. Once $\mathbf{E}$ has been computed based on Ohm's law, it is easy to propagate $\mathbf{B}$ using the discretized form of the above. When
-computing each component of $\mathbf{E}$ on an edge, the solver computes the candidate values on the four neighboring cells of the edge. In the supermagnetosonic case, when the plasma velocity exceeds the speed of the fast magnetosonic wave mode, the upwinded
-value from one of the cells is used. In the submagnetosonic case the value is computed as a weighted average of the electric field on
-the four cells and a diffusive flux is added to stabilize the scheme.
+where the integral on the LHS is taken over the cell face and the line integral is evaluated along the contour of that face. Once $\mathbf{E}$ has been computed based on Ohm's law, it is easy to propagate $\mathbf{B}$ using the discretized form of the above. When computing each component of $\mathbf{E}$ on an edge, the solver computes the candidate values on the four neighboring cells of the edge. In the supermagnetosonic case, when the plasma velocity exceeds the speed of the fast magnetosonic wave mode, the upwinded value from one of the cells is used. In the submagnetosonic case the value is computed as a weighted average of the electric field on the four cells and a diffusive flux is added to stabilize the scheme.
 
 For the time integration a $2^{nd}$ order Runge–Kutta method is used. To propagate the field from $t$ to $t + \Delta t$ we need the $\rho_q$ and $\mathbf{V}_i$ values at both $t$ and $t + \Delta t/2$. With the leap-frog algorithm there are no real values for the distribution function at these times. A $1^{st}$ order accurate interpolation is used to compute the required values:
 $$
@@ -161,8 +156,7 @@ $$
 \tilde{f}(t+\frac{1}{2}\Delta t) = \frac{1}{2}\big[ \tilde{f}^v(t+\Delta t) + \tilde{f}^r(t+\frac{1}{2}\Delta t) \big].
 $$
 
-The field solver also contributes to the dynamic computation of the timestep. With the simplest form of Ohm's law the fastest characteristic speed is the speed of the fast magnetosonic wave mode and we use that speed to compute the maximum timestep allowed by the field solver. For the field solver Courant numbers $\in [0.4, 0.5]$ is used, as higher values cause numerical instability of the
-scheme.
+The field solver also contributes to the dynamic computation of the timestep. With the simplest form of Ohm's law the fastest characteristic speed is the speed of the fast magnetosonic wave mode and we use that speed to compute the maximum timestep allowed by the field solver. For the field solver Courant numbers $\in [0.4, 0.5]$ is used, as higher values cause numerical instability of the scheme.
 
 In Vlasiator the magnetic field has been split into a perturbed field updated during the simulations, and a static background field. The electric field is computed based on the total magnetic field and all changes to the magnetic field are only added to the perturbed part of the magnetic field. The background field must be curl-free and thus the Hall term can be computed based on the perturbed part only. This avoids numerical integration errors arising from strong background field gradients. In magnetospheric simulations the background field consists of the Earth's dipole, as well as a constant IMF in all cells.
 As can be seen in [ldz_main.cpp](https://github.com/henry2004y/vlasiator/blob/82a5bdf17eb3fcebdd397d4fa834099b0371de04/fieldsolver/ldz_main.cpp#L102), to handle the potential stiffness of the generalized Ohm's law, the subcycling technique (typically within 50 cycles) is applied for all terms on the RHS. Compared this to the MHD treatment in BATSRUS: BATSRUS solves the advection term $-\mathbf{u}\times\mathbf{B}$ and electron pressure gradient term $\nabla P_e/n$ are marched with explicit scheme, while the Hall term $\mathbf{j}\times\mathbf{B}$ is marched with implicit GMRES scheme (typically ~ 10 steps). This lies in the fact that the Hall term is mathematically stiff, while other terms are nonstiff. This makes me wondering if it is possible to use different treatment for different terms in Vlasiator as well.
