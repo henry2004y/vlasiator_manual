@@ -30,7 +30,7 @@ One restart file for 3D Earth now is typically ~2TB.
 
 ## Overview
 
-The fundamental description of charged particle motion in an electromagnetic field is given by Vlasov's equation
+The fundamental description of charged particle motion in an electromagnetic field is given by the Vlasov equation
 $$
 \frac{\partial f_\alpha}{\partial t} + \mathbf{v}_\alpha\frac{\partial f_\alpha}{\partial \mathbf{r}_\alpha} + \mathbf{a}_\alpha\cdot \frac{\partial f_\alpha}{\partial \mathbf{v}_\alpha} = 0,
 $$
@@ -39,18 +39,14 @@ the six-dimensional phase-space density of a particle species with mass m and ch
 $$
 \mathbf{a}_\alpha = \frac{q_\alpha}{m_\alpha}(\mathbf{E}+\mathbf{v}_\alpha\times\mathbf{B}),
 $$
-where $\mathbf{E}$ is the electric field affecting ions and $\mathbf{B}$ is the magnetic field.
+where $\mathbf{E}$ and $\mathbf{B}$ are the electric and magnetic field, respectively.
 
-The bulk parameters of the plasma, such as the ion charge density $\rho_q$ and current density $\mathbf{j}_i$, are obtained as velocity moments of the ion velocity distribution function
+The bulk parameters of the plasma, such as the ion density $n_\alpha$ and velocity $\mathbf{u}_\alpha$, are obtained as velocity moments of the ion velocity distribution function
 $$
-\rho_q = q \int d^3 v f(\mathbf{r},\mathbf{v},t),
+n_\alpha = \int d^3 v f(\mathbf{r},\mathbf{v},t),
 $$
 $$
-\mathbf{j}_i = q \int d^3 v \mathbf{v}f(\mathbf{r},\mathbf{v},t).
-$$
-These also give the bulk velocity of ions,
-$$
-\mathbf{V}_i = \mathbf{j}_i / \rho_q.
+\mathbf{u}_\alpha = \int d^3 v \mathbf{v}f(\mathbf{r},\mathbf{v},t).
 $$
 
 The magnetic field is updated using Faraday's law:
@@ -59,12 +55,12 @@ $$
 $$
 and the system is closed by Ohm's law giving the electric field $\mathbf{E}_{\text{Ohm}}$. Depending on the order of approximation, the simplest one only takes the convection electric field
 $$
-\mathbf{E}_\text{Ohm} = -\mathbf{V}_i \times\mathbf{B},
+\mathbf{E}_\text{Ohm} = -\mathbf{u}_\alpha \times\mathbf{B},
 $$
-where $\mathbf{V}_i$ is the ion bulk velocity given previously.
+where $\mathbf{u}_i$ is the ion bulk velocity given previously.
 The electric field exerted on the ion is given by
 $$
-\mathbf{E}_i = -\mathbf{V}_i \times\mathbf{B} + \frac{1}{\rho_q}\mathbf{j}\times\mathbf{B}.
+\mathbf{E}_\alpha = -\mathbf{u}_\alpha \times\mathbf{B} + \frac{1}{\rho_q}\mathbf{j}\times\mathbf{B}.
 $$
 The second term on the right hand side is the Hall term, which must be included otherwise no bulk force is exerted on the ions.
 The total current density $\mathbf{j}$ is obtained from Ampère–Maxwell's law where the displacement current has been neglected:
