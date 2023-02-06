@@ -29,7 +29,7 @@ Multithreading runs can save memory mostly because there will be fewer ghost cel
 
 ## Timestepping
 
-In regions of small densities, the maximum characteristic wave speed may become very large, which in turn limits the discrete time steps constrained by the CFL condition. Surprisingly this has not become a major issue in Vlasiator 5.1, but I did suffer for a long time because of the problematic magnetic field settings near the inner boundary ($\nabla\cdot\mathbf{B}\neq 0$). 
+In regions of small densities, the maximum characteristic wave speed may become very large, which in turn limits the discrete time steps constrained by the CFL condition. Surprisingly this has not become a major issue in Vlasiator 5.1, but I did suffer for a long time because of the problematic magnetic field settings near the inner boundary ($\nabla\cdot\mathbf{B}\neq 0$).
 
 Check some ideas in [Low Density Treatment](https://henry2004y.github.io/vlasiator_manual/menu7/#low_density_treatment) if you are interested in implementing a practical solution.
 
@@ -71,7 +71,7 @@ When I performed a closed magnetic flux calculation for a 2D meridional run, I f
 
 ## VLSV Writing Bug
 
-The VLSV library has a file writing bug with OpenMPI4. Current workaround it to set
+The VLSV library has a [file writing bug](https://github.com/fmihpc/vlasiator/issues/698) with OpenMPI4. This happens even for serial runs as long as the code is compiled with MPI. Current workaround it to set
 
 ```bash
 export OMPI_MCA_io=^ompio
