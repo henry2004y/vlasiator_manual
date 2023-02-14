@@ -123,7 +123,7 @@ Both diffusion and dispersion errors are observed.
 
 Both diffusion and dispersion errors are observed. It looks slightly better than the Alfven wave test.
 
-\figenv{Density, velocity and magnetic field perturbations of fast wave after one period.}{/assets/img/fast_1d_n100_1period.png}{width:100%;border: 1px solid red;}
+\figenv{Density, velocity and magnetic field perturbations of fast wave after one period.}{/assets/img/fast_1d_n100_2period.png}{width:100%;border: 1px solid red;}
 
 #### Slow wave
 
