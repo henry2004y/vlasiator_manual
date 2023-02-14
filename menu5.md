@@ -103,6 +103,8 @@ $\gamma = 5/3$.
 
 ### Linear waves test
 
+The waves are propagating in an oblique direction so as to check grid effects.
+
 The results are really sensitive to the perturbation magnitude $A$. If $A=10^{-3}$, single and double precision results are almost identical; if $A=10^{-6}$, the single precision results are completely off while the double precision results at least still maintain the wave-like pattern. I found $A=10^{-4}$ as roughly when the single and double precision results differ.
 
 The moments are very sensitive to the velocity grid resolutions as well as extent. With double precision VDFs, the initial condition follows the analytical solution well even at $A=10^{-6}$; with single precision VDFs, the initial condition has observable errors at $A=10^{-6}$ and even larger errors at larger $A$.
@@ -115,18 +117,18 @@ Depending on the velocity space resolutions, the single precision VDF may not ev
 
 Both diffusion and dispersion errors are observed.
 
-\figenv{.}{/assets/img/alfven_1d_n100_1period.png}{width:100%;border: 1px solid red;}
+\figenv{Velocity and magnetic field perturbations of Alfven wave after one period.}{/assets/img/alfven_1d_n100_1period.png}{width:100%;border: 1px solid red;}
 
 #### Fast wave
 
 Both diffusion and dispersion errors are observed. It looks slightly better than the Alfven wave test.
 
-\figenv{.}{/assets/img/fast_1d_n100_1period.png}{width:100%;border: 1px solid red;}
+\figenv{Density, velocity and magnetic field perturbations of fast wave after one period.}{/assets/img/fast_1d_n100_1period.png}{width:100%;border: 1px solid red;}
 
 #### Slow wave
 
 The slow wave test is the strangest among all. At first the wave did propagate to the left as expected, but it stopped propagating after a quarter of the wave period and then behaved like a standing wave.
 
-\figenv{.}{/assets/img/slow_1d_n100_1period.png}{width:100%;border: 1px solid red;}
+\figenv{Density, velocity and magnetic field perturbations of slow wave after one period.}{/assets/img/slow_1d_n100_1period.png}{width:100%;border: 1px solid red;}
 
 ### GEM Challenge
