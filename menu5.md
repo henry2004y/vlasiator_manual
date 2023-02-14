@@ -113,6 +113,17 @@ Double precision VDF runs are in general much better, but we can still see both 
 
 #### Alfven wave
 
+| Variable | Background | Perturbations |
+|----------|------------|---------------|
+|$\rho$    | $1.0$      | $0.0$         |
+|$\rho u_x$| $0.0$      | $0.0$         |
+|$\rho u_y$| $0.0$      | $-3.333333333333333e-1$ |
+|$\rho u_z$| $0.0$      | $9.428090415820634e-1$ |
+|$\mathcal{E}$ | $\frac{1}{\gamma(\gamma-1)}$ | $0.0$ |
+|$B_x$     | $1.0$      | $0.0$ |
+|$B_y$     | $\sqrt{2}$ | $-3.333333333333333e-1$ |
+|$B_z$     | $0.5$      | $9.428090415820634e-1$ |
+
 Depending on the velocity space resolutions, the single precision VDF may not even has a average value of 0 vy/vz. Double precision does not suffer from this issue.
 
 Both diffusion and dispersion errors are observed.
@@ -121,11 +132,33 @@ Both diffusion and dispersion errors are observed.
 
 #### Fast wave
 
+| Variable | Background | Perturbations |
+|----------|------------|---------------|
+|$\rho$    | $1.0$      | $4.472135954999580e-1$ |
+|$\rho u_x$| $0.0$      | $-8.944271909999160e-1$ |
+|$\rho u_y$| $0.0$      | $4.216370213557840e-1$ |
+|$\rho u_z$| $0.0$      | $1.490711984999860e-1$ |
+|$\mathcal{E}$ | $\frac{1}{\gamma(\gamma-1)}$ | $2.012457825664615$ |
+|$B_x$     | $1.0$      | $0.0$ |
+|$B_y$     | $\sqrt{2}$ | $8.432740427115680e-1$ |
+|$B_z$     | $0.5$      | $2.981423969999720e-1$ |
+
 Both diffusion and dispersion errors are observed. It looks slightly better than the Alfven wave test.
 
 \figenv{Density, velocity and magnetic field perturbations of fast wave after one period.}{/assets/img/fast_1d_n100_2period.png}{width:100%;border: 1px solid red;}
 
 #### Slow wave
+
+| Variable | Background | Perturbations |
+|----------|------------|---------------|
+|$\rho$    | $1.0$      | $8.944271909999159e-1$ |
+|$\rho u_x$| $0.0$      | $-4.472135954999579e-1$ |
+|$\rho u_y$| $0.0$      | $-8.432740427115680e-1$ |
+|$\rho u_z$| $0.0$      | $-2.981423969999720e-1$ |
+|$\mathcal{E}$ | $\frac{1}{\gamma(\gamma-1)}$ | $6.708136850795449e-1$ |
+|$B_x$     | $1.0$      | $0.0$ |
+|$B_y$     | $\sqrt{2}$ | $-4.216370213557841e-1$ |
+|$B_z$     | $0.5$      | $-1.490711984999860e-1$ |
 
 The slow wave test is the strangest among all. At first the wave did propagate to the left as expected, but it stopped propagating after a quarter of the wave period and then behaved like a standing wave.
 
