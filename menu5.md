@@ -122,7 +122,7 @@ If the so-called "diffusive E" term is turned off in Vlasiator (by default it's 
 
 #### Alfvén wave
 
-This test involves the propagation of Alfvén waves and whistler waves. The Alfvén/whistler waves have variations in the transverse components of the magnetic field and the velocity. The longitudinal components, the density and the pressure are not perturbed. The following solution of the ideal MHD equations describes a right-hand polarized Alfvén wave propagating in the $+x$-direction:
+This test involves the propagation of Alfvén waves and whistler waves. The Alfvén/whistler waves have variations in the transverse components of the magnetic field and the velocity. The longitudinal components, the density and the pressure are not perturbed. The following solution of the Hall MHD equations describes a right-hand polarized Alfvén/whistler wave propagating in the $+x$-direction:
 $$
 \begin{aligned}
 u_y &= -\delta u\cos(kx-\omega t) \\
@@ -142,7 +142,7 @@ $$
 
 At larger k, Alfvén waves evolve into whistler waves, and the phase speed then depends on k:
 $$
-v_\mathrm{ph,W} = \frac{\omega}{k} = W + \sqrt{\frac{B_x^2}{\mu_0\rho} + W^2},\quad W=\frac{m}{e}\frac{kB_x}{2\rho}
+v_\mathrm{ph,W} = \frac{\omega}{k} = \frac{W}{2} + \sqrt{\frac{B_x^2}{\mu_0\rho} + \frac{W^2}{4}},\quad W=\frac{m}{e}\frac{kB_x}{\mu_0\rho}
 $$
 
 We set wavelength $\lambda=2\pi/k=32$ and the initial conditions as follows:
@@ -174,7 +174,7 @@ Next we switch on the Hall term and check the whistler wave in Figure 4.
 
 \figenv{Figure 4. Velocity and magnetic field perturbations of $\beta\sim 0.02, \lambda=32 d_i$ whistler wave after one period.}{/assets/img/whistler_1d_Lx32_beta0.02_n64.png}{width:100%;border: 1px solid red;}
 
-Interestingly, now even in the cold plasma limit we do not see the strange bumps. An observable change in the run log is that subcycling is now taking place: it take 29 subcycles instead of only 1-3 in the pure Alfvén wave test. But luckily we do not see any numerical instabilities.
+Interestingly, now even in the cold plasma limit we do not see the strange bumps. An observable change in the run log is that subcycling is now taking place: it take 29 subcycles instead of only 1-3 in the pure Alfvén wave test. But luckily we do not see any numerical instabilities. So a conclusion from the Alfvén/whistler test is that *the Hall term is necessary even for the Alfvén wave in a hybrid model*; without it we always see some distortions of the wave profile. The real reason might be that the time step taken in the field solver for just the convection term is too large.
 
 #### Fast wave
 
