@@ -221,6 +221,12 @@ For the parameters listed here, $r_L / d_i = 0.68$. The results are shown in Fig
 
 \figenv{Figure 6. Density, velocity and magnetic field perturbations of $\beta\sim 0.6, \lambda=0.1 d_i$ fast wave after one period.}{/assets/img/fast_1d_Lx0.1_beta0.6_n100.png}{width:100%;border: 1px solid red;}
 
+As a 2D setup, we rotate the whole problem with angle $\alpha=atan(-3/4)$ with respect to $+x$. The results are shown in Figure 7 and 8.
+
+\figenv{Figure 7. Velocity and magnetic field perturbations of $\beta\sim 0.6, \lambda=32 d_i$ 2D fast wave after one period.}{/assets/img/fast_2d_t=1.0_n32_24.png}{width:100%;border: 1px solid red;}
+
+\figenv{Figure 8. Velocity and magnetic field perturbations of $\beta\sim 0.6, \lambda=32 d_i$ 2D fast wave after one period.}{/assets/img/fast_2d_t=1.0_ycenter_xslice_n32_24.png}{width:100%;border: 1px solid red;}
+
 #### Slow wave
 
 Slow wave test is tricky, in that slow wave does not propagate perpendicular to the magnetic field. If we simply modify the anisotropic fast wave test parameters, we would expect a zero phase speed slow wave with anti-correlated magnetic pressure and thermal pressure perturbations. I have not yet designed a proper set of parameters for slow waves.
@@ -233,10 +239,10 @@ but this is something we need to check as well. There are specific tests for che
 
 ### GEM Challenge
 
-The GEM reconnection test is performed using Project Harris. The 2D colored contour of density overplotted with magnetic field lines are shown in Figure 7.
+The GEM reconnection test is performed using Project Harris. The 2D colored contour of density overplotted with magnetic field lines are shown in Figure 9.
 
-\figenv{Figure 7. Density and magnetic field of the Harris current sheet at $t=0$.}{/assets/img/current_sheet_initial.png}{width:100%;border: 1px solid red;}
+\figenv{Figure 9. Density and magnetic field of the Harris current sheet at $t=0$.}{/assets/img/current_sheet_initial.png}{width:100%;border: 1px solid red;}
 
 The normalized reconnection rates are shown in Figure 8. The points for MHD, Hall MHD, hybrid and full PIC are extracted from Figure 1 in [Birn+ 2001](https://doi.org/10.1029/1999JA900449). Without the Hall term, the reconnection rate is significantly lower than others and is comparable with ideal MHD. Resolving the ion inertial length is also important to get fast reconnection rates.
 
-\figenv{Figure 8. Normalized reconnection rate as a function of time.}{/assets/img/reconnected_flux.png}{width:100%;border: 1px solid red;}
+\figenv{Figure 10. Normalized reconnection rate as a function of time.}{/assets/img/reconnected_flux.png}{width:100%;border: 1px solid red;}
