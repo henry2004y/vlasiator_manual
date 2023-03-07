@@ -243,6 +243,6 @@ The GEM reconnection test is performed using Project Harris. The 2D colored cont
 
 \figenv{Figure 9. Density and magnetic field of the Harris current sheet at $t=0$.}{/assets/img/current_sheet_initial.png}{width:100%;border: 1px solid red;}
 
-The normalized reconnection rates are shown in Figure 8. The points for MHD, Hall MHD, hybrid and full PIC are extracted from Figure 1 in [Birn+ 2001](https://doi.org/10.1029/1999JA900449). Without the Hall term, the reconnection rate is significantly lower than others and is comparable with ideal MHD. Resolving the ion inertial length is also important to get fast reconnection rates.
+The normalized reconnection rates are shown in Figure 8. The points for MHD, Hall MHD, hybrid and full PIC are extracted from Figure 1 in [Birn+ 2001](https://doi.org/10.1029/1999JA900449). Without the Hall term, the reconnection rate is significantly lower than others and is comparable with ideal MHD. Resolving the ion inertial length is also important to get fast reconnection rates. The reason we have a delayed onset for Vlasiator compared with PIC may be due to the fact that we have smaller noises (suggested from Takuma Nakamura).
 
 \figenv{Figure 10. Normalized reconnection rate as a function of time.}{/assets/img/reconnected_flux.png}{width:100%;border: 1px solid red;}
