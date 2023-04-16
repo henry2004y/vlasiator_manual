@@ -33,6 +33,10 @@ In regions of small densities, the maximum characteristic wave speed may become 
 
 Check some ideas in [Low Density Treatment](https://henry2004y.github.io/vlasiator_manual/menu7/#low_density_treatment) if you are interested in implementing a practical solution.
 
+## Staggered Grid
+
+All DCCRG variables are stored at cell centers, while the electric and magnetic field are stored at edge and face centers, respectively. While performing some sensitive analysis such as parallel electric field, mixing `fs_e` with `vg_b_vol` may cause errors up to 1 order of magnitude. The important thing is **not** to process data saved at different spatial locations!
+
 ## Velocity Space Resolution
 
 Extra care is needed when resolving the velocity space. Velocity is the 1st moment integral of the distribution function, and temperature determines the width of the distribution: if your velocity is too small compared to the thermal width, you can only resolve part of the phase space; if the velocity space cells are too large, then the integral will become inaccurate.
