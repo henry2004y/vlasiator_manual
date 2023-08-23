@@ -135,6 +135,25 @@ In Vlasiator 5, the default solver uses a 5th-order interpolation for the accele
 
 Interestingly, the same idea appears in theoretical plasma physics for studying the phase space evolution. An extremely hard to solve problem can become quite easy and straightforward by moving in the phase space and shift your calculation completely to another spatial-temporal location.
 
+Let us write it down in a more rigorous way. Let $S_T$ be the spatial translation operator for advection
+$$
+S_T = \left( \mathbf{v}\cdot \frac{\partial f_s}{\partial\mathbf{x}} \right)
+$$
+and $S_A$ be the acceleration operator including rotation
+$$
+S_A = \left( \frac{q_s}{m_s}\left(\mathbf{E} + \mathbf{v}\times\mathbf{B}\right)\cdot\frac{\partial f_s}{\partial \mathbf{v}} \right)
+$$
+The splitting is performed using a leapfrog scheme:
+$$
+\tilde{f}^{n+1} = S_A\left( \frac{\Delta t}{2}\right)\, S_T\left(\Delta t \right)\, S_A\left( \frac{\Delta t}{2}\right)\, \tilde{f}^n
+$$
+
+\figenv{Figure 2: Time stepping in Vlasiator. The translation and acceleration of $f$ are leapfrogged following the Strang-splitting method. The algorithm is initialised by half a time step of acceleration (step 0. in red). Then 1. $f$ is translated forward by one step $\Delta t$ (possibly subcycled). 2. $\mathbf{E},\mathbf{B}$ are stepped forward by $\Delta t$  (possibly subcycled). 3. $f$ is accelerated forward by $\Delta t$. The sequence is repeated (4.–6.)}{/assets/img/vlasiator_timestepping.png}{width:100%;border: 1px solid red;}
+
+$S_A$ can generally be described by an offset 3D rotation matrix (due to gyration around $\mathbf{B}$). As every offset rotation matrix can be decomposed into three shear matrices $S = S_x S_y S_z$, each performing an axis-parallel shear into one spatial dimension, the numerically efficient semi-Lagrangian acceleration update using the SLICE-3D approach is possible: before each shear transformation, the velocity space is rearranged into a single-cell column format parallel to the shear direction in memory, each of which requires only a 1D remapping with a high reconstruction order. This update method comes with a maximum rotation angle limit due to the shear decomposition of about 22∘ (WHY???), which imposes a further time step limit. For larger rotational angles per time step (caused by stronger magnetic fields), the acceleration can be subcycled.
+
+$S_T$ can generally be described by a translation matrix with no rotation, and the same SLICE-3D approach lends itself to it in a similar vein as for velocity space. The main difference is the typical use of 3rd order reconstruction in order to keep the stencil width at two.
+
 ## Field Propagation
 
 The magnetic field is propagated using the algorithm by [Londrillo and del Zanna (2004)](https://doi.org/10.1016/j.jcp.2003.09.016), which is a 2nd-order accurate (both in time and space) upwind constrained transport method.
