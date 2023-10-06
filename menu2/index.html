@@ -73,7 +73,8 @@
 <p>One thing to notice here is that currently local timestepping is not available. This should be added to speed up the steady state runs.</p>
 <pre><code class="YAML hljs">[<span class=hljs-string >bailout</span>]
 <span class=hljs-string >max_memory</span> <span class=hljs-string >=</span> <span class=hljs-number >55</span>
-<span class=hljs-string >min_dt</span> <span class=hljs-string >=</span> <span class=hljs-number >1e-3</span></code></pre>
+<span class=hljs-string >min_dt</span> <span class=hljs-string >=</span> <span class=hljs-number >1e-3</span>
+<span class=hljs-string >velocity_space_wall_block_margin</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span> <span class=hljs-comment ># number of vblocks away from the vextent</span></code></pre>
 <p>Stop the run if any of the criteria is violated. The memory limit is only working when PAPI is used&#33;</p>
 <h3 id=grid ><a href="#grid" class=header-anchor >Grid</a></h3>
 <p>All the values are assumed to be in SI units.</p>
@@ -410,7 +411,7 @@ h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span>
 <p>For more information, check <code>ioread.cpp</code>.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: August 23, 2023. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: October 06, 2023. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
