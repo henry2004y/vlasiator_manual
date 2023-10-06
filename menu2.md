@@ -87,6 +87,7 @@ One thing to notice here is that currently local timestepping is not available. 
 [bailout]
 max_memory = 55
 min_dt = 1e-3
+velocity_space_wall_block_margin = 1 # number of vblocks away from the vextent
 ```
 
 Stop the run if any of the criteria is violated. The memory limit is only working when PAPI is used!
