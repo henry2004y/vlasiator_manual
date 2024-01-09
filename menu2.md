@@ -409,6 +409,8 @@ write_initial_state = 0       # initial value output on/off, before any solver (
 
 system_write_t_interval = 649.0 # Interval in simulation seconds to write that type of file
 system_write_file_name = bulk
+write_system_stripe_factor = 4
+
 system_write_distribution_stride = 1
 system_write_distribution_xline_stride = 0
 system_write_distribution_yline_stride = 0
@@ -417,12 +419,15 @@ system_write_distribution_zline_stride = 0
 restart_walltime_interval = -1 # Save in given wall time interval. Negative numbers disables writes
 number_of_restarts = 4294967295 # Exit the simulation after a certain number of saving restarts above
 
+write_restart_stripe_factor = 20
+
 write_as_float = 0 # convert to single precision outputs or not
 ```
 
 * `system_write_file_name`: it is arbitrary, although we have used `bulk` for the frequent simulation output files for almost 10 years now.
 * `system_write_distribution_stride`: write out the velocity distribution function every N cells, this is a modulo on the cell's ID essentially.
 * `system_write_distribution_xline_stride`: write out the VDF every N cells in x (same for y and z).
+* `write_restart_stripe_factor` and `write_system_stripe_factor`: speed up lustre IO performance by setting the number of Object Storage Targets (OSTs). See [Lustre File Striping](https://docs.nersc.gov/performance/io/lustre/) for more information. If a file is larger than 10 GB, it would be better to use a larger stripe factor than 1.
 
 It is indeed very strange to make outputs of raw distribution functions under the IO tag instead of [`variables`].
 
