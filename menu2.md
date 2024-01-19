@@ -425,8 +425,15 @@ write_as_float = 0 # convert to single precision outputs or not
 ```
 
 * `system_write_file_name`: it is arbitrary, although we have used `bulk` for the frequent simulation output files for almost 10 years now.
-* `system_write_distribution_stride`: write out the velocity distribution function every N cells, this is a modulo on the cell's ID essentially. If this is 0, the separate x,y,z strides have no effects.
-* `system_write_distribution_xline_stride`: write out the VDF every N cells in x (same for y and z).
+* `system_write_distribution_stride`: write out the velocity distribution function every N cells, this is a modulo on the cell's ID essentially.
+* `system_write_distribution_xline_stride`: write out the VDF every N cells in x (same for y and z). For example,
+```YAML
+system_write_distribution_stride = 0
+system_write_distribution_xline_stride = 50
+system_write_distribution_yline_stride = 50
+system_write_distribution_zline_stride = 1
+```
+means saving VDFs every 50 cells along X and Y axis.
 * `write_restart_stripe_factor` and `write_system_stripe_factor`: speed up lustre IO performance by setting the number of Object Storage Targets (OSTs). See [Lustre File Striping](https://docs.nersc.gov/performance/io/lustre/) for more information. If a file is larger than 10 GB, it would be better to use a larger stripe factor than 1.
 * `restart_walltime_interval`: by default this is negative. If this is positive by `number_of_restarts` is positive, then the run will immediately stop.
 
