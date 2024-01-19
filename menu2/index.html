@@ -360,10 +360,17 @@ h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span>
 <ul>
 <li><p><code>system_write_file_name</code>: it is arbitrary, although we have used <code>bulk</code> for the frequent simulation output files for almost 10 years now.</p>
 
-<li><p><code>system_write_distribution_stride</code>: write out the velocity distribution function every N cells, this is a modulo on the cell&#39;s ID essentially. If this is 0, the separate x,y,z strides have no effects.</p>
+<li><p><code>system_write_distribution_stride</code>: write out the velocity distribution function every N cells, this is a modulo on the cell&#39;s ID essentially.</p>
 
-<li><p><code>system_write_distribution_xline_stride</code>: write out the VDF every N cells in x &#40;same for y and z&#41;.</p>
+<li><p><code>system_write_distribution_xline_stride</code>: write out the VDF every N cells in x &#40;same for y and z&#41;. For example,</p>
 
+</ul>
+<pre><code class="YAML hljs"><span class=hljs-string >system_write_distribution_stride</span> <span class=hljs-string >=</span> <span class=hljs-number >0</span>
+<span class=hljs-string >system_write_distribution_xline_stride</span> <span class=hljs-string >=</span> <span class=hljs-number >50</span>
+<span class=hljs-string >system_write_distribution_yline_stride</span> <span class=hljs-string >=</span> <span class=hljs-number >50</span>
+<span class=hljs-string >system_write_distribution_zline_stride</span> <span class=hljs-string >=</span> <span class=hljs-number >1</span></code></pre>
+<p>means saving VDFs every 50 cells along X and Y axis.</p>
+<ul>
 <li><p><code>write_restart_stripe_factor</code> and <code>write_system_stripe_factor</code>: speed up lustre IO performance by setting the number of Object Storage Targets &#40;OSTs&#41;. See <a href="https://docs.nersc.gov/performance/io/lustre/">Lustre File Striping</a> for more information. If a file is larger than 10 GB, it would be better to use a larger stripe factor than 1.</p>
 
 <li><p><code>restart_walltime_interval</code>: by default this is negative. If this is positive by <code>number_of_restarts</code> is positive, then the run will immediately stop.</p>
@@ -419,7 +426,7 @@ h400000v40h-400000z'/></svg></span></span></span><span class=vlist-s >​</span>
 <p>For more information, check <code>ioread.cpp</code>.</p>
 <div class=page-foot >
   <div class=copyright >
-    &copy; Hongyang Zhou. Last modified: January 14, 2024. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
+    &copy; Hongyang Zhou. Last modified: January 19, 2024. Website built with <a href="https://github.com/tlienart/Franklin.jl">Franklin.jl</a> and the <a href="https://julialang.org">Julia programming language</a>.
   </div>
 </div>
 </div>
