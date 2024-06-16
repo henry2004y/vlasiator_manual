@@ -35,19 +35,7 @@ Back in 1993, a techinque called *perfectly matched layer* (PML) for the absorpt
 With the new medium the theoretical reflection factor of a plane wave striking a vacuum-layer interface is null at any frequency and at any incidence angle, contrary to the previously designed medium with which such a factor is null at normal incidence only. 
 So, the layer surrounding the computational domain can theoretically absorb without reflection any kind of wave travelling towards boundaries, and it can be regarded as a perfectly matched layer. The new medium as the PML medium and the new technique of free-space simulation as the PML technique.
 
-### Derivation
-
-The theoretical derivation starts in discussing the transverse electric wave propagation. One key concept that confused me was the magnetic conductivity denoted as $\sigma^\ast$. Maybe this is just a jargon: permeability is a magnetic analogy to conductivity in electric circuits. Reluctance in a magnetic circuit is inversely proportional to permeability just as electric resistance is inversely proportional to conductivity. The relationships between length and cross-sectional area are also the same. Consequently calling permeability "magnetic conductivity" is a fine way to reinforce the analogy and understand magnetic circuits using an electronic analogy.
-
-I guess I need to review my EM courses to fully understand the derivations.
-
-### Implementation
-
-The basic idea is to surround the simulation domain with a lossy region that will damp waves. To prevent reflection at the domain-lossy region interface, the impedance $\eta=\mu/\epsilon$ should match at the interface. The key to have a non-reflective boundary for all wave modes is to introduce anisotropy in the permeability and permittivity tensors.
-
-As a brief overview, the EM solver updates the magnetic field with Faradays' law (curl of E), and updates the electric field with one form of the Ohm's law. The loss term is introduced in the Ohm's law as $\eta \mathbf{j}=/mathbf{j}/\sigma$ (which, btw, is often called artificial resistivity in plasma physics). The current density, $\mathbf{j}$, is calculated as curl of B from Ampere's law. 
-
-So, how do we calculate the loss terms? Well, by introducing an artificial resistivity/conductivity as a function of space. The exact form differs case by case.
+Checkout [Steven Johnson's note](https://math.mit.edu/~stevenj/18.369/spring09/pml.pdf).
 
 ## Output Sampling
 
