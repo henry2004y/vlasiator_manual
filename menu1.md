@@ -67,9 +67,18 @@ This comes together with a new Makefile borrowed from Athena. I need to think ab
 
 CMake-like tools will make your life much easier.
 
+### Updates
+
+As of 2024, two new things are introduced:
+
+1. Head-only libraries are now attached as submodules;
+2. A new `build_libraries.sh` script is added to facilitate GitHub CI.
+
+Checkout the official GitHub wiki for how to add the submodules and build the other libraries.
+
 ## DCCRG
 
-DCCRG is the underlying grid and MPI library for Vlasiator. It provides similar functionality compared to **AMReX** and **BATL**.
+DCCRG is the underlying grid and MPI library for Vlasiator. It provides similar functionality as **AMReX** and **BATL** do.
 
 ### Pros & Cons
 
@@ -130,7 +139,7 @@ However, the latest Eigen version 3.3.8 has compilation error in assertions:
 
 ## Vectorclass
 
-Vectorclass used for some avx instructions in the acceleration part of the Vlasov solver.
+Vectorclass is used for some avx instructions in the acceleration part of the Vlasov solver. It has version 1 and version 2; use version 1 for those compilers that does not support version 2. By default Vlasiator uses version 2 as a submodule.
 
 Assuming you are on the top level and want to install Vectorclass under directory `lib`,
 
@@ -145,7 +154,6 @@ There are two versions in-use:
 
 * AGNER, which aims at ultimate avx performance;
 * FALLBACK, which is homemade and more robust, but does not provide the best performance.
-
 
 ## PHIPROF
 
