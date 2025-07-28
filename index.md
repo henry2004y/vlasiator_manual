@@ -46,7 +46,7 @@ $$
 n_\alpha = \int d^3 v f(\mathbf{r},\mathbf{v},t),
 $$
 $$
-\mathbf{u}_\alpha = \int d^3 v \mathbf{v}f(\mathbf{r},\mathbf{v},t).
+\mathbf{u}_\alpha = \frac{1}{n_\alpha}\int d^3 v \mathbf{v}f(\mathbf{r},\mathbf{v},t).
 $$
 
 The magnetic field is updated using Faraday's law:
