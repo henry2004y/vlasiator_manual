@@ -199,7 +199,7 @@ make install
 
 This is also a dynamic library that needs to be loaded:
 
-```
+```bash
 export LD_LIBRARY_PATH=/home/hongyang/Vlasiator/vlasiator/lib/jemalloc/lib
 ```
 
@@ -219,7 +219,7 @@ make install
 
 A typical output of PAPI in Vlasiator looks like the following
 
-```
+```shell
 (MEM) Resident per node (avg, min, max): 150.348 144.319 161.92
 (MEM) High water mark per node (GiB) avg: 201.933 min: 185.869 max: 217.764 sum (TiB): 5.91601 on 30 nodes
 ```
